@@ -1,0 +1,205 @@
+{
+  "format": "pull-list-yard-feed-v1",
+  "generatedAt": "2026-10-25T22:00:00Z",
+  "yards": {
+    "north": {
+      "status": "partial",
+      "checkedAt": "2026-10-25T22:00:00Z",
+      "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/",
+      "message": "Verified sample from the public page, NOT full inventory. Deploy scheduled importer to update.",
+      "vehicles": [
+        {
+          "id": "north-1581-94613",
+          "yard": "north",
+          "year": 2015,
+          "make": "Honda",
+          "model": "CR-Z",
+          "row": "A",
+          "space": "3",
+          "vin": "JHMZF1D63FS001455",
+          "stock": "1581-94613",
+          "section": "Front Yard",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/"
+        },
+        {
+          "id": "north-1581-94636",
+          "yard": "north",
+          "year": 2005,
+          "make": "Dodge",
+          "model": "Durango",
+          "row": "60",
+          "space": "1",
+          "vin": "1D4HD48N95F547001",
+          "stock": "1581-94636",
+          "section": "TrkVanSuv",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/"
+        },
+        {
+          "id": "north-1581-94644",
+          "yard": "north",
+          "year": 2001,
+          "make": "GMC",
+          "model": "Yukon",
+          "row": "60",
+          "space": "2",
+          "vin": "1GKEK13T71J187166",
+          "stock": "1581-94644",
+          "section": "TrkVanSuv",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/"
+        },
+        {
+          "id": "north-1581-94248",
+          "yard": "north",
+          "year": 2005,
+          "make": "Chevrolet",
+          "model": "Silverado 1500",
+          "row": "60",
+          "space": "4",
+          "vin": "1GCEC19T55E154410",
+          "stock": "1581-94248",
+          "section": "TrkVanSuv",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/"
+        }
+      ]
+    },
+    "south": {
+      "status": "partial",
+      "checkedAt": "2026-10-25T22:00:00Z",
+      "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/",
+      "message": "Verified sample from the public page, NOT full inventory. Deploy scheduled importer to update.",
+      "vehicles": [
+        {
+          "id": "south-1585-79915",
+          "yard": "south",
+          "year": 2002,
+          "make": "Acura",
+          "model": "MDX",
+          "row": "",
+          "space": "",
+          "vin": "2HNYD18602H506376",
+          "stock": "1585-79915",
+          "section": "",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/"
+        },
+        {
+          "id": "south-1585-79971",
+          "yard": "south",
+          "year": 2008,
+          "make": "Acura",
+          "model": "RL",
+          "row": "",
+          "space": "",
+          "vin": "JH4KB16608C002814",
+          "stock": "1585-79971",
+          "section": "",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/"
+        },
+        {
+          "id": "south-1585-79940",
+          "yard": "south",
+          "year": 2000,
+          "make": "Buick",
+          "model": "Century",
+          "row": "",
+          "space": "",
+          "vin": "2G4WS52J1Y1340440",
+          "stock": "1585-79940",
+          "section": "",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/"
+        },
+        {
+          "id": "south-1585-79891",
+          "yard": "south",
+          "year": 2012,
+          "make": "Buick",
+          "model": "Verano",
+          "row": "",
+          "space": "",
+          "vin": "1G4PS5SK6C4128370",
+          "stock": "1585-79891",
+          "section": "",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/"
+        }
+      ]
+    },
+    "island": {
+      "status": "partial",
+      "checkedAt": "2026-10-25T22:00:00Z",
+      "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/",
+      "message": "Verified sample from the public page, NOT full inventory. Deploy scheduled importer to update.",
+      "vehicles": [
+        {
+          "id": "island-1582-91036",
+          "yard": "island",
+          "year": 2000,
+          "make": "Dodge",
+          "model": "Ram 1500",
+          "row": "64",
+          "space": "17",
+          "vin": "1B7HC16Z3YS581872",
+          "stock": "1582-91036",
+          "section": "TrkVanSuv",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/"
+        },
+        {
+          "id": "island-1582-90292",
+          "yard": "island",
+          "year": 2004,
+          "make": "Chevrolet",
+          "model": "Silverado 1500",
+          "row": "64",
+          "space": "18",
+          "vin": "2GCEK13T541377834",
+          "stock": "1582-90292",
+          "section": "TrkVanSuv",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/"
+        },
+        {
+          "id": "island-1582-90647",
+          "yard": "island",
+          "year": 2008,
+          "make": "Ford",
+          "model": "F-250 Super Duty",
+          "row": "64",
+          "space": "19",
+          "vin": "1FTSW20R58EA69251",
+          "stock": "1582-90647",
+          "section": "TrkVanSuv",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/"
+        },
+        {
+          "id": "island-1582-91257",
+          "yard": "island",
+          "year": 2017,
+          "make": "Ram",
+          "model": "ProMaster City",
+          "row": "32",
+          "space": "8",
+          "vin": "ZFBERFABXH6E33872",
+          "stock": "1582-91257",
+          "section": "Domestic",
+          "source": "Official LKQ inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/"
+        }
+      ]
+    },
+    "summit": {
+      "status": "unavailable",
+      "checkedAt": null,
+      "sourceUrl": null,
+      "message": "Official Summit inventory source not yet connected. No current cars are verified.",
+      "vehicles": []
+    }
+  }
+}
