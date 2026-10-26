@@ -178,8 +178,28 @@ def fetch_summit(session, headers, delay=0):
     unique = {}
     for rec, loc in summit:
         car = normalize(rec, loc)
-        if car: unique[car['id']] = car
+        if not car:
+            continue
+        # Some API payloads reuse a yard/location ID in the generic 'id' field.
+        # Never let that overwrite distinct vehicles. A content fingerprint is
+        # used only when the purported vehicle ID collides with different data.
+        fingerprint = hashlib.sha256(
+            json.dumps(rec, sort_keys=True, default=str).encode('utf-8')
+        ).hexdigest()[:24]
+        proposed = car['id']
+        if proposed in unique:
+            if unique[proposed]['_fingerprint'] == fingerprint:
+                continue  # Exact duplicate, e.g. repeated API record.
+            proposed = 'summit-record-' + fingerprint
+            # A collision-resistant backup handles missing/non-unique IDs.
+        if proposed in unique and unique[proposed]['_fingerprint'] == fingerprint:
+            continue
+        car['id'] = proposed
+        car['_fingerprint'] = fingerprint
+        unique[proposed] = car
     cars = list(unique.values())
+    for car in cars:
+        car.pop('_fingerprint', None)
     dated = sum(bool(c['availableDate']) for c in cars)
     photos = sum(bool(c['imageUrl']) for c in cars)
     print(f'summit: parsed {len(cars)} unique Summit vehicles; {dated} set dates, {photos} photos; reference ~1144', flush=True)
