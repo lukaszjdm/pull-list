@@ -1,10 +1,10 @@
 {
   "format": "pull-list-yard-feed-v1",
-  "generatedAt": "2026-10-26T01:15:47.803983Z",
+  "generatedAt": "2026-10-26T01:39:48.904879Z",
   "yards": {
     "north": {
       "status": "partial",
-      "checkedAt": "2026-10-26T01:15:47.803983Z",
+      "checkedAt": "2026-10-26T01:39:48.904879Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/",
       "message": "Scanned 59 populated publicly linked inventory pages (1466 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 59,
@@ -24936,7 +24936,7 @@
     },
     "south": {
       "status": "partial",
-      "checkedAt": "2026-10-26T01:15:47.803983Z",
+      "checkedAt": "2026-10-26T01:39:48.904879Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/",
       "message": "Scanned 50 populated publicly linked inventory pages (1229 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 50,
@@ -45839,7 +45839,7 @@
     },
     "island": {
       "status": "partial",
-      "checkedAt": "2026-10-26T01:15:47.803983Z",
+      "checkedAt": "2026-10-26T01:39:48.904879Z",
       "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/",
       "message": "Scanned 72 populated publicly linked inventory pages (1800 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 72,
@@ -76450,8 +76450,8 @@
     "summit": {
       "status": "unavailable",
       "checkedAt": null,
-      "sourceUrl": "https://salvagewatch.com/search/?yard_id=26",
-      "message": "Summit third-party scan unavailable (No recognizable Summit vehicle rows on first page); previously saved records retained.",
+      "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501",
+      "message": "Official Summit import not verified (Could not discover make options in official search page; no changes saved); old records retained.",
       "vehicles": []
     }
   }
