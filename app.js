@@ -82,3 +82,152 @@ function exportBackup(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'app
 function restoreBackup(text){const data=JSON.parse(text);if(!Array.isArray(data.parts)||!Array.isArray(data.cars))throw Error('Not a Pull List backup');db=data;db.hidden??=[];db.fee??=13.25;db.other??=0;current=null;save();nav('browse');flash('Backup restored.')}
 async function vinDecode(){if(!current?.vin){flash('Edit this car to enter its VIN first.');return}try{let r=await fetch('https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/'+encodeURIComponent(current.vin)+'?format=json');if(!r.ok)throw Error('Lookup unavailable');let v=(await r.json()).Results?.[0];if(!v)throw Error('No decoded record');let detail=[v.ModelYear,v.Make,v.Model,v.Trim,v.BodyClass,v.EngineModel,v.DisplacementL&&v.DisplacementL+'L'].filter(Boolean).join(' · ');flash('NHTSA VIN decode: '+detail+'. Confirm trim and options physically; VIN data may be incomplete.')}catch(e){flash('VIN lookup failed: '+e.message+'. Check connection.')}}
 $('#form').onsubmit=e=>{e.preventDefault();let vals=Object.fromEntries(new FormData(e.currentTarget));if(modalSave?.(vals)===false)return;$('#modal').close()};$('#close').onclick=$('#cancel').onclick=()=>$('#modal').close();$('#theme').onclick=()=>{db.dark=!db.dark;save()};$('#settings').onclick=$('#navSettings').onclick=openSettings;$$('nav [data-nav]').forEach(b=>b.onclick=()=>nav(b.dataset.nav));$('#yard').onchange=renderBrowse;$('#search').oninput=renderBrowse;$('#sort').onchange=renderBrowse;$('#yearMin').oninput=renderBrowse;$('#yearMax').oninput=renderBrowse;$('#back').onclick=$('#dbback').onclick=()=>nav('browse');$('#addcar').onclick=()=>openCar();$('#editcar').onclick=()=>{if(current?.demo){flash('The demo vehicle is read-only. Add a vehicle to your own yard to edit it.');return}openCar(current)};$('#removeCar').onclick=()=>{if(current?.demo)return;twice('car-'+current.id,()=>{db.hidden.push(current.id);save();current=null;nav('browse');flash('Vehicle hidden. Yard re-import will not automatically restore it.')})};$('#newpart').onclick=$('#dbadd').onclick=()=>openPart();$('#vinLookup').onclick=vinDecode;$('#openyard').onclick=()=>{let y=YARDS[$('#yard').value];if(y?.url)window.open(y.url,'_blank','noopener,noreferrer');else flash('Select an Illinois yard to open its official inventory page.')};$('#importvehicles').onclick=()=>chooseFile('.csv',importVehicles);$('#importparts').onclick=()=>chooseFile('.json,.txt',importParts);$('#exportdata').onclick=exportBackup;$('#importbackup').onclick=()=>chooseFile('.json',restoreBackup);$('#dbsearch').oninput=renderDB;render();nav('browse');loadLiveInventory();
+
+
+
+
+
+
+/* =========================================================
+   PULL LIST — AUTOMATIC RESEARCH SYNC
+   Imports new recommendations from seed.json while keeping
+   existing browser edits, vehicles and preferences.
+   ========================================================= */
+
+(() => {
+  const STORAGE_KEY = "pulllist-v1";
+
+  async function syncNewResearch() {
+    try {
+      const response = await fetch(
+        "./seed.json?sync=" + Date.now(),
+        { cache: "no-store" }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "seed.json returned HTTP " + response.status
+        );
+      }
+
+      const latest = await response.json();
+
+      if (
+        !Array.isArray(latest) ||
+        !latest.every(p =>
+          p && typeof p.id === "string" && p.id
+        )
+      ) {
+        throw new Error("Invalid research database.");
+      }
+
+      const raw = localStorage.getItem(STORAGE_KEY);
+
+      if (!raw) {
+        console.warn(
+          "[Pull List Sync] No local database found yet."
+        );
+        return;
+      }
+
+      const saved = JSON.parse(raw);
+
+      if (
+        !saved ||
+        !Array.isArray(saved.parts)
+      ) {
+        throw new Error(
+          "Existing browser parts database is invalid."
+        );
+      }
+
+      // Compare unique part IDs.
+      const existingIDs = new Set(
+        saved.parts
+          .filter(p => p && p.id != null)
+          .map(p => String(p.id))
+      );
+
+      const addedIDs = new Set();
+      const additions = [];
+
+      for (const part of latest) {
+        const id = String(part.id);
+
+        if (
+          existingIDs.has(id) ||
+          addedIDs.has(id)
+        ) {
+          continue;
+        }
+
+        additions.push(part);
+        addedIDs.add(id);
+      }
+
+      if (additions.length === 0) {
+        console.log(
+          "[Pull List Sync] Already up to date:",
+          saved.parts.length,
+          "parts."
+        );
+        return;
+      }
+
+      // Check that the database has not changed during fetch.
+      if (localStorage.getItem(STORAGE_KEY) !== raw) {
+        console.warn(
+          "[Pull List Sync] Local data changed during sync.",
+          "Will try again on the next page load."
+        );
+        return;
+      }
+
+      // Preserve all existing records and settings.
+      const updated = {
+        ...saved,
+        parts: [
+          ...saved.parts,
+          ...additions
+        ]
+      };
+
+      // Save changes. Existing parts are never replaced.
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(updated)
+      );
+
+      console.log(
+        "[Pull List Sync] Added",
+        additions.length,
+        "new recommendations."
+      );
+
+      console.log(
+        "[Pull List Sync] Total parts:",
+        updated.parts.length
+      );
+
+      // Refresh the interface to display the added parts.
+      window.location.reload();
+
+    } catch (error) {
+      console.error(
+        "[Pull List Sync] Failed safely:",
+        error
+      );
+    }
+  }
+
+  // Run after the website finishes initializing.
+  if (document.readyState === "complete") {
+    syncNewResearch();
+  } else {
+    window.addEventListener(
+      "load",
+      syncNewResearch,
+      { once: true }
+    );
+  }
+})();
