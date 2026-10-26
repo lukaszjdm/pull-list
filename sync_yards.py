@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read every publicly linked page of each LKQ yard inventory.
+"""Read Chicago North LKQ inventory pages and save the result.
 
 This follows the website's regular Next Page links (e.g. ?page=2), without
 bypassing restrictions. Partial/failed runs do not replace prior snapshots.
@@ -21,8 +21,6 @@ PATH = ROOT / 'yard-inventory.json'
 JS_PATH = ROOT / 'yard-inventory.js'
 YARDS = {
     'north': 'https://www.pyp.com/inventory/chicago-north-1581/',
-    'south': 'https://www.pyp.com/inventory/chicago-south-1585/',
-    'island': 'https://www.pyp.com/inventory/blue-island-1582/',
 }
 HEADERS = {'User-Agent': 'Mozilla/5.0 (compatible; PullListInventory/1.1; personal inventory reader)'}
 VIN = re.compile(r'\b(?:VIN\s*)?([A-HJ-NPR-Z0-9]{17})\b', re.I)
@@ -133,10 +131,10 @@ def fetch_all_pages(yard, base_url, session=None, delay=PAGE_DELAY_SECONDS, max_
             verification.raise_for_status()
             cars = parse(verification.text, yard)
             if not cars:
-                # A non-vehicle response may indicate a block or outage;
-                # reject pages that themselves still advertise Next Page.
-                if next_page(verification.text, page_url, base_url):
-                    raise RuntimeError(f'Empty page still has pagination: {page_url}')
+                # LKQ may retain a Next Page link even on its empty final page.
+                # Only treat an empty page as completion after multiple filled pages.
+                if count < 2:
+                    raise RuntimeError(f'Insufficient pages to verify end of inventory: {page_url}')
                 print(f'{yard}: end of inventory at empty page {count+1}; keeping {len(unique)} vehicles', flush=True)
                 break
 
@@ -144,6 +142,11 @@ def fetch_all_pages(yard, base_url, session=None, delay=PAGE_DELAY_SECONDS, max_
             unique[car['stock'] or car['vin']] = car
         count += 1
         print(f'{yard}: page {count}, {len(cars)} cards, {len(unique)} unique total', flush=True)
+        # A final batch containing fewer than the usual 25 cards is the end.
+        # LKQ may still show a Next Page link pointing to an empty page.
+        if len(cars) < 25:
+            print(f'{yard}: final partial page reached ({len(cars)} cards)', flush=True)
+            break
         page_url = next_page(response.text, page_url, base_url)
         if page_url and delay:
             time.sleep(delay)
