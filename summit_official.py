@@ -1,154 +1,186 @@
-"""Experimental official Pick-n-Pull Summit inventory reader.
+"""Read Pick-n-Pull's public vehicle-search API for Summit, Illinois.
 
-The public search HTML is scanned by make, filtered to the Summit section, and
-saved only if plausible. The site may change markup. Never represent a partial
-scan as complete inventory.
+Does not modify inventory files; sync_yards-summit-first.py handles persistence.
+The API response schema may change. Fail safely and log diagnostics instead of
+writing incomplete inventory. No cookies or credentials are needed.
 """
 from __future__ import annotations
+
 import datetime as dt
 import hashlib
+import json
 import re
-import time
-from urllib.parse import urljoin
-from bs4 import BeautifulSoup
+from urllib.parse import urlencode
 
-BASE = 'https://www.picknpull.com'
-SEARCH = BASE + '/check-inventory/vehicle-search'
-PARAMS = {'distance':'10', 'zip':'60501'}
-DATE = re.compile(r'\bSet\s*:?\s*(\d{1,2}/\d{1,2}/\d{4})\b', re.I)
-ROW = re.compile(r'\bRow\s*:?\s*([A-Za-z0-9-]+)\b', re.I)
-YEAR = re.compile(r'^(19\d{2}|20\d{2})\s+(.+)$')
-SUMMIT = re.compile(r'Pick\s*[- ]\s*n\s*[- ]\s*Pull\s*[- ]\s*Summit', re.I)
+API = 'https://www.picknpull.com/api/vehicle/search'
+SOURCE = 'https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501'
+PARAMS = {'makeId': '', 'modelId': '', 'year': '', 'distance': '10', 'zip': '60501', 'language': 'english'}
+YEAR_RX = re.compile(r'^(19\d{2}|20\d{2})$')
+DATE_RX = re.compile(r'(?<!\d)(\d{1,2})[/-](\d{1,2})[/-](\d{4})(?!\d)')
+VIN_RX = re.compile(r'^[A-HJ-NPR-Z0-9]{17}$', re.I)
+SUMMIT_RX = re.compile(r'\bsummit\b', re.I)
 
 
-def make_options(soup):
-    result = {}
-    for select in soup.find_all('select'):
-        attr = ' '.join([str(select.get('name','')), str(select.get('id',''))]).lower()
-        if 'make' not in attr: continue
-        for option in select.find_all('option'):
-            val = (option.get('value') or '').strip()
-            label = option.get_text(' ', strip=True)
-            if val and val != '0' and val.isdigit() and label and 'select' not in label.lower():
-                result[val] = label
-    return result
+def flat_key(k):
+    return re.sub(r'[^a-z0-9]', '', str(k).lower())
 
 
-def safe_photo(tag):
-    if not tag: return ''
-    for a in ('data-src', 'data-original','src','srcset'):
-        v = (tag.get(a) or '').strip()
-        if not v: continue
-        v = v.split(',')[0].split()[0]
-        url = urljoin(BASE, v)
-        if url.startswith('https://') and not any(x in url.lower() for x in ('logo','placeholder','spinner','icon')):
-            return url
+def value(obj, *keys):
+    if not isinstance(obj, dict):
+        return None
+    mapped = {flat_key(k): v for k, v in obj.items()}
+    for key in keys:
+        v = mapped.get(flat_key(key))
+        if v is not None and v != '':
+            return v
+    return None
+
+
+def text(v):
+    if v is None: return ''
+    if isinstance(v, (str, int, float)): return str(v).strip()
+    if isinstance(v, dict):
+        for field in ('name', 'label', 'description', 'value', 'title', 'city'):
+            t = text(value(v, field))
+            if t: return t
     return ''
 
 
-def parse_results(html):
-    """Extract vehicle labels after the exact Summit heading only.
-
-    Result records may be divs rather than articles; isolate an image and its
-    nearest row/date wrapper, avoiding other-yard or unrelated vehicle records.
-    """
-    soup = BeautifulSoup(html, 'html.parser')
-    found = []
-    summit = False
-    for el in soup.find_all(True):
-        # Treat a standalone heading as a yard section boundary.
-        if el.name in ('h2','h3','h4','h5'):
-            t = el.get_text(' ', strip=True)
-            if re.search(r'Pick\s*[- ]\s*n\s*[- ]\s*Pull', t, re.I):
-                summit = bool(SUMMIT.search(t))
-        if not summit or el.name != 'img': continue
-        title = (el.get('alt') or '').strip()
-        m = YEAR.match(title)
-        if not m: continue
-        parent = el
-        text = ''
-        for _ in range(5):
-            parent = parent.parent
-            if parent is None or parent.name in ('body', 'html'): break
-            text = parent.get_text(' ', strip=True)
-            if DATE.search(text) and ROW.search(text) and len(text) < 450:
-                break
-        else:
-            continue
-        dm, rm = DATE.search(text), ROW.search(text)
-        if not dm or not rm or len(text) > 450: continue
-        try:
-            date = dt.datetime.strptime(dm.group(1), '%m/%d/%Y').date().isoformat()
-        except ValueError: continue
-        make_model = m.group(2).strip()
-        # Use single-make search pages to disambiguate unusual make names later.
-        make, _, model = make_model.partition(' ')
-        if not model: continue
-        link = el.find_parent('a',href=True)
-        url = urljoin(BASE,link.get('href','')) if link else ''
-        if url and not url.startswith(BASE+'/'): url = ''
-        key = url or '|'.join([str(m.group(1)),make_model,rm.group(1),date])
-        # Rows and dates are not unique if two matching cars arrive together.
-        # Cannot guarantee deduplication in the absence of vehicle IDs.
-        digest = hashlib.sha1(key.encode()).hexdigest()[:16]
-        found.append(dict(id='summit-'+digest, yard='summit', year=int(m.group(1)), make=make,
-            model=model, row=rm.group(1), space='', section='', stock='', vin='',
-            availableDate=date, imageUrl=safe_photo(el), vehicleUrl=url,
-            source='Official Pick-n-Pull website', sourceUrl=SEARCH+'?distance=10&zip=60501'))
-    return found
+def first_text(rec, *keys):
+    return text(value(rec, *keys))
 
 
-def fetch_summit(session, headers, delay=0.4):
-    """Try unfiltered official Summit results FIRST; make searches are fallback.
+def parse_date(v):
+    s = text(v)
+    if not s: return ''
+    m = DATE_RX.search(s)
+    if m:
+        a, b, y = map(int, m.groups())
+        try: return dt.date(y, a, b).isoformat()
+        except ValueError: return ''
+    try: return dt.date.fromisoformat(s[:10]).isoformat()
+    except ValueError: return ''
 
-    ZIP 60501 / 10 miles may already show every vehicle without specifying
-    make. Do not require a make dropdown that is often hydrated by JavaScript.
-    """
-    response = session.get(SEARCH, params=PARAMS, headers=headers, timeout=40)
+
+def walk(obj, inherited=''):
+    """Find plausible vehicle dictionaries at any depth of the API payload."""
+    if isinstance(obj, list):
+        for item in obj:
+            yield from walk(item, inherited)
+    elif isinstance(obj, dict):
+        location = location_for(obj) or inherited
+        if seems_vehicle(obj):
+            yield obj, location
+            return
+        for item in obj.values():
+            if isinstance(item, (list, dict)):
+                yield from walk(item, location)
+
+
+def location_for(obj):
+    parts = []
+    for k in ('yardName', 'yard', 'locationName', 'location', 'storeName', 'store', 'branchName', 'branch', 'city'):
+        t = first_text(obj, k)
+        if t: parts.append(t)
+    # A location ID alone cannot prove a record is at Summit.
+    return ' | '.join(parts)
+
+
+def seems_vehicle(rec):
+    y = first_text(rec, 'year', 'vehicleYear', 'modelYear', 'yr')
+    make = first_text(rec, 'makeName', 'make', 'vehicleMake', 'manufacturer')
+    model = first_text(rec, 'modelName', 'model', 'vehicleModel')
+    title = first_text(rec, 'vehicleName', 'vehicleDescription', 'vehicle', 'description', 'title')
+    if not (y and make and model) and title:
+        m = re.match(r'^\s*((?:19|20)\d{2})\s+(\S+)\s+(.+)', title)
+        if m: y, make, model = m.groups()
+    return bool(YEAR_RX.fullmatch(y) and make and model)
+
+
+def image_url(v):
+    if isinstance(v, list):
+        for i in v:
+            ans = image_url(i)
+            if ans: return ans
+        return ''
+    if isinstance(v, dict):
+        return image_url(value(v, 'url', 'imageUrl', 'photoUrl', 'src', 'fullUrl', 'originalUrl'))
+    s = text(v)
+    if s.startswith('//'): s = 'https:' + s
+    if s.startswith('/'): s = 'https://www.picknpull.com' + s
+    if s.startswith(('https://', 'http://')): return s
+    return ''
+
+
+def normalize(rec, loc):
+    year = first_text(rec, 'year', 'vehicleYear', 'modelYear', 'yr')
+    make = first_text(rec, 'makeName', 'make', 'vehicleMake', 'manufacturer')
+    model = first_text(rec, 'modelName', 'model', 'vehicleModel')
+    title = first_text(rec, 'vehicleName', 'vehicleDescription', 'vehicle', 'description', 'title')
+    if not (year and make and model):
+        m = re.match(r'^\s*((?:19|20)\d{2})\s+(\S+)\s+(.+)', title)
+        if m: year, make, model = m.groups()
+    if not YEAR_RX.fullmatch(year): return None
+    vin = first_text(rec, 'vin', 'vinNumber', 'vehicleVin').upper()
+    if not VIN_RX.fullmatch(vin): vin = ''
+    stock = first_text(rec, 'stockNumber', 'stock', 'inventoryNumber', 'vehicleStockNumber')
+    api_id = first_text(rec, 'vehicleId', 'inventoryId', 'inventoryID', 'vehicleInventoryId', 'id')
+    row = first_text(rec, 'row', 'rowNumber', 'yardRow', 'rowLocation')
+    arrival = parse_date(value(rec, 'setDate', 'dateSet', 'arrivalDate', 'availableDate', 'dateAdded', 'dateInYard', 'dateReceived'))
+    photo = image_url(value(rec, 'imageUrl', 'photoUrl', 'primaryImage', 'mainImage', 'thumbnailUrl', 'photos', 'images', 'vehicleImage'))
+    url = first_text(rec, 'vehicleUrl', 'detailUrl', 'url', 'link')
+    if url.startswith('/'): url = 'https://www.picknpull.com' + url
+    if url and not url.startswith('https://www.picknpull.com/'): url = ''
+    # Hash the complete record when no stable identifier is offered; this avoids
+    # collapsing two same-year/model vehicles placed in the same row on one day.
+    ident = api_id or stock or vin or hashlib.sha256(json.dumps(rec, sort_keys=True, default=str).encode()).hexdigest()[:24]
+    return {'id': 'summit-' + ident, 'yard': 'summit', 'year': int(year),
+            'make': make, 'model': model, 'row': row, 'space': '', 'section': '',
+            'stock': stock, 'vin': vin, 'availableDate': arrival, 'imageUrl': photo,
+            'vehicleUrl': url, 'source': 'Official Pick-n-Pull vehicle API', 'sourceUrl': SOURCE}
+
+
+def describe_payload(obj):
+    if isinstance(obj, dict):
+        return f'JSON object; top-level keys: {list(obj)[:20]}'
+    if isinstance(obj, list): return f'JSON array with {len(obj)} top-level entries'
+    return f'JSON type: {type(obj).__name__}'
+
+
+def fetch_summit(session, headers, delay=0):
+    """Match existing sync_yards.py signature; returns (vehicles, make_count)."""
+    request_headers = dict(headers or {})
+    request_headers['Accept'] = 'application/json, text/plain, */*'
+    response = session.get(API, params=PARAMS, headers=request_headers, timeout=60)
     response.raise_for_status()
-    html = response.text
-    soup = BeautifulSoup(html, 'html.parser')
-    text = soup.get_text(' ', strip=True)
-    unfiltered = parse_results(html)
-    reported = re.findall(r'Displaying\s+([\d,]+)\s+vehicles?', text, re.I)
-    print(
-        f'summit: direct ZIP search HTTP {response.status_code}; '
-        f'HTML {len(html)} bytes; parsed {len(unfiltered)} Summit vehicles; '
-        f'page counts: {reported[:8] or "not present"}',
-        flush=True
-    )
-    if len(unfiltered) >= 800:
-        print('summit: using unfiltered official inventory; no make search needed', flush=True)
-        return unfiltered, 0
-
-    # The HTML may have vehicle cards but different heading markup; report
-    # structural clues rather than immediately failing on missing make options.
-    headings = [h.get_text(' ', strip=True)[:90] for h in soup.find_all(['h2', 'h3', 'h4', 'h5'])]
-    pictures = [im.get('alt','')[:65] for im in soup.find_all('img') if YEAR.match(im.get('alt','').strip())]
-    print(f'summit: headings sample: {headings[:14]}', flush=True)
-    print(f'summit: vehicle-photo alt sample: {pictures[:5]} (total {len(pictures)})', flush=True)
-    print(f'summit: Summit text present: {bool(SUMMIT.search(text))}', flush=True)
-
-    options = make_options(soup)
-    if not options:
-        raise RuntimeError(
-            f'No server-rendered make dropdown; direct search recognized '
-            f'{len(unfiltered)} Summit cars. Send summit: diagnostic lines. '
-            'The make control may be loaded by JavaScript.'
-        )
-
-    print(f'summit: discovered {len(options)} make options; trying make-by-make fallback', flush=True)
-    unique = {v['id']: v for v in unfiltered}
-    for i, (code, make_name) in enumerate(options.items(), 1):
-        r = session.get(SEARCH, params={**PARAMS, 'make':code, 'model':'0'}, headers=headers, timeout=40)
-        r.raise_for_status()
-        vehicles = parse_results(r.text)
-        for v in vehicles:
-            v['make'] = make_name
-            unique[v['id']] = v
-        print(f'summit: make {i}/{len(options)} {make_name}: {len(vehicles)}; {len(unique)} unique', flush=True)
-        if delay:
-            time.sleep(delay)
-    if not unique:
-        raise RuntimeError('No Summit cars parsed; old snapshot retained')
-    return list(unique.values()), len(options)
+    try:
+        payload = response.json()
+    except ValueError as exc:
+        raise RuntimeError(f'API HTTP {response.status_code} did not return JSON: {response.text[:120]!r}') from exc
+    print(f'summit: official API HTTP {response.status_code}; {len(response.content)} bytes; {describe_payload(payload)}', flush=True)
+    matches = list(walk(payload))
+    labels = sorted({loc[:100] for _,loc in matches if loc})
+    print(f'summit: {len(matches)} vehicle-shaped records; locations: {labels[:14]}', flush=True)
+    if not matches:
+        sample = []
+        def sample_keys(v, depth=0):
+            if len(sample) >= 6 or depth > 5: return
+            if isinstance(v, dict):
+                sample.append(list(v)[:18])
+                for child in v.values(): sample_keys(child, depth+1)
+            elif isinstance(v, list) and v: sample_keys(v[0], depth+1)
+        sample_keys(payload)
+        raise RuntimeError(f'API data structure not recognized. Key samples: {sample}')
+    summit = [(rec, loc) for rec,loc in matches if SUMMIT_RX.search(loc)]
+    if not summit:
+        sample = [list(rec)[:20] for rec,_ in matches[:2]]
+        raise RuntimeError(f'Found {len(matches)} vehicles but none positively linked to Summit. Vehicle key samples: {sample}; locations: {labels[:10]}')
+    unique = {}
+    for rec, loc in summit:
+        car = normalize(rec, loc)
+        if car: unique[car['id']] = car
+    cars = list(unique.values())
+    dated = sum(bool(c['availableDate']) for c in cars)
+    photos = sum(bool(c['imageUrl']) for c in cars)
+    print(f'summit: parsed {len(cars)} unique Summit vehicles; {dated} set dates, {photos} photos; reference ~1144', flush=True)
+    return cars, 0
