@@ -1022,3 +1022,91 @@ loadLiveInventory();
     '[Pull List] Compact vehicle details enabled.'
   );
 })();
+
+
+/* Pull List — Generation labels from research data */
+
+(() => {
+  const normalize = s =>
+    String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  function getGeneration(car) {
+    if (car.generation) return car.generation;
+
+    const year = Number(car.year);
+    const sameCar = p =>
+      normalize(p.make) === normalize(car.make) &&
+      normalize(p.model) === normalize(car.model);
+
+    // Find generation ranges saved in seed.json.
+    const ranges = db.parts
+      .filter(sameCar)
+      .filter(p =>
+        Number(p.generationStartYear) <= year &&
+        Number(p.generationEndYear) >= year
+      )
+      .map(p => [
+        Number(p.generationStartYear),
+        Number(p.generationEndYear)
+      ]);
+
+    if (!ranges.length) return "";
+
+    // Avoid displaying conflicting generation ranges.
+    const unique = [...new Set(ranges.map(r => r.join("-")))];
+
+    if (unique.length !== 1) return "";
+
+    const [start, end] = ranges[0];
+
+    // Try to find an existing generation name.
+    const researched = MORE_DEMOS.find(r =>
+      sameCar(r) &&
+      r.generation &&
+      r.generation.includes(String(start)) &&
+      r.generation.includes(String(end))
+    );
+
+    return researched?.generation ||
+      `Generation (${start}–${end})`;
+  }
+
+  const previousRenderDetail = renderDetail;
+
+  renderDetail = function () {
+    previousRenderDetail();
+
+    if (!current) return;
+
+    const generation = getGeneration(current);
+    if (!generation) return;
+
+    // Update the existing specifications panel.
+    document.querySelectorAll(
+      "#vehicleSpecs .spec-item"
+    ).forEach(item => {
+      const label = item.querySelector("small");
+      const value = item.querySelector("strong");
+
+      if (
+        label?.textContent.trim() === "Generation" &&
+        value
+      ) {
+        value.textContent = generation;
+      }
+    });
+
+    // Update compact display if enabled.
+    const chips = document.querySelector(".pl-vehicle-chips");
+
+    if (chips && !chips.textContent.includes(generation)) {
+      const chip = document.createElement("span");
+      chip.className = "pl-chip";
+      chip.textContent = generation;
+      chips.prepend(chip);
+    }
+  };
+
+  console.log("Generation labels enabled.");
+})();
+
