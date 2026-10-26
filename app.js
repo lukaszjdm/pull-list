@@ -49,7 +49,7 @@ const availableLabel=c=>{if(!c.availableDate)return '';let d=new Date(c.availabl
 const maxProfit=c=>{let parts=carParts(c).filter(p=>p.group==='general'&&num(p.soldCount)>=5);return parts.length?Math.max(...parts.map(profit)):null};
 const save=()=>{store();render()};
 function nav(screen){$$('.screen').forEach(e=>e.hidden=e.id!==screen);$$('nav button[data-nav]').forEach(e=>e.classList.toggle('selected',e.dataset.nav===screen));if(screen==='browse')renderBrowse();if(screen==='database')renderDB();window.scrollTo({top:0,behavior:'instant'})}
-function render(){document.body.classList.toggle('dark',!!db.dark);renderBrowse();if(current)renderDetail();renderDB()}
+function render(){   document.body.classList.toggle('dark',!!db.dark);   renderBrowse();   if(current) renderDetail();   if(!$('#database').hidden) renderDB(); }
 function renderBrowse(){const yard=$('#yard').value,search=$('#search').value.toLowerCase().trim(),min=Number($('#yearMin').value)||0,max=Number($('#yearMax').value)||9999;let cars=allCars().filter(c=>(yard==='all'?c.yard!=='demo':c.yard===yard)&&c.year>=min&&c.year<=max&&[c.year,c.make,c.model,c.row,c.trim].join(' ').toLowerCase().includes(search));const sort=$('#sort').value;cars.sort((a,b)=>sort==='row'?(String(a.row??'').localeCompare(String(b.row??''),undefined,{numeric:true})||a.make.localeCompare(b.make)):sort==='year'?b.year-a.year:sort==='date-new'||sort==='date-old'?((a.availableDate&&b.availableDate)?(sort==='date-new'?b.availableDate.localeCompare(a.availableDate):a.availableDate.localeCompare(b.availableDate)):(a.availableDate?-1:b.availableDate?1:0)):sort==='name'?(a.make+' '+a.model).localeCompare(b.make+' '+b.model):((maxProfit(b)??-Infinity)-(maxProfit(a)??-Infinity)));
 $('#vehicleCount').textContent='('+cars.length+')';$('#shownYard').textContent=yard==='all'?'All Illinois yards':YARDS[yard].name;
 $('#vehicles').innerHTML=cars.length?cars.map(c=>`<div class="car ${c.demo?'demo-car':''}">${photoUrl(c)?`<img class="car-thumb" src="${safe(photoUrl(c))}" alt="${safe(c.year+' '+c.make+' '+c.model)} yard photo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">`:''}<div class="car-main"><div class="name">${safe(c.year)} ${safe(c.make)} ${safe(c.model)}</div><small>${safe(c.demo?'Research':YARDS[c.yard]?.name)} · Row ${safe(c.row||'—')} ${c.space?'· Space '+safe(c.space):''} ${c.demo?'· RESEARCH':''}</small>${c.availableDate?`<small class="available-date">Available ${safe(availableLabel(c))}</small>`:''}<small>${carParts(c).length} recommended parts</small></div><div class="right"><div class="value">${maxProfit(c)===null?'—':money(maxProfit(c))}</div><small>Top est. net profit</small><button class="btn" data-open="${safe(c.id)}">View parts →</button></div></div>`).join(''):`<div class="empty">No verified vehicles are available for this yard yet. Check the inventory status above, or choose Research to explore your parts database.</div>`;
@@ -560,4 +560,142 @@ async function vinDecode(){if(!current?.vin){flash('Edit this car to enter its V
     '[Pull List] Mobile pagination loaded.',
     `Page size: ${pageSize}`
   );
+})();
+
+
+/* Initialize Pull List application */
+
+$('#form').onsubmit = e => {
+  e.preventDefault();
+  const vals = Object.fromEntries(new FormData(e.currentTarget));
+  if (modalSave?.(vals) === false) return;
+  $('#modal').close();
+};
+
+$('#close').onclick =
+$('#cancel').onclick = () => $('#modal').close();
+
+$('#theme').onclick = () => {
+  db.dark = !db.dark;
+  save();
+};
+
+$('#settings').onclick =
+$('#navSettings').onclick = openSettings;
+
+$$('nav [data-nav]').forEach(b => {
+  b.onclick = () => nav(b.dataset.nav);
+});
+
+$('#yard').onchange = renderBrowse;
+$('#search').oninput = renderBrowse;
+$('#sort').onchange = renderBrowse;
+$('#yearMin').oninput = renderBrowse;
+$('#yearMax').oninput = renderBrowse;
+
+$('#back').onclick =
+$('#dbback').onclick = () => nav('browse');
+
+$('#addcar').onclick = () => openCar();
+
+$('#editcar').onclick = () => {
+  if (current?.demo) {
+    flash('Research vehicles are read-only.');
+    return;
+  }
+  openCar(current);
+};
+
+$('#removeCar').onclick = () => {
+  if (current?.demo) return;
+
+  twice('car-' + current.id, () => {
+    db.hidden.push(current.id);
+    save();
+    current = null;
+    nav('browse');
+    flash('Vehicle hidden.');
+  });
+};
+
+$('#newpart').onclick =
+$('#dbadd').onclick = () => openPart();
+
+$('#vinLookup').onclick = vinDecode;
+
+$('#openyard').onclick = () => {
+  const y = YARDS[$('#yard').value];
+
+  if (y?.url) {
+    window.open(y.url, '_blank', 'noopener,noreferrer');
+  } else {
+    flash('Select a yard to open its official inventory.');
+  }
+};
+
+$('#importvehicles').onclick = () =>
+  chooseFile('.csv', importVehicles);
+
+$('#importparts').onclick = () =>
+  chooseFile('.json,.txt', importParts);
+
+$('#exportdata').onclick = exportBackup;
+
+$('#importbackup').onclick = () =>
+  chooseFile('.json', restoreBackup);
+
+$('#dbsearch').oninput = renderDB;
+
+// Apply initial appearance and display the homepage.
+render();
+nav('browse');
+
+// Load the live inventory.
+loadLiveInventory();
+
+// Automatically import newly added research.
+(async () => {
+  try {
+    const response = await fetch(
+      './seed.json?sync=' + Date.now(),
+      { cache: 'no-store' }
+    );
+
+    if (!response.ok) return;
+
+    const latest = await response.json();
+    if (!Array.isArray(latest)) return;
+
+    const existing = new Set(
+      db.parts.map(p => String(p.id))
+    );
+
+    let added = 0;
+
+    for (const part of latest) {
+      const id = String(part?.id || '');
+
+      if (!id || existing.has(id)) continue;
+
+      db.parts.push(part);
+      existing.add(id);
+      added++;
+    }
+
+    if (added > 0) {
+      store();
+      renderBrowse();
+
+      console.log(
+        '[Pull List] Automatically imported',
+        added,
+        'new recommendations.'
+      );
+    }
+  } catch (error) {
+    console.warn(
+      '[Pull List] Research sync unavailable:',
+      error
+    );
+  }
 })();
