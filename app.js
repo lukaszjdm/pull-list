@@ -699,3 +699,326 @@ loadLiveInventory();
     );
   }
 })();
+
+
+
+/* ============================================
+   PULL LIST — VEHICLE DETAILS UPGRADE
+   Research-based generation matching
+   Compact vehicle information and part cards
+   ============================================ */
+
+(() => {
+  'use strict';
+
+  // Normalize names for matching research vehicles.
+  const normalize = value =>
+    String(value || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '');
+
+  function findGeneration(vehicle) {
+    if (vehicle.generation) {
+      return vehicle.generation;
+    }
+
+    const year = Number(vehicle.year);
+
+    // Search existing researched vehicles.
+    const matches = MORE_DEMOS.filter(research => {
+      if (
+        normalize(research.make) !==
+        normalize(vehicle.make)
+      ) return false;
+
+      if (
+        normalize(research.model) !==
+        normalize(vehicle.model)
+      ) return false;
+
+      const generation = String(
+        research.generation || ''
+      );
+
+      const years = generation.match(
+        /\((\d{4})\s*[–-]\s*(\d{4})\)/
+      );
+
+      // Only match when research explicitly
+      // states a generation year range.
+      if (!years) return false;
+
+      const start = Number(years[1]);
+      const end = Number(years[2]);
+
+      return year >= start && year <= end;
+    });
+
+    // Avoid choosing between conflicting matches.
+    const generations = [
+      ...new Set(
+        matches.map(car => car.generation)
+      )
+    ];
+
+    return generations.length === 1
+      ? generations[0]
+      : '';
+  }
+
+  const originalRenderDetail = renderDetail;
+
+  renderDetail = function () {
+    if (!current) return;
+
+    const generation = findGeneration(current);
+    const inferred = !current.generation && !!generation;
+
+    // Add session-only generation information.
+    // Does not change saved or downloaded inventory.
+    if (inferred) {
+      current.generation = generation;
+    }
+
+    // Preserve existing parts, pricing and buttons.
+    originalRenderDetail();
+
+    if (!current) return;
+
+    const detail = document.getElementById('detail');
+    const specs = document.getElementById('vehicleSpecs');
+    const hero = detail?.querySelector('.carhero');
+
+    if (!detail || !specs || !hero) return;
+
+    detail.classList.add('pl-compact-details');
+
+    detail.querySelector('.pl-vehicle-chips')?.remove();
+    detail.querySelector('.pl-spec-toggle')?.remove();
+
+    const values = [
+      generation && {
+        label: 'Generation',
+        value: generation
+      },
+      current.body && {
+        label: 'Body',
+        value: current.body
+      },
+      current.engine && {
+        label: 'Engine',
+        value: current.engine
+      },
+      current.row && {
+        label: 'Row',
+        value: current.row
+      },
+      current.space && {
+        label: 'Space',
+        value: current.space
+      },
+      current.availableDate && {
+        label: 'Added',
+        value: availableLabel(current)
+      },
+      current.vin && {
+        label: 'VIN',
+        value: current.vin
+      }
+    ].filter(Boolean);
+
+    const chips = document.createElement('div');
+    chips.className = 'pl-vehicle-chips';
+
+    chips.innerHTML = values.map(item => `
+      <span class="pl-chip">
+        <strong>${safe(item.label)}</strong>
+        ${safe(item.value)}
+      </span>
+    `).join('');
+
+    specs.before(chips);
+
+    if (inferred) {
+      const note = document.createElement('small');
+      note.className = 'pl-generation-note';
+      note.textContent =
+        'Generation inferred from matching research. ' +
+        'Verify engine, trim, and equipment before pulling parts.';
+      chips.after(note);
+    }
+
+    // Hide the large specifications grid initially,
+    // but allow it to be expanded at any time.
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'btn pl-spec-toggle';
+    toggle.textContent = 'Show all vehicle specifications ↓';
+
+    specs.hidden = true;
+
+    toggle.onclick = () => {
+      specs.hidden = !specs.hidden;
+
+      toggle.textContent = specs.hidden
+        ? 'Show all vehicle specifications ↓'
+        : 'Hide vehicle specifications ↑';
+    };
+
+    specs.before(toggle);
+  };
+
+  // Style the compact details and profit cards.
+  const style = document.createElement('style');
+  style.textContent = `
+    .pl-compact-details .carhero {
+      padding: 19px;
+    }
+
+    .pl-compact-details .carhero h1 {
+      font-size: clamp(23px, 4vw, 32px);
+      margin: 7px 0;
+    }
+
+    .pl-compact-details #carMeta,
+    .pl-compact-details #carVin {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pl-vehicle-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 13px 0 8px;
+    }
+
+    .pl-chip {
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+      background: var(--chip);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      padding: 7px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      line-height: 1.4;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .pl-chip strong {
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .pl-generation-note {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin: 5px 0 12px;
+    }
+
+    .pl-spec-toggle {
+      margin: 9px 0 14px;
+    }
+
+    .pl-compact-details #vehicleSpecs[hidden] {
+      display: none !important;
+    }
+
+    .pl-compact-details .summarygrid {
+      margin: 12px 0 20px;
+    }
+
+    .pl-compact-details .partgroup {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 23px 0;
+    }
+
+    .pl-compact-details .partgroup > h2,
+    .pl-compact-details .partgroup > p,
+    .pl-compact-details .partgroup > .empty {
+      grid-column: 1 / -1;
+    }
+
+    .pl-compact-details .partgroup > p {
+      margin: -3px 0 4px;
+    }
+
+    .pl-compact-details .part {
+      margin: 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pl-compact-details .parthead {
+      display: block;
+    }
+
+    .pl-compact-details .part h3 {
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .pl-compact-details .part .profit {
+      text-align: left;
+      margin-top: 10px;
+      font-size: 25px;
+    }
+
+    .pl-compact-details .part .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      margin: 8px 0;
+    }
+
+    .pl-compact-details .part .metric {
+      min-width: 0;
+    }
+
+    .pl-compact-details .part .buttonrow {
+      margin-top: auto;
+    }
+
+    .pl-compact-details .part .buttonrow .btn {
+      flex: 1;
+    }
+
+    @media (max-width: 850px) {
+      .pl-compact-details .partgroup {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 590px) {
+      .pl-compact-details .partgroup {
+        grid-template-columns: 1fr;
+      }
+
+      .pl-compact-details .part {
+        padding: 15px;
+      }
+
+      .pl-compact-details .part .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pl-compact-details .carhero {
+        padding: 14px;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+
+  console.log(
+    '[Pull List] Compact vehicle details enabled.'
+  );
+})();
