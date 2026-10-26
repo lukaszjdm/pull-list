@@ -81,153 +81,483 @@ function importSingleParts(d,notify){let a=Array.isArray(d)?d:[...(d.generalReco
 function exportBackup(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='pull-list-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function restoreBackup(text){const data=JSON.parse(text);if(!Array.isArray(data.parts)||!Array.isArray(data.cars))throw Error('Not a Pull List backup');db=data;db.hidden??=[];db.fee??=13.25;db.other??=0;current=null;save();nav('browse');flash('Backup restored.')}
 async function vinDecode(){if(!current?.vin){flash('Edit this car to enter its VIN first.');return}try{let r=await fetch('https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/'+encodeURIComponent(current.vin)+'?format=json');if(!r.ok)throw Error('Lookup unavailable');let v=(await r.json()).Results?.[0];if(!v)throw Error('No decoded record');let detail=[v.ModelYear,v.Make,v.Model,v.Trim,v.BodyClass,v.EngineModel,v.DisplacementL&&v.DisplacementL+'L'].filter(Boolean).join(' · ');flash('NHTSA VIN decode: '+detail+'. Confirm trim and options physically; VIN data may be incomplete.')}catch(e){flash('VIN lookup failed: '+e.message+'. Check connection.')}}
-$('#form').onsubmit=e=>{e.preventDefault();let vals=Object.fromEntries(new FormData(e.currentTarget));if(modalSave?.(vals)===false)return;$('#modal').close()};$('#close').onclick=$('#cancel').onclick=()=>$('#modal').close();$('#theme').onclick=()=>{db.dark=!db.dark;save()};$('#settings').onclick=$('#navSettings').onclick=openSettings;$$('nav [data-nav]').forEach(b=>b.onclick=()=>nav(b.dataset.nav));$('#yard').onchange=renderBrowse;$('#search').oninput=renderBrowse;$('#sort').onchange=renderBrowse;$('#yearMin').oninput=renderBrowse;$('#yearMax').oninput=renderBrowse;$('#back').onclick=$('#dbback').onclick=()=>nav('browse');$('#addcar').onclick=()=>openCar();$('#editcar').onclick=()=>{if(current?.demo){flash('The demo vehicle is read-only. Add a vehicle to your own yard to edit it.');return}openCar(current)};$('#removeCar').onclick=()=>{if(current?.demo)return;twice('car-'+current.id,()=>{db.hidden.push(current.id);save();current=null;nav('browse');flash('Vehicle hidden. Yard re-import will not automatically restore it.')})};$('#newpart').onclick=$('#dbadd').onclick=()=>openPart();$('#vinLookup').onclick=vinDecode;$('#openyard').onclick=()=>{let y=YARDS[$('#yard').value];if(y?.url)window.open(y.url,'_blank','noopener,noreferrer');else flash('Select an Illinois yard to open its official inventory page.')};$('#importvehicles').onclick=()=>chooseFile('.csv',importVehicles);$('#importparts').onclick=()=>chooseFile('.json,.txt',importParts);$('#exportdata').onclick=exportBackup;$('#importbackup').onclick=()=>chooseFile('.json',restoreBackup);$('#dbsearch').oninput=renderDB;render();nav('browse');loadLiveInventory();
 
 
+/* =====================================================
+   PULL LIST — MOBILE PAGINATION UPDATE
+   Compatible with the existing Pull List app.js
 
-
-
-
-/* =========================================================
-   PULL LIST — AUTOMATIC RESEARCH SYNC
-   Imports new recommendations from seed.json while keeping
-   existing browser edits, vehicles and preferences.
-   ========================================================= */
+   Features:
+   - 50, 100, or 200 cars per page
+   - Full-inventory search
+   - Newest arrivals first
+   - Automatic page reset when filters change
+   - Saved page-size preference
+   - Lazy-loading car photos
+   - Pull List logo when photos are missing
+   - Preserves existing parts and research
+   ===================================================== */
 
 (() => {
-  const STORAGE_KEY = "pulllist-v1";
+  'use strict';
 
-  async function syncNewResearch() {
+  const PAGE_STORAGE_KEY = 'pulllist-pagination-v2';
+
+  const allowedSizes = [50, 100, 200];
+
+  let savedSize = 50;
+
+  try {
+    const stored = JSON.parse(
+      localStorage.getItem(PAGE_STORAGE_KEY) || '{}'
+    );
+
+    if (allowedSizes.includes(Number(stored.pageSize))) {
+      savedSize = Number(stored.pageSize);
+    }
+  } catch (error) {
+    console.warn('[Pull List] Page settings unavailable.');
+  }
+
+  let pageSize = savedSize;
+  let currentPage = 1;
+  let lastFilters = '';
+
+  const sizeSelect = document.getElementById('pageSize');
+  const prevButton = document.getElementById('prevPage');
+  const nextButton = document.getElementById('nextPage');
+  const pageIndicator = document.getElementById('pageIndicator');
+  const pageSummary = document.getElementById('pageSummary');
+
+  if (
+    !sizeSelect ||
+    !prevButton ||
+    !nextButton ||
+    !pageIndicator ||
+    !pageSummary
+  ) {
+    console.error(
+      '[Pull List] Pagination controls were not found. ' +
+      'Update index.html first.'
+    );
+    return;
+  }
+
+  sizeSelect.value = String(pageSize);
+
+  // Newest arrivals are the default.
+  const sortSelect = document.getElementById('sort');
+  sortSelect.value = 'date-new';
+
+  function rememberPageSize() {
     try {
-      const response = await fetch(
-        "./seed.json?sync=" + Date.now(),
-        { cache: "no-store" }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          "seed.json returned HTTP " + response.status
-        );
-      }
-
-      const latest = await response.json();
-
-      if (
-        !Array.isArray(latest) ||
-        !latest.every(p =>
-          p && typeof p.id === "string" && p.id
-        )
-      ) {
-        throw new Error("Invalid research database.");
-      }
-
-      const raw = localStorage.getItem(STORAGE_KEY);
-
-      if (!raw) {
-        console.warn(
-          "[Pull List Sync] No local database found yet."
-        );
-        return;
-      }
-
-      const saved = JSON.parse(raw);
-
-      if (
-        !saved ||
-        !Array.isArray(saved.parts)
-      ) {
-        throw new Error(
-          "Existing browser parts database is invalid."
-        );
-      }
-
-      // Compare unique part IDs.
-      const existingIDs = new Set(
-        saved.parts
-          .filter(p => p && p.id != null)
-          .map(p => String(p.id))
-      );
-
-      const addedIDs = new Set();
-      const additions = [];
-
-      for (const part of latest) {
-        const id = String(part.id);
-
-        if (
-          existingIDs.has(id) ||
-          addedIDs.has(id)
-        ) {
-          continue;
-        }
-
-        additions.push(part);
-        addedIDs.add(id);
-      }
-
-      if (additions.length === 0) {
-        console.log(
-          "[Pull List Sync] Already up to date:",
-          saved.parts.length,
-          "parts."
-        );
-        return;
-      }
-
-      // Check that the database has not changed during fetch.
-      if (localStorage.getItem(STORAGE_KEY) !== raw) {
-        console.warn(
-          "[Pull List Sync] Local data changed during sync.",
-          "Will try again on the next page load."
-        );
-        return;
-      }
-
-      // Preserve all existing records and settings.
-      const updated = {
-        ...saved,
-        parts: [
-          ...saved.parts,
-          ...additions
-        ]
-      };
-
-      // Save changes. Existing parts are never replaced.
       localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(updated)
+        PAGE_STORAGE_KEY,
+        JSON.stringify({ pageSize })
       );
-
-      console.log(
-        "[Pull List Sync] Added",
-        additions.length,
-        "new recommendations."
-      );
-
-      console.log(
-        "[Pull List Sync] Total parts:",
-        updated.parts.length
-      );
-
-      // Refresh the interface to display the added parts.
-      window.location.reload();
-
     } catch (error) {
-      console.error(
-        "[Pull List Sync] Failed safely:",
-        error
+      console.warn(
+        '[Pull List] Could not save page-size preference.'
       );
     }
   }
 
-  // Run after the website finishes initializing.
-  if (document.readyState === "complete") {
-    syncNewResearch();
-  } else {
-    window.addEventListener(
-      "load",
-      syncNewResearch,
-      { once: true }
-    );
+  function sortCars(cars, sort) {
+    const text = value => String(value ?? '');
+
+    if (sort === 'date-new' || sort === 'date-old') {
+      const newest = sort === 'date-new';
+
+      cars.sort((a, b) => {
+        const dateA = text(
+          a.availableDate || a.setDate || a.arrivalDate
+        );
+
+        const dateB = text(
+          b.availableDate || b.setDate || b.arrivalDate
+        );
+
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+
+        return newest
+          ? dateB.localeCompare(dateA)
+          : dateA.localeCompare(dateB);
+      });
+    }
+
+    else if (sort === 'profit') {
+      cars.sort((a, b) =>
+        (maxProfit(b) ?? -Infinity) -
+        (maxProfit(a) ?? -Infinity)
+      );
+    }
+
+    else if (sort === 'year') {
+      cars.sort((a, b) => b.year - a.year);
+    }
+
+    else if (sort === 'name') {
+      cars.sort((a, b) =>
+        (a.make + ' ' + a.model).localeCompare(
+          b.make + ' ' + b.model
+        )
+      );
+    }
+
+    else if (sort === 'row') {
+      cars.sort((a, b) =>
+        text(a.row).localeCompare(
+          text(b.row),
+          undefined,
+          { numeric: true }
+        )
+      );
+    }
+
+    return cars;
   }
+
+  function imageForCar(car) {
+    const photo = photoUrl(car);
+
+    if (!photo) {
+      return `
+        <img
+          class="car-thumb fallback-logo"
+          src="pull-list-logo.png"
+          alt="Pull List"
+          loading="lazy"
+          decoding="async"
+        >
+      `;
+    }
+
+    return `
+      <img
+        class="car-thumb"
+        src="${safe(photo)}"
+        alt="${safe(
+          car.year + ' ' + car.make + ' ' + car.model
+        )}"
+        loading="lazy"
+        decoding="async"
+        referrerpolicy="no-referrer"
+        onerror="
+          this.onerror=null;
+          this.src='pull-list-logo.png';
+          this.classList.add('fallback-logo');
+        "
+      >
+    `;
+  }
+
+  function vehicleCard(car) {
+    const parts = carParts(car);
+    const best = maxProfit(car);
+
+    const yardName = car.demo
+      ? 'Research'
+      : YARDS[car.yard]?.name || car.yard;
+
+    const arrival = car.availableDate
+      ? `
+        <small class="available-date">
+          Available ${safe(availableLabel(car))}
+        </small>
+      `
+      : '';
+
+    return `
+      <div class="car ${car.demo ? 'demo-car' : ''}">
+
+        ${imageForCar(car)}
+
+        <div class="car-main">
+
+          <div class="name">
+            ${safe(car.year)}
+            ${safe(car.make)}
+            ${safe(car.model)}
+          </div>
+
+          <small>
+            ${safe(yardName)}
+            · Row ${safe(car.row || '—')}
+            ${
+              car.space
+                ? ' · Space ' + safe(car.space)
+                : ''
+            }
+          </small>
+
+          ${arrival}
+
+          <small>
+            ${parts.length} recommended parts
+          </small>
+
+        </div>
+
+        <div class="right">
+
+          <div class="value">
+            ${best === null ? '—' : money(best)}
+          </div>
+
+          <small>
+            Top est. net profit
+          </small>
+
+          <button
+            type="button"
+            class="btn"
+            data-open="${safe(car.id)}"
+          >
+            View parts →
+          </button>
+
+        </div>
+
+      </div>
+    `;
+  }
+
+  function updateInventoryStatus(yard) {
+    const status = document.getElementById(
+      'inventoryStatus'
+    );
+
+    if (yard === 'demo') {
+      status.textContent =
+        MORE_DEMOS.length +
+        ' research vehicles loaded. ' +
+        'These are not confirmed in any yard.';
+
+      return;
+    }
+
+    if (liveError) {
+      status.textContent = liveError;
+      return;
+    }
+
+    if (!liveFeed) {
+      status.textContent = 'Loading yard inventory feed…';
+      return;
+    }
+
+    const keys = yard === 'all'
+      ? ['north', 'south', 'island', 'summit']
+      : [yard];
+
+    status.textContent = keys.map(key => {
+      const item = liveFeed.yards?.[key];
+      const name = YARDS[key]?.name || key;
+
+      if (!item) {
+        return name + ': no inventory loaded';
+      }
+
+      const count = item.vehicles?.length || 0;
+      const state = item.status || 'unknown';
+
+      return `${name}: ${count} vehicles; ${state}`;
+    }).join(' | ');
+  }
+
+  // Replace the old browse renderer with the
+  // paginated version. All other app functions remain.
+  renderBrowse = function () {
+    const yard = $('#yard').value;
+    const search = $('#search').value
+      .toLowerCase()
+      .trim();
+
+    const yearMin =
+      Number($('#yearMin').value) || 0;
+
+    const yearMax =
+      Number($('#yearMax').value) || 9999;
+
+    const sort = $('#sort').value;
+
+    const filterKey = JSON.stringify({
+      yard,
+      search,
+      yearMin,
+      yearMax,
+      sort
+    });
+
+    // Changing filters automatically returns to page 1.
+    if (filterKey !== lastFilters) {
+      currentPage = 1;
+      lastFilters = filterKey;
+    }
+
+    // Search across ALL vehicles before pagination.
+    const matching = allCars().filter(car => {
+      if (yard === 'all') {
+        if (car.yard === 'demo') return false;
+      } else if (car.yard !== yard) {
+        return false;
+      }
+
+      if (
+        car.year < yearMin ||
+        car.year > yearMax
+      ) {
+        return false;
+      }
+
+      const vehicleText = [
+        car.year,
+        car.make,
+        car.model,
+        car.trim,
+        car.row,
+        car.space,
+        car.vin,
+        car.stock,
+        car.engine,
+        car.body
+      ].join(' ').toLowerCase();
+
+      return vehicleText.includes(search);
+    });
+
+    sortCars(matching, sort);
+
+    const totalCars = matching.length;
+
+    const totalPages = Math.max(
+      1,
+      Math.ceil(totalCars / pageSize)
+    );
+
+    currentPage = Math.min(
+      Math.max(1, currentPage),
+      totalPages
+    );
+
+    const startIndex =
+      (currentPage - 1) * pageSize;
+
+    const endIndex = Math.min(
+      startIndex + pageSize,
+      totalCars
+    );
+
+    // The important optimization:
+    // Render only the current page.
+    const visibleCars = matching.slice(
+      startIndex,
+      endIndex
+    );
+
+    $('#vehicleCount').textContent =
+      `(${totalCars})`;
+
+    $('#shownYard').textContent =
+      yard === 'all'
+        ? 'All Illinois yards'
+        : YARDS[yard]?.name || yard;
+
+    pageSummary.textContent = totalCars
+      ? `Showing ${startIndex + 1}–${endIndex} of ${totalCars}`
+      : 'Showing 0 vehicles';
+
+    pageIndicator.textContent =
+      `Page ${currentPage} of ${totalPages}`;
+
+    prevButton.disabled = currentPage === 1;
+    nextButton.disabled = currentPage >= totalPages;
+
+    $('#vehicles').innerHTML =
+      visibleCars.length
+        ? visibleCars.map(vehicleCard).join('')
+        : `
+          <div class="empty">
+            No vehicles match your search.
+          </div>
+        `;
+
+    updateInventoryStatus(yard);
+
+    // Keep the View Parts buttons working.
+    document.querySelectorAll(
+      '#vehicles [data-open]'
+    ).forEach(button => {
+      button.onclick = () => {
+        const id = button.dataset.open;
+
+        current = allCars().find(
+          car => String(car.id) === id
+        );
+
+        if (!current) {
+          console.warn(
+            '[Pull List] Vehicle no longer available.'
+          );
+          return;
+        }
+
+        nav('detail');
+        renderDetail();
+      };
+    });
+  };
+
+  // Page-size selector.
+  sizeSelect.onchange = () => {
+    const requestedSize = Number(sizeSelect.value);
+
+    pageSize = allowedSizes.includes(requestedSize)
+      ? requestedSize
+      : 50;
+
+    currentPage = 1;
+    rememberPageSize();
+    renderBrowse();
+  };
+
+  // Previous page.
+  prevButton.onclick = () => {
+    if (currentPage <= 1) return;
+
+    currentPage--;
+    renderBrowse();
+
+    document.querySelector('.sectionheading')
+      ?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+  };
+
+  // Next page.
+  nextButton.onclick = () => {
+    const currentTotal = Number(
+      pageIndicator.textContent
+        .split(' of ')[1]
+    ) || 1;
+
+    if (currentPage >= currentTotal) return;
+
+    currentPage++;
+    renderBrowse();
+
+    document.querySelector('.sectionheading')
+      ?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+  };
+
+  console.log(
+    '[Pull List] Mobile pagination loaded.',
+    `Page size: ${pageSize}`
+  );
 })();
