@@ -28,8 +28,67 @@ ROW = re.compile(r'\bRow\s+([A-Za-z0-9-]+)', re.I)
 SPACE = re.compile(r'\bSpace\s+([A-Za-z0-9-]+)', re.I)
 SECTION = re.compile(r'\bSection\s+(.+?)\s*\|?\s*Row\b', re.I)
 STOCK = re.compile(r'\b(158[125]-\d{4,})\b')
+AVAILABLE = re.compile(r'\bAvailable\s*[:|]?\s*(\d{1,2}/\d{1,2}/\d{4})\b', re.I)
 MAX_PAGES = 200   # Safety guard; hitting it is an error, not a successful full scan.
 PAGE_DELAY_SECONDS = 0.3
+
+
+def safe_image_url(value, base_url):
+    """Only accept public HTTP(S) image URLs from the official LKQ host/CDN."""
+    if not value or not isinstance(value, str):
+        return ''
+    value = value.strip().split(',')[0].strip()
+    if value.startswith('data:') or value.startswith('blob:'):
+        return ''
+    # srcset values can have a width descriptor after the URL.
+    value = value.split()[0] if value else ''
+    url = urljoin(base_url, value)
+    parsed = urlparse(url)
+    if parsed.scheme not in ('https', 'http') or not parsed.netloc:
+        return ''
+    # URL is supplied by the public page, not user data; don't accept javascript URLs.
+    if any(term in parsed.path.lower() for term in ('logo', 'icon', 'placeholder', 'spinner', 'loader', 'avatar', 'google')):
+        return ''
+    return url
+
+
+def vehicle_image(h, base_url):
+    """Use image elements inside the vehicle card, not unrelated page imagery."""
+    # Cards vary in markup; choose the nearest wrapping element containing the
+    # heading but NOT a second vehicle heading. Avoid selecting document-wide images.
+    container = None
+    for parent in h.parents:
+        if getattr(parent, 'name', '') in ('body', 'html'):
+            break
+        if parent.name not in ('article', 'li', 'div', 'section'):
+            continue
+        if len(parent.find_all('h3')) == 1 and parent.find('img'):
+            container = parent
+            break
+    if container is None:
+        return ''
+    for img in container.find_all('img'):
+        for attribute in ('data-src', 'data-lazy-src', 'data-original', 'data-image', 'src', 'srcset', 'data-srcset'):
+            candidate = safe_image_url(img.get(attribute), base_url)
+            if candidate:
+                return candidate
+    for tag in container.find_all(['source']):
+        candidate = safe_image_url(tag.get('srcset') or tag.get('data-srcset'), base_url)
+        if candidate:
+            return candidate
+    return ''
+
+
+def vehicle_url(h, base_url):
+    """Vehicle heading normally links to its official listing detail page."""
+    anchor = h.find('a', href=True) or h.find_parent('a', href=True)
+    if not anchor:
+        return ''
+    candidate = urljoin(base_url, anchor['href'])
+    parsed, base = urlparse(candidate), urlparse(base_url)
+    if parsed.netloc != base.netloc or not parsed.path.startswith(base.path):
+        return ''
+    return candidate
 
 
 def parse(html, yard):
@@ -75,6 +134,14 @@ def parse(html, yard):
             continue
         seen.add(ident)
         row, space, section = ROW.search(block), SPACE.search(block), SECTION.search(block)
+        date_match = AVAILABLE.search(block)
+        available_date = ''
+        if date_match:
+            try:
+                available_date = dt.datetime.strptime(date_match.group(1), '%m/%d/%Y').date().isoformat()
+            except ValueError:
+                pass
+        source_url = vehicle_url(h, YARDS[yard])
         vehicles.append({
             'id': f'{yard}-{ident}', 'yard': yard, 'year': int(m.group(1)),
             'make': make, 'model': model,
@@ -82,6 +149,9 @@ def parse(html, yard):
             'space': space.group(1) if space else '',
             'section': section.group(1).strip(' |') if section else '',
             'stock': stock, 'vin': vin,
+            'availableDate': available_date,
+            'imageUrl': vehicle_image(h, YARDS[yard]),
+            'vehicleUrl': source_url,
             'source': 'Official LKQ public inventory page',
             'sourceUrl': YARDS[yard],
         })

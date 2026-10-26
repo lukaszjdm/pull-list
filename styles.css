@@ -7,3 +7,12 @@ body.dark .feature-art{background:linear-gradient(140deg,#3c5945,#1c2c21)}body.d
 @media(max-width:620px){.headline-mark{display:none}.headline{padding:5px 3px 20px}.headline h1{font-size:37px}.feature{grid-template-columns:1fr}.feature-art{height:150px;padding:13px 18px}.car-silhouette{font-size:67px;position:absolute;right:22px;top:23px}.art-foot{margin-top:auto}.feature-body{padding:20px}.feature-body h2{font-size:29px}.feature-button{width:100%}.feature-stats{margin:8px 0}.sectionheading h2{font-size:18px}}
 
 .spec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0 18px}.spec-item{background:var(--chip);border-radius:11px;padding:11px 12px;min-width:0}.spec-item small{display:block;color:var(--muted);font-size:11px;letter-spacing:.2px;margin-bottom:5px}.spec-item strong{font-size:13px;overflow-wrap:anywhere;font-weight:700;line-height:1.4}.spec-item:nth-child(1),.spec-item:nth-child(2){grid-column:span 2}@media(max-width:520px){.spec-grid{gap:8px}.spec-item{padding:10px}.spec-item strong{font-size:12px}}
+
+/* Optional LKQ photos and arrival dates */
+.car-main{flex:1;min-width:0}
+.car-thumb{width:100px;height:78px;object-fit:cover;border-radius:10px;flex-shrink:0;background:var(--chip)}
+.car .right{flex-shrink:0}
+.available-date{font-weight:700;color:var(--accent)!important}
+.vehicle-photo{max-width:560px;margin:12px 0 17px}
+.vehicle-photo img{display:block;width:100%;max-height:360px;object-fit:contain;background:var(--chip);border-radius:12px}
+@media(max-width:520px){.car-thumb{width:75px;height:75px}.car .name{font-size:15px}.car .right .value{font-size:15px}}
