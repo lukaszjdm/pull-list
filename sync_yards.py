@@ -8,7 +8,7 @@ import datetime as dt, json, re, sys, pathlib
 import requests
 from bs4 import BeautifulSoup
 
-ROOT=pathlib.Path(__file__).resolve().parents[1]
+ROOT=pathlib.Path(__file__).resolve().parent
 PATH=ROOT/'yard-inventory.json'
 JS_PATH=ROOT/'yard-inventory.js'
 YARDS={'north':'https://www.pyp.com/inventory/chicago-north-1581/',
