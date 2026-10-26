@@ -19,7 +19,7 @@ jobs:
       - name: Install parser dependencies
         run: pip install -r requirements.txt
       - name: Refresh official LKQ public pages
-        run: python sync_yards.py
+        run: python sync_yards-summit-first.py --summit-only
       - name: Commit changed feed
         run: |
           git config user.name "github-actions[bot]"
