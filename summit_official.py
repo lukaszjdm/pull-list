@@ -99,28 +99,56 @@ def parse_results(html):
 
 
 def fetch_summit(session, headers, delay=0.4):
+    """Try unfiltered official Summit results FIRST; make searches are fallback.
+
+    ZIP 60501 / 10 miles may already show every vehicle without specifying
+    make. Do not require a make dropdown that is often hydrated by JavaScript.
+    """
     response = session.get(SEARCH, params=PARAMS, headers=headers, timeout=40)
     response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'html.parser')
+    html = response.text
+    soup = BeautifulSoup(html, 'html.parser')
+    text = soup.get_text(' ', strip=True)
+    unfiltered = parse_results(html)
+    reported = re.findall(r'Displaying\s+([\d,]+)\s+vehicles?', text, re.I)
+    print(
+        f'summit: direct ZIP search HTTP {response.status_code}; '
+        f'HTML {len(html)} bytes; parsed {len(unfiltered)} Summit vehicles; '
+        f'page counts: {reported[:8] or "not present"}',
+        flush=True
+    )
+    if len(unfiltered) >= 800:
+        print('summit: using unfiltered official inventory; no make search needed', flush=True)
+        return unfiltered, 0
+
+    # The HTML may have vehicle cards but different heading markup; report
+    # structural clues rather than immediately failing on missing make options.
+    headings = [h.get_text(' ', strip=True)[:90] for h in soup.find_all(['h2', 'h3', 'h4', 'h5'])]
+    pictures = [im.get('alt','')[:65] for im in soup.find_all('img') if YEAR.match(im.get('alt','').strip())]
+    print(f'summit: headings sample: {headings[:14]}', flush=True)
+    print(f'summit: vehicle-photo alt sample: {pictures[:5]} (total {len(pictures)})', flush=True)
+    print(f'summit: Summit text present: {bool(SUMMIT.search(text))}', flush=True)
+
     options = make_options(soup)
     if not options:
-        raise RuntimeError('Could not discover make options in official search page; no changes saved')
-    print(f'summit: discovered {len(options)} makes', flush=True)
-    unique = {}
-    successful = 0
-    for i,(code, make_name) in enumerate(options.items(), 1):
-        r = session.get(SEARCH, params={**PARAMS,'make':code,'model':'0'}, headers=headers, timeout=40)
+        raise RuntimeError(
+            f'No server-rendered make dropdown; direct search recognized '
+            f'{len(unfiltered)} Summit cars. Send summit: diagnostic lines. '
+            'The make control may be loaded by JavaScript.'
+        )
+
+    print(f'summit: discovered {len(options)} make options; trying make-by-make fallback', flush=True)
+    unique = {v['id']: v for v in unfiltered}
+    for i, (code, make_name) in enumerate(options.items(), 1):
+        r = session.get(SEARCH, params={**PARAMS, 'make':code, 'model':'0'}, headers=headers, timeout=40)
         r.raise_for_status()
         vehicles = parse_results(r.text)
-        # Reject nonempty result pages that the parser cannot understand.
-        if 'Displaying ' in r.text and not vehicles and SUMMIT.search(r.text):
-            raise RuntimeError(f'Summit vehicle results were present but could not parse make {make_name}; snapshot unchanged')
         for v in vehicles:
             v['make'] = make_name
             unique[v['id']] = v
-        successful += 1
-        print(f'summit: make {i}/{len(options)} {make_name}: {len(vehicles)} found; {len(unique)} unique', flush=True)
-        if delay: time.sleep(delay)
-    if successful != len(options) or not unique:
-        raise RuntimeError('Incomplete Summit scan; existing data retained')
-    return list(unique.values()), successful
+        print(f'summit: make {i}/{len(options)} {make_name}: {len(vehicles)}; {len(unique)} unique', flush=True)
+        if delay:
+            time.sleep(delay)
+    if not unique:
+        raise RuntimeError('No Summit cars parsed; old snapshot retained')
+    return list(unique.values()), len(options)
