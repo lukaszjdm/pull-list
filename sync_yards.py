@@ -226,69 +226,9 @@ def fetch_all_pages(yard, base_url, session=None, delay=PAGE_DELAY_SECONDS, max_
 
 
 
-# Summit third-party catalog (not the official yard's own availability feed).
-SUMMIT_SOURCE = 'https://salvagewatch.com/search/?yard_id=26'
-
-def parse_summit(html):
-    """Parse linked vehicles only from SalvageWatch result table rows."""
-    soup = BeautifulSoup(html, 'html.parser')
-    found = []
-    for table in soup.find_all('table'):
-        head = ' '.join(th.get_text(' ', strip=True) for th in table.find_all('th')).lower()
-        if 'vehicle' not in head or 'yard' not in head:
-            continue
-        for tr in table.find_all('tr'):
-            link = tr.select_one('a[href*="/vehicles/"]') or tr.select_one('a[href*="/vehicle/"]')
-            if not link:
-                continue
-            url = urljoin(SUMMIT_SOURCE, link.get('href', ''))
-            if urlparse(url).netloc != 'salvagewatch.com' or not re.match(r'^/vehicles/\d+/?$', urlparse(url).path):
-                continue
-            title = link.get_text(' ', strip=True)
-            m = re.match(r'^(\d{4})\s+(.+)$', title)
-            if not m:
-                continue
-            name = m.group(2).split(' ', 1)
-            if len(name) != 2:
-                continue
-            row = ''
-            # No arrival-date claim: "On lot" is relative and may reflect first sighting.
-            link_key = urlparse(url).path.rstrip('/').split('/')[-1]
-            if not link_key:
-                continue
-            found.append({
-                'id': 'summit-'+link_key, 'yard': 'summit',
-                'year': int(m.group(1)), 'make': name[0], 'model': name[1],
-                'row': row, 'space': '', 'section': '', 'stock': '', 'vin': '',
-                'availableDate': '', 'imageUrl': '', 'vehicleUrl': url,
-                'source': 'SalvageWatch third-party inventory index',
-                'sourceUrl': SUMMIT_SOURCE,
-            })
-    return found
-
-def fetch_summit(session=None, delay=PAGE_DELAY_SECONDS, max_pages=120):
-    session = session or requests.Session()
-    unique = {}
-    for page in range(1, max_pages + 1):
-        url = SUMMIT_SOURCE + ('&page='+str(page) if page > 1 else '')
-        resp = session.get(url, headers=HEADERS, timeout=35)
-        resp.raise_for_status()
-        cars = parse_summit(resp.text)
-        if not cars:
-            if page == 1:
-                raise RuntimeError('No recognizable Summit vehicle rows on first page')
-            raise RuntimeError(f'Unexpected empty page {page}; retaining older snapshot')
-        for car in cars:
-            unique[car['id']] = car
-        print(f'summit: page {page}, {len(cars)} cards, {len(unique)} unique total', flush=True)
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        next_link = next((a for a in soup.find_all('a', href=True)
-                          if 'next page' in a.get_text(' ', strip=True).lower()), None)
-        if not next_link:
-            return list(unique.values()), page
-        if delay:
-            time.sleep(delay)
-    raise RuntimeError('Summit safety page limit reached; retaining older snapshot')
+# Summit's official ZIP/distance search (experimental parser, fails safely).
+from summit_official import fetch_summit as fetch_official_summit
+SUMMIT_SOURCE = 'https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501'
 
 def main():
     feed = json.loads(PATH.read_text()) if PATH.exists() else {'format': 'pull-list-yard-feed-v1', 'yards': {}}
@@ -314,24 +254,30 @@ def main():
                 'message': f'Full-page scan failed: {str(exc)[:160]}. Older snapshot retained; do not assume this is a complete current inventory.',
             }
             print(f'{yard}: ERROR: {exc}', file=sys.stderr, flush=True)
-    # Summit uses a different inventory system. Fetch the publicly indexed
-    # third-party SalvageWatch catalog; mark it clearly as third-party data.
+    # Summit: scan official public vehicle-search by make, not SalvageWatch.
     previous = feed.setdefault('yards', {}).get('summit', {})
     try:
-        vehicles, pages = fetch_summit()
+        vehicles, searched_makes = fetch_official_summit(requests.Session(), HEADERS)
+        # A very low count is likely a parser/search-coverage problem, not a real inventory change.
+        if len(vehicles) < 800:
+            raise RuntimeError(f'Only {len(vehicles)} Summit vehicles against ~1144 reference; refusing incomplete replacement')
+        # The baseline was reported by the user, not independently verified.
+        # Keep a partial label until site coverage can be validated.
+        status = 'partial'
         feed['yards']['summit'] = {
-            'status': 'third-party', 'checkedAt': now,
+            'status': status, 'checkedAt': now,
             'sourceUrl': SUMMIT_SOURCE,
-            'message': f'Third-party SalvageWatch index ({len(vehicles)} vehicles, {pages} pages). Not official Pick-n-Pull live availability; confirm before travel.',
-            'pageCount': pages, 'vehicleCount': len(vehicles), 'vehicles': vehicles,
+            'message': f'Official Pick-n-Pull ZIP 60501 / 10-mile search: {len(vehicles)} recognized Summit vehicles across {searched_makes} make searches. Coverage not independently verified (previous reference ~1144).',
+            'makeCount': searched_makes, 'vehicleCount': len(vehicles), 'vehicles': vehicles,
         }
         succeeded += 1
-        print(f'summit: COMPLETE THIRD-PARTY INDEX: {pages} pages, {len(vehicles)} vehicles', flush=True)
+        print(f'summit: OFFICIAL IMPORT: {len(vehicles)} unique vehicles from {searched_makes} makes (reference ~1144)', flush=True)
     except Exception as exc:
         feed['yards']['summit'] = {
-            **previous, 'status': 'stale' if previous.get('vehicles') else 'unavailable',
+            **previous,
+            'status': 'stale' if previous.get('vehicles') else 'unavailable',
             'sourceUrl': SUMMIT_SOURCE,
-            'message': f'Summit third-party scan unavailable ({str(exc)[:120]}); previously saved records retained.'
+            'message': f'Official Summit import not verified ({str(exc)[:150]}); old records retained.'
         }
         print(f'summit: ERROR: {exc}', file=sys.stderr, flush=True)
     feed['generatedAt'] = now
