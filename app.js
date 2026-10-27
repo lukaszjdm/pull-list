@@ -282,6 +282,23 @@ else if (sort === 'profit') {
   });
 }
 
+else if (sort === 'year') {
+  cars.sort((a, b) =>
+    Number(b.year) - Number(a.year)
+  );
+}
+
+else if (sort === 'name') {
+  cars.sort((a, b) =>
+    (String(a.make) + ' ' + String(a.model))
+      .localeCompare(
+        String(b.make) + ' ' + String(b.model),
+        undefined,
+        { numeric: true, sensitivity: 'base' }
+      )
+  );
+}
+
     else if (sort === 'row') {
       cars.sort((a, b) =>
         text(a.row).localeCompare(
