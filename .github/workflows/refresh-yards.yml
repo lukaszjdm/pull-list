@@ -1,28 +1,57 @@
+
 name: Refresh partial LKQ inventory snapshot
+
 on:
   schedule:
-    - cron: "0 8,10 * * *"
+    - cron: "17 8,14 * * *"
       timezone: "America/Chicago"
   workflow_dispatch:
 
-
 permissions:
   contents: write
+
+# Prevent two inventory refreshes from pushing
+# to main at the same time.
+concurrency:
+  group: pull-list-inventory-refresh
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Install parser dependencies
         run: pip install -r requirements.txt
+
       - name: Refresh official LKQ public pages
         run: python sync_yards-summit-first.py
+
       - name: Commit changed feed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add yard-inventory.json yard-inventory.js
-          git diff --cached --quiet || (git commit -m "Update public LKQ yard snapshot" && git push)
+
+          if git diff --cached --quiet; then
+            echo "No inventory changes."
+            exit 0
+          fi
+
+          git commit -m "Update public LKQ yard snapshot"
+
+          # Bring in any commits made while scraping.
+          git pull --rebase origin main
+
+          # Publish the updated inventory.
+          git push origin HEAD:main
