@@ -42,7 +42,59 @@ async function loadLiveInventory(){
 }
 
 const match=(p,c)=>String(p.make).trim().toLowerCase()===String(c.make).trim().toLowerCase()&&similarModel(p.model,c.model)&&+c.year>=+p.startYear&&+c.year<=+p.endYear;
-const carParts=c=>db.parts.filter(p=>match(p,c));
+
+let partIndex = null;
+
+function getPartIndex() {
+  if (
+    partIndex &&
+    partIndex.source === db.parts &&
+    partIndex.size === db.parts.length
+  ) return partIndex.map;
+
+  const map = new Map();
+
+  for (const p of db.parts) {
+    const key =
+      String(p.make).trim().toLowerCase() +
+      '|' + cleanModel(p.model);
+
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(p);
+  }
+
+  partIndex = {
+    source: db.parts,
+    size: db.parts.length,
+    map
+  };
+
+  return map;
+}
+
+const carParts = c => {
+  const index = getPartIndex();
+  const make = String(c.make).trim().toLowerCase();
+  const model = cleanModel(c.model);
+
+  const candidates = [
+    ...(index.get(make + '|' + model) || [])
+  ];
+
+  for (const prefix of [
+    'f250', 'f350', 'mazda6',
+    'ram1500', 'silverado1500'
+  ]) {
+    if (model !== prefix && model.startsWith(prefix)) {
+      candidates.push(
+        ...(index.get(make + '|' + prefix) || [])
+      );
+    }
+  }
+
+  return candidates.filter(p => match(p, c));
+};
+
 const profit=p=>num(p.salePrice)*(1-db.fee/100)-num(p.yardCost)-num(p.shipping)-num(db.other);
 const photoUrl=c=>{try{let u=new URL(c.imageUrl);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}};
 const availableLabel=c=>{if(!c.availableDate)return '';let d=new Date(c.availableDate+'T12:00:00');return Number.isFinite(d.getTime())?d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):c.availableDate};
