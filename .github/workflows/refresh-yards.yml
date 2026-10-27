@@ -1,7 +1,7 @@
 name: Refresh partial LKQ inventory snapshot
 on:
   schedule:
-    - cron: "0 8,10,12,14,16,18 * * *"
+    - cron: "0 8,10 * * *"
       timezone: "America/Chicago"
   workflow_dispatch:
 
