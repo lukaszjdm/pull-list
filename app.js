@@ -276,8 +276,11 @@ else if (sort === 'profit') {
       car.year;
 
     if (!profitCache.has(key)) {
-      profitCache.set(key, maxProfit(car));
-    }
+  profitCache.set(
+    key,
+    maxProfit(car) ?? potentialProfit(car)
+  );
+}
 
     return profitCache.get(key);
   };
