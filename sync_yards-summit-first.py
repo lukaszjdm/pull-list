@@ -26,8 +26,8 @@ YARDS = {
 }
 HEADERS = {'User-Agent': 'Mozilla/5.0 (compatible; PullListInventory/1.1; personal inventory reader)'}
 VIN = re.compile(r'\b(?:VIN\s*)?([A-HJ-NPR-Z0-9]{17})\b', re.I)
-ROW = re.compile(r'\bRow\s+([A-Za-z0-9-]+)', re.I)
-SPACE = re.compile(r'\bSpace\s+([A-Za-z0-9-]+)', re.I)
+ROW = re.compile(r'\bRow\s+(\d+[A-Z]?|[A-Z])\b', re.I)
+SPACE = re.compile(r'\bSpace\s+(\d+[A-Z]?)\b', re.I)
 SECTION = re.compile(r'\bSection\s+(.+?)\s*\|?\s*Row\b', re.I)
 STOCK = re.compile(r'\b(158[125]-\d{4,})\b')
 AVAILABLE = re.compile(r'\bAvailable\s*[:|]?\s*(\d{1,2}/\d{1,2}/\d{4})\b', re.I)
