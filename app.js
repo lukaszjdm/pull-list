@@ -1328,3 +1328,364 @@ loadLiveInventory();
   );
 })();
 
+
+/* =============================================
+   PULL LIST — CLEAN VEHICLE DETAILS
+   Automatic VIN decoding + chassis codes
+   ============================================= */
+
+(() => {
+  'use strict';
+
+  const decodeCacheKey = 'pulllist-vin-decodes-v1';
+  const decodeCache = new Map();
+  const pending = new Map();
+
+  let generationData = [];
+  let generationPromise = null;
+  let activeRequest = 0;
+
+  const normalize = value =>
+    String(value || '').toLowerCase()
+      .replace(/[^a-z0-9]/g, '');
+
+  const valid = value => {
+    const s = String(value ?? '').trim();
+    return s && !['0', 'null', 'undefined', 'not applicable']
+      .includes(s.toLowerCase()) ? s : '';
+  };
+
+  // Restore previously decoded VINs.
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(decodeCacheKey) || '{}'
+    );
+    Object.entries(saved).forEach(([vin, data]) => {
+      decodeCache.set(vin, data);
+    });
+  } catch {}
+
+  function saveCache() {
+    try {
+      const entries = [...decodeCache.entries()].slice(-500);
+      localStorage.setItem(
+        decodeCacheKey,
+        JSON.stringify(Object.fromEntries(entries))
+      );
+    } catch {}
+  }
+
+  // Load our existing researched generation catalog.
+  function loadGenerations() {
+    if (generationPromise) return generationPromise;
+
+    generationPromise = fetch(
+      'generations.json',
+      { cache: 'no-store' }
+    )
+      .then(r => {
+        if (!r.ok) throw Error('Generation file unavailable');
+        return r.json();
+      })
+      .then(data => {
+        generationData = Array.isArray(data.generations)
+          ? data.generations
+          : [];
+        return generationData;
+      })
+      .catch(() => []);
+
+    return generationPromise;
+  }
+
+  function generationFor(car) {
+    const year = Number(car.year);
+
+    const matching = generationData.filter(g =>
+      normalize(g.make) === normalize(car.make) &&
+      normalize(g.model) === normalize(car.model) &&
+      year >= Number(g.startYear) &&
+      year <= Number(g.endYear)
+    );
+
+    if (matching.length === 1) {
+      const g = matching[0];
+      return `${g.label} (${g.startYear}–${g.endYear})`;
+    }
+
+    return valid(car.generation) || '';
+  }
+
+  function decodedEngine(d, car) {
+    if (!d) return valid(car.engine);
+
+    const cylinders = valid(d.EngineCylinders);
+    const liters = Number(d.DisplacementL);
+
+    const pieces = [];
+
+    if (cylinders) pieces.push(`${cylinders} Cyl`);
+
+    if (liters > 0 && Number.isFinite(liters)) {
+      pieces.push(`${liters.toFixed(2)}L`);
+    }
+
+    return pieces.join(', ') || valid(car.engine);
+  }
+
+  function drivetrain(d, car) {
+    const source = valid(d?.DriveType) ||
+      valid(car.drivetrain);
+
+    return source
+      .replace(/Front-Wheel Drive/i, 'FWD')
+      .replace(/Rear-Wheel Drive/i, 'RWD')
+      .replace(/All-Wheel Drive/i, 'AWD');
+  }
+
+  function row(label, value) {
+    if (!valid(value)) return '';
+
+    return `
+      <div class="pl-clean-spec-row">
+        <span>${safe(label)}</span>
+        <strong>${safe(value)}</strong>
+      </div>
+    `;
+  }
+
+  function drawDetails(car, decoded, loading) {
+    if (
+      !current ||
+      String(current.id) !== String(car.id)
+    ) return;
+
+    const detail = document.getElementById('detail');
+    const photo = document.getElementById('carPhoto');
+
+    if (!detail || !photo) return;
+
+    // Remove previously injected duplicate elements.
+    detail.querySelectorAll(
+      '.pl-vehicle-chips, .pl-spec-toggle, ' +
+      '.pl-generation-note, .pl-clean-specs'
+    ).forEach(el => el.remove());
+
+    const oldMeta = document.getElementById('carMeta');
+    const oldVin = document.getElementById('carVin');
+    const oldSpecs = document.getElementById('vehicleSpecs');
+    const oldDecode = document.getElementById('vinLookup');
+
+    if (oldMeta) oldMeta.hidden = true;
+    if (oldVin) oldVin.hidden = true;
+    if (oldSpecs) oldSpecs.hidden = true;
+    if (oldDecode) oldDecode.hidden = true;
+
+    const generation = generationFor(car);
+    const body = valid(decoded?.BodyClass) ||
+      valid(car.body);
+    const engine = decodedEngine(decoded, car);
+    const drive = drivetrain(decoded, car);
+    const fuel = valid(decoded?.FuelTypePrimary) ||
+      valid(car.fuel);
+    const trim = valid(decoded?.Trim) ||
+      valid(car.trim);
+
+    const card = document.createElement('div');
+    card.className = 'pl-clean-specs';
+
+    card.innerHTML = `
+      ${row('VIN', car.vin)}
+      ${row('Generation', generation)}
+      ${row('Trim', trim)}
+      ${row('Body', body)}
+      ${row('Engine', engine)}
+      ${row('Drivetrain', drive)}
+      ${row('Fuel', fuel)}
+      ${row('Row', car.row)}
+      ${row('Space', car.space)}
+      ${
+        loading
+          ? '<small class="pl-decode-status">' +
+            'Identifying vehicle specifications…</small>'
+          : ''
+      }
+    `;
+
+    photo.insertAdjacentElement('afterend', card);
+  }
+
+  async function decodeVin(vin) {
+    vin = String(vin || '').trim().toUpperCase();
+
+    if (!/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)) {
+      return null;
+    }
+
+    if (decodeCache.has(vin)) {
+      return decodeCache.get(vin);
+    }
+
+    if (pending.has(vin)) {
+      return pending.get(vin);
+    }
+
+    const task = (async () => {
+      try {
+        const url =
+          'https://vpic.nhtsa.dot.gov/api/vehicles/' +
+          'DecodeVinValues/' +
+          encodeURIComponent(vin) +
+          '?format=json';
+
+        const response = await fetch(url);
+
+        if (!response.ok) return null;
+
+        const data = await response.json();
+        const result = data.Results?.[0];
+
+        if (!result) return null;
+
+        // Only cache usable decoded information.
+        if (
+          !valid(result.Make) &&
+          !valid(result.Model) &&
+          !valid(result.BodyClass)
+        ) return null;
+
+        decodeCache.set(vin, result);
+        saveCache();
+
+        return result;
+      } catch {
+        return null;
+      } finally {
+        pending.delete(vin);
+      }
+    })();
+
+    pending.set(vin, task);
+    return task;
+  }
+
+  const oldRenderDetail = renderDetail;
+
+  renderDetail = function () {
+    // Preserve all original part and profit rendering.
+    oldRenderDetail();
+
+    if (!current) return;
+
+    const car = current;
+    const requestId = ++activeRequest;
+    const vin = String(car.vin || '').toUpperCase();
+
+    const cached = decodeCache.get(vin) || null;
+
+    drawDetails(
+      car,
+      cached,
+      !cached && /^[A-HJ-NPR-Z0-9]{17}$/.test(vin)
+    );
+
+    // Update generation label when catalog arrives.
+    loadGenerations().then(() => {
+      if (requestId !== activeRequest) return;
+
+      drawDetails(
+        car,
+        decodeCache.get(vin) || null,
+        !decodeCache.has(vin) &&
+          /^[A-HJ-NPR-Z0-9]{17}$/.test(vin)
+      );
+    });
+
+    // Decode automatically; no button needed.
+    if (cached || !vin) return;
+
+    decodeVin(vin).then(decoded => {
+      if (requestId !== activeRequest) return;
+      drawDetails(car, decoded, false);
+    });
+  };
+
+  const style = document.createElement('style');
+
+  style.textContent = `
+    #detail #carMeta,
+    #detail #carVin,
+    #detail #vehicleSpecs,
+    #detail #vinLookup,
+    #detail .pl-vehicle-chips,
+    #detail .pl-generation-note,
+    #detail .pl-spec-toggle {
+      display: none !important;
+    }
+
+    .pl-clean-specs {
+      display: grid;
+      gap: 0;
+      margin: 16px 0;
+      padding: 4px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+    }
+
+    .pl-clean-spec-row {
+      display: grid;
+      grid-template-columns: minmax(95px, 32%) 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .pl-clean-spec-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .pl-clean-spec-row span {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .pl-clean-spec-row strong {
+      color: var(--ink);
+      font-weight: 600;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .pl-decode-status {
+      padding: 10px 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    @media (max-width: 590px) {
+      .pl-clean-specs {
+        padding: 3px 12px;
+      }
+
+      .pl-clean-spec-row {
+        font-size: 12px;
+        grid-template-columns: 92px 1fr;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+
+  loadGenerations();
+
+  console.log(
+    '[Pull List] Clean automatic vehicle details enabled.'
+  );
+})();
+
+
+
