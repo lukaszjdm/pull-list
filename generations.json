@@ -2259,6 +2259,3102 @@
       "label": "second generation / G-body",
       "verified": false,
       "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Cadillac",
+      "model": "Escalade Ext",
+      "startYear": 2007,
+      "endYear": 2013,
+      "label": "second EXT generation / GMT946",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Trailblazer Ext",
+      "startYear": 2002,
+      "endYear": 2009,
+      "label": "first generation / GMT360",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chrysler",
+      "model": "Pt Cruiser",
+      "startYear": 2001,
+      "endYear": 2010,
+      "label": "first and only generation / PT",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Neon",
+      "startYear": 2000,
+      "endYear": 2005,
+      "label": "second generation / PL",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Taurus",
+      "startYear": 2000,
+      "endYear": 2007,
+      "label": "fourth generation / D186",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Yukon",
+      "startYear": 1992,
+      "endYear": 1999,
+      "label": "first generation / GMT400",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Odyssey",
+      "startYear": 2011,
+      "endYear": 2017,
+      "label": "fourth North American generation / RL5",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Hyundai",
+      "model": "Santa Fe Sport",
+      "startYear": 2013,
+      "endYear": 2018,
+      "label": "third-generation short-wheelbase body / DM",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Qx56",
+      "startYear": 2004,
+      "endYear": 2010,
+      "label": "JA60 generation / JA60",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Forte Koup",
+      "startYear": 2010,
+      "endYear": 2013,
+      "label": "first generation / TD",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lexus",
+      "model": "Ls460",
+      "startYear": 2007,
+      "endYear": 2017,
+      "label": "fourth generation / XF40/USF40/UVF40",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lincoln",
+      "model": "Continental",
+      "startYear": 1995,
+      "endYear": 2002,
+      "label": "ninth generation / FN74",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "Tribute",
+      "startYear": 2008,
+      "endYear": 2011,
+      "label": "second generation / EP2",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "C300",
+      "startYear": 2008,
+      "endYear": 2015,
+      "label": "W204",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercury",
+      "model": "Monterey",
+      "startYear": 2004,
+      "endYear": 2007,
+      "label": "minivan revival generation / V platform",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "Lancer",
+      "startYear": 2002,
+      "endYear": 2007,
+      "label": "1 (modern U.S.)",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Titan",
+      "startYear": 2004,
+      "endYear": 2015,
+      "label": "A60 generation / A60",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Pontiac",
+      "model": "Grand Prix",
+      "startYear": 2004,
+      "endYear": 2008,
+      "label": "eighth generation / W-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Saturn",
+      "model": "Outlook",
+      "startYear": 2007,
+      "endYear": 2010,
+      "label": "first and only generation / Lambda",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Scion",
+      "model": "Xa",
+      "startYear": 2004,
+      "endYear": 2006,
+      "label": "first and only generation / NCP61",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "Outback",
+      "startYear": 2005,
+      "endYear": 2009,
+      "label": "third generation / BP",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Suzuki",
+      "model": "Sidekick",
+      "startYear": 1989,
+      "endYear": 1998,
+      "label": "1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Camry",
+      "startYear": 2007,
+      "endYear": 2011,
+      "label": "sixth U.S. wide-body generation / XV40",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Jetta",
+      "startYear": 2005,
+      "endYear": 2010,
+      "label": "Mk5",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volvo",
+      "model": "V70",
+      "startYear": 1998,
+      "endYear": 2000,
+      "label": "first generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Buick",
+      "model": "Electra",
+      "startYear": 1977,
+      "endYear": 1984,
+      "label": "fifth modern generation / C-body 1977-1984",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Cadillac",
+      "model": "Escalade Esv",
+      "startYear": 2003,
+      "endYear": 2006,
+      "label": "first ESV generation / GMT800",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Traverse",
+      "startYear": 2009,
+      "endYear": 2017,
+      "label": "first generation / Lambda",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chrysler",
+      "model": "Town And Country",
+      "startYear": 2008,
+      "endYear": 2016,
+      "label": "fifth minivan generation / RT",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Durango",
+      "startYear": 1998,
+      "endYear": 2003,
+      "label": "first generation / DN",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Sierra 1500",
+      "startYear": 1999,
+      "endYear": 2006,
+      "label": "first generation / GMT800",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Odyssey",
+      "startYear": 1999,
+      "endYear": 2004,
+      "label": "second North American generation / RL1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Hyundai",
+      "model": "Sonata",
+      "startYear": 1999,
+      "endYear": 2005,
+      "label": "EF generation / EF",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Qx50",
+      "startYear": 2014,
+      "endYear": 2017,
+      "label": "first generation / J50",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Jeep",
+      "model": "Renegade",
+      "startYear": 2015,
+      "endYear": 2023,
+      "label": "first and only U.S. generation / BU",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Sedona",
+      "startYear": 2006,
+      "endYear": 2014,
+      "label": "second U.S. generation / VQ",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lexus",
+      "model": "Es330",
+      "startYear": 2002,
+      "endYear": 2006,
+      "label": "fourth generation / XV30/MCV30",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lincoln",
+      "model": "Mark Viii",
+      "startYear": 1993,
+      "endYear": 1998,
+      "label": "sixth modern Mark generation / FN10",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "6",
+      "startYear": 2014,
+      "endYear": 2021,
+      "label": "third generation / GJ/GL",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "S550",
+      "startYear": 2007,
+      "endYear": 2013,
+      "label": "W221",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercury",
+      "model": "Mountaineer",
+      "startYear": 2002,
+      "endYear": 2005,
+      "label": "second generation / U152",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "Montero Sport",
+      "startYear": 1997,
+      "endYear": 2004,
+      "label": "1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Sentra",
+      "startYear": 2007,
+      "endYear": 2012,
+      "label": "B16 generation / B16",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Pontiac",
+      "model": "Bonneville",
+      "startYear": 2000,
+      "endYear": 2005,
+      "label": "ninth generation / G-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Saturn",
+      "model": "Astra",
+      "startYear": 2008,
+      "endYear": 2009,
+      "label": "first and only U.S. generation / Delta II/Astra H",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Scion",
+      "model": "Tc",
+      "startYear": 2011,
+      "endYear": 2016,
+      "label": "second generation / AGT20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Cadillac",
+      "model": "Escalade",
+      "startYear": 1999,
+      "endYear": 2000,
+      "label": "first generation / GMT400",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Colorado",
+      "startYear": 2004,
+      "endYear": 2012,
+      "label": "first generation / GMT355",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Charger",
+      "startYear": 2006,
+      "endYear": 2010,
+      "label": "sixth generation / LX",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Expedition",
+      "startYear": 2003,
+      "endYear": 2006,
+      "label": "second generation / U222",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Pilot",
+      "startYear": 2003,
+      "endYear": 2008,
+      "label": "first generation / YF1/YF2",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Hyundai",
+      "model": "Accent",
+      "startYear": 2006,
+      "endYear": 2011,
+      "label": "third generation / MC",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Qx56",
+      "startYear": 2011,
+      "endYear": 2013,
+      "label": "Z62 generation / Z62",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Jeep",
+      "model": "Cherokee",
+      "startYear": 2014,
+      "endYear": 2023,
+      "label": "fifth generation / KL",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Sportage",
+      "startYear": 2005,
+      "endYear": 2010,
+      "label": "second generation / KM",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lexus",
+      "model": "Gs350",
+      "startYear": 2006,
+      "endYear": 2011,
+      "label": "third generation / S190/GRS190/UZS190/GWS191",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lincoln",
+      "model": "Navigator",
+      "startYear": 1998,
+      "endYear": 2002,
+      "label": "first generation / UN173",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "3",
+      "startYear": 2014,
+      "endYear": 2018,
+      "label": "third generation / BM/BN",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "E320",
+      "startYear": 2003,
+      "endYear": 2009,
+      "label": "W211",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercury",
+      "model": "Mountaineer",
+      "startYear": 1997,
+      "endYear": 2001,
+      "label": "first generation / UN105",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "Lancer",
+      "startYear": 2008,
+      "endYear": 2017,
+      "label": "2 (modern U.S.)",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Pathfinder",
+      "startYear": 2013,
+      "endYear": 2020,
+      "label": "R52 generation / R52",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Pontiac",
+      "model": "Grand Am",
+      "startYear": 1999,
+      "endYear": 2005,
+      "label": "fifth generation / N-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chrysler",
+      "model": "Concorde",
+      "startYear": 1998,
+      "endYear": 2004,
+      "label": "second generation / LH2",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Stratus",
+      "startYear": 2001,
+      "endYear": 2006,
+      "label": "second generation / JR/ST-22",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Escape",
+      "startYear": 2001,
+      "endYear": 2007,
+      "label": "first generation / CD2",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Yukon",
+      "startYear": 2007,
+      "endYear": 2014,
+      "label": "third generation / GMT900",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Pilot",
+      "startYear": 2009,
+      "endYear": 2015,
+      "label": "second generation / YF3/YF4",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Hyundai",
+      "model": "Elantra Gt",
+      "startYear": 2013,
+      "endYear": 2017,
+      "label": "GD generation / GD",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Qx4",
+      "startYear": 1997,
+      "endYear": 2003,
+      "label": "R50 generation / JR50",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Jeep",
+      "model": "Wrangler",
+      "startYear": 1987,
+      "endYear": 1995,
+      "label": "first generation / YJ",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Sedona",
+      "startYear": 2002,
+      "endYear": 2005,
+      "label": "first U.S. generation / KV",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lexus",
+      "model": "Is300",
+      "startYear": 2001,
+      "endYear": 2005,
+      "label": "first U.S.-market generation / XE10/GXE10/JCE10",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lincoln",
+      "model": "Town Car",
+      "startYear": 1998,
+      "endYear": 2011,
+      "label": "third generation / Panther FN145",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "Mpv",
+      "startYear": 2000,
+      "endYear": 2006,
+      "label": "second U.S. generation / LW",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "ML320",
+      "startYear": 2006,
+      "endYear": 2011,
+      "label": "W164",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercury",
+      "model": "Sable",
+      "startYear": 2000,
+      "endYear": 2005,
+      "label": "fourth generation / D186",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Sentra",
+      "startYear": 2013,
+      "endYear": 2019,
+      "label": "B17 generation / B17",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Saturn",
+      "model": "Vue",
+      "startYear": 2008,
+      "endYear": 2010,
+      "label": "second generation / Theta/Antara",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "Forester",
+      "startYear": 1998,
+      "endYear": 2002,
+      "label": "first generation / SF",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Suzuki",
+      "model": "Vitara",
+      "startYear": 1999,
+      "endYear": 2004,
+      "label": "1 (U.S.)",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Corolla",
+      "startYear": 2003,
+      "endYear": 2008,
+      "label": "ninth generation / E120/E130",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Jetta",
+      "startYear": 1999,
+      "endYear": 2005,
+      "label": "Mk4",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volvo",
+      "model": "V50",
+      "startYear": 2005,
+      "endYear": 2011,
+      "label": "first generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Silverado 1500",
+      "startYear": 2007,
+      "endYear": 2013,
+      "label": "second generation / GMT900",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Charger",
+      "startYear": 2011,
+      "endYear": 2023,
+      "label": "seventh generation / LD",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Escape",
+      "startYear": 2013,
+      "endYear": 2019,
+      "label": "third generation / C520",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Civic",
+      "startYear": 2001,
+      "endYear": 2005,
+      "label": "seventh generation / ES/EM/EP/EU",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Hyundai",
+      "model": "Veloster",
+      "startYear": 2012,
+      "endYear": 2017,
+      "label": "first generation / FS",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Jx35",
+      "startYear": 2013,
+      "endYear": 2013,
+      "label": "L50 generation / L50",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Jeep",
+      "model": "Liberty",
+      "startYear": 2008,
+      "endYear": 2012,
+      "label": "second generation / KK",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Optima",
+      "startYear": 2011,
+      "endYear": 2015,
+      "label": "third generation / TF",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lexus",
+      "model": "Is350",
+      "startYear": 2006,
+      "endYear": 2013,
+      "label": "second generation sedan / XE20/GSE20/USE20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lincoln",
+      "model": "Ls",
+      "startYear": 2000,
+      "endYear": 2006,
+      "label": "first and only generation / DEW98",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "Miata",
+      "startYear": 1999,
+      "endYear": 2005,
+      "label": "second generation / NB",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "E430",
+      "startYear": 1996,
+      "endYear": 2002,
+      "label": "W210",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercury",
+      "model": "Villager",
+      "startYear": 1999,
+      "endYear": 2002,
+      "label": "second generation / V226",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Trailblazer",
+      "startYear": 2002,
+      "endYear": 2009,
+      "label": "first generation / GMT360",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Grand Caravan",
+      "startYear": 1996,
+      "endYear": 2000,
+      "label": "third generation / NS",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Ranger",
+      "startYear": 1998,
+      "endYear": 2011,
+      "label": "third U.S. generation / PN150",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Envoy Xl",
+      "startYear": 2002,
+      "endYear": 2006,
+      "label": "extended-wheelbase body run / GMT370",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Accord",
+      "startYear": 2013,
+      "endYear": 2017,
+      "label": "ninth generation / CR/CT",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Aveo",
+      "startYear": 2004,
+      "endYear": 2011,
+      "label": "first U.S. generation / T200/T250",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Sprinter 2500",
+      "startYear": 2003,
+      "endYear": 2006,
+      "label": "first U.S. Dodge generation / VA",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Explorer",
+      "startYear": 2002,
+      "endYear": 2005,
+      "label": "third generation / U152",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Canyon",
+      "startYear": 2004,
+      "endYear": 2012,
+      "label": "first generation / GMT355",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Accord Crosstour",
+      "startYear": 2010,
+      "endYear": 2015,
+      "label": "first and only generation / TF1/TF2",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Q50",
+      "startYear": 2014,
+      "endYear": 2024,
+      "label": "V37 generation / V37",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Jeep",
+      "model": "Wrangler",
+      "startYear": 2007,
+      "endYear": 2018,
+      "label": "third generation / JK",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Equinox",
+      "startYear": 2005,
+      "endYear": 2009,
+      "label": "first generation / Theta",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Magnum",
+      "startYear": 2005,
+      "endYear": 2008,
+      "label": "modern generation / LX",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Fiesta",
+      "startYear": 2011,
+      "endYear": 2019,
+      "label": "second U.S. generation / B299",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Fit",
+      "startYear": 2007,
+      "endYear": 2008,
+      "label": "first U.S.-market Fit generation / GD3",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Qx80",
+      "startYear": 2014,
+      "endYear": 2024,
+      "label": "Z62 generation / Z62",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lexus",
+      "model": "Gx470",
+      "startYear": 2003,
+      "endYear": 2009,
+      "label": "first generation / J120/UZJ120",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lincoln",
+      "model": "Mkz",
+      "startYear": 2013,
+      "endYear": 2020,
+      "label": "second generation / CD4",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "2",
+      "startYear": 2011,
+      "endYear": 2014,
+      "label": "DE U.S. generation / DE",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "ML320",
+      "startYear": 1998,
+      "endYear": 2005,
+      "label": "W163",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "Endeavor",
+      "startYear": 2004,
+      "endYear": 2011,
+      "label": "1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Versa",
+      "startYear": 2012,
+      "endYear": 2019,
+      "label": "N17 generation / N17",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "Crosstrek",
+      "startYear": 2013,
+      "endYear": 2017,
+      "label": "First generation (GP; 2012)",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Suzuki",
+      "model": "Sx4",
+      "startYear": 2007,
+      "endYear": 2013,
+      "label": "1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Corolla",
+      "startYear": 2014,
+      "endYear": 2019,
+      "label": "eleventh generation / E170",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Touareg",
+      "startYear": 2004,
+      "endYear": 2010,
+      "label": "1st generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volvo",
+      "model": "S60",
+      "startYear": 2001,
+      "endYear": 2009,
+      "label": "first generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Cavalier",
+      "startYear": 1995,
+      "endYear": 2005,
+      "label": "third generation / J-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Challenger",
+      "startYear": 2008,
+      "endYear": 2023,
+      "label": "third generation / LC/LA",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Focus",
+      "startYear": 2000,
+      "endYear": 2007,
+      "label": "first U.S. generation / C170",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Fit",
+      "startYear": 2009,
+      "endYear": 2013,
+      "label": "second U.S.-market generation / GE8",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "I35",
+      "startYear": 2002,
+      "endYear": 2004,
+      "label": "A33 generation / A33",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Forte Koup",
+      "startYear": 2014,
+      "endYear": 2018,
+      "label": "second generation / YD",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Lexus",
+      "model": "Rx350",
+      "startYear": 2004,
+      "endYear": 2009,
+      "label": "second generation / XU30",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Expedition",
+      "startYear": 2007,
+      "endYear": 2017,
+      "label": "third generation / U324",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Crosstour",
+      "startYear": 2010,
+      "endYear": 2015,
+      "label": "first and only generation / TF1/TF2",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Qx30",
+      "startYear": 2017,
+      "endYear": 2019,
+      "label": "H15 generation / H15",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Sportage",
+      "startYear": 1995,
+      "endYear": 2002,
+      "label": "first generation / NB7",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Silverado 1500",
+      "startYear": 2014,
+      "endYear": 2018,
+      "label": "third generation / K2XX",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "E-250",
+      "startYear": 1992,
+      "endYear": 2014,
+      "label": "fourth generation / VN58",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Accord",
+      "startYear": 1994,
+      "endYear": 1997,
+      "label": "fifth generation / CD/CE",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Qx70",
+      "startYear": 2014,
+      "endYear": 2017,
+      "label": "S51 generation / S51",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Cadenza",
+      "startYear": 2014,
+      "endYear": 2016,
+      "label": "first U.S. generation / VG",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "Cx-7",
+      "startYear": 2007,
+      "endYear": 2012,
+      "label": "first and only generation / ER",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "CLK320",
+      "startYear": 1998,
+      "endYear": 2003,
+      "label": "C208/A208",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Cube",
+      "startYear": 2009,
+      "endYear": 2014,
+      "label": "Z12 U.S. generation / Z12",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "B9 Tribeca",
+      "startYear": 2006,
+      "endYear": 2007,
+      "label": "WX pre-facelift generation / WX",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Suzuki",
+      "model": "Grand Vitara",
+      "startYear": 1999,
+      "endYear": 2005,
+      "label": "1 (U.S.)",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Highlander",
+      "startYear": 2008,
+      "endYear": 2013,
+      "label": "second generation / XU40",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Eos",
+      "startYear": 2007,
+      "endYear": 2016,
+      "label": "single generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volvo",
+      "model": "C30",
+      "startYear": 2008,
+      "endYear": 2013,
+      "label": "first generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Freestar",
+      "startYear": 2004,
+      "endYear": 2007,
+      "label": "first and only generation / V platform",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Cr-V",
+      "startYear": 2012,
+      "endYear": 2016,
+      "label": "fourth generation / RM1-RM4",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Fx35",
+      "startYear": 2009,
+      "endYear": 2012,
+      "label": "S51 generation / S51",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Sorento",
+      "startYear": 2016,
+      "endYear": 2020,
+      "label": "third generation / UM",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "I-Miev",
+      "startYear": 2012,
+      "endYear": 2017,
+      "label": "1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Murano",
+      "startYear": 2009,
+      "endYear": 2014,
+      "label": "Z51 generation / Z51",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Saturn",
+      "model": "Relay",
+      "startYear": 2005,
+      "endYear": 2007,
+      "label": "first and only generation / U-body/GMT201",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "Forester",
+      "startYear": 2009,
+      "endYear": 2013,
+      "label": "third generation / SH",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Suzuki",
+      "model": "XL-7",
+      "startYear": 2001,
+      "endYear": 2006,
+      "label": "1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Silverado 2500 Hd Classic",
+      "startYear": 2007,
+      "endYear": 2007,
+      "label": "GMT800 carryover / GMT800",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Ram 1500",
+      "startYear": 2009,
+      "endYear": 2010,
+      "label": "fourth-generation Dodge-badged phase / DS/DJ",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Expedition",
+      "startYear": 1997,
+      "endYear": 2002,
+      "label": "first generation / UN93",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Jimmy",
+      "startYear": 1995,
+      "endYear": 2001,
+      "label": "second compact generation / S/T-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Honda",
+      "model": "Civic",
+      "startYear": 1992,
+      "endYear": 1995,
+      "label": "fifth generation / EG/EH/EJ",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Malibu",
+      "startYear": 2004,
+      "endYear": 2008,
+      "label": "sixth generation / Epsilon I",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Dodge",
+      "model": "Dynasty",
+      "startYear": 1988,
+      "endYear": 1993,
+      "label": "first and only generation / C-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Blazer",
+      "startYear": 1995,
+      "endYear": 2005,
+      "label": "second compact generation / S/T-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Taurus",
+      "startYear": 1992,
+      "endYear": 1995,
+      "label": "second generation / DN5",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "M37",
+      "startYear": 2011,
+      "endYear": 2013,
+      "label": "Y51 generation / Y51",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Sedona",
+      "startYear": 2015,
+      "endYear": 2021,
+      "label": "third U.S. generation / YP",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "Mazda2",
+      "startYear": 2011,
+      "endYear": 2014,
+      "label": "DE U.S. generation / DE",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "CLS500",
+      "startYear": 2006,
+      "endYear": 2011,
+      "label": "C219",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "Raider",
+      "startYear": 2006,
+      "endYear": 2009,
+      "label": "1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Sentra",
+      "startYear": 2000,
+      "endYear": 2006,
+      "label": "B15 generation / B15",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Saturn",
+      "model": "Vue",
+      "startYear": 2002,
+      "endYear": 2007,
+      "label": "first generation / Theta",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "K1500",
+      "startYear": 1988,
+      "endYear": 1998,
+      "label": "fourth generation / GMT400",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Five Hundred",
+      "startYear": 2005,
+      "endYear": 2007,
+      "label": "first and only generation / D3",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Infiniti",
+      "model": "Fx45",
+      "startYear": 2003,
+      "endYear": 2008,
+      "label": "S50 generation / S50",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Forte5",
+      "startYear": 2014,
+      "endYear": 2018,
+      "label": "second generation / YD",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "Mazda6",
+      "startYear": 2009,
+      "endYear": 2013,
+      "label": "second North American generation / GH",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "ML500",
+      "startYear": 1998,
+      "endYear": 2005,
+      "label": "W163",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "Galant",
+      "startYear": 2004,
+      "endYear": 2012,
+      "label": "9 (North America)",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Armada",
+      "startYear": 2004,
+      "endYear": 2015,
+      "label": "WA60 generation / WA60",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Camry",
+      "startYear": 1997,
+      "endYear": 2001,
+      "label": "fourth U.S. wide-body generation / XV20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Golf",
+      "startYear": 2010,
+      "endYear": 2014,
+      "label": "Mk6",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volvo",
+      "model": "C70",
+      "startYear": 2006,
+      "endYear": 2013,
+      "label": "second generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Tracker",
+      "startYear": 1999,
+      "endYear": 2004,
+      "label": "second generation / Suzuki FT",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "F-250 Super Duty",
+      "startYear": 2011,
+      "endYear": 2016,
+      "label": "third generation / P473",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Rio",
+      "startYear": 2001,
+      "endYear": 2005,
+      "label": "first U.S. generation / DC",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "Mazda3",
+      "startYear": 2004,
+      "endYear": 2009,
+      "label": "first generation / BK",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "3000Gt",
+      "startYear": 1991,
+      "endYear": 1999,
+      "label": "1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Frontier",
+      "startYear": 1998,
+      "endYear": 2004,
+      "label": "D22 generation / D22",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "Outback",
+      "startYear": 2015,
+      "endYear": 2019,
+      "label": "fifth generation / BS",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Corolla",
+      "startYear": 1998,
+      "endYear": 2002,
+      "label": "eighth generation / E110",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Golf",
+      "startYear": 1999,
+      "endYear": 2006,
+      "label": "Mk4",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volvo",
+      "model": "XC70",
+      "startYear": 2003,
+      "endYear": 2007,
+      "label": "first named XC70 generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Impala",
+      "startYear": 2000,
+      "endYear": 2005,
+      "label": "eighth generation / W-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "E-350 Super Duty",
+      "startYear": 1992,
+      "endYear": 2014,
+      "label": "fourth generation / VN58",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Sierra 2500 Hd",
+      "startYear": 2001,
+      "endYear": 2006,
+      "label": "GMT800 HD",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Optima",
+      "startYear": 2006,
+      "endYear": 2010,
+      "label": "second generation / MG",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "Mazda6",
+      "startYear": 2003,
+      "endYear": 2008,
+      "label": "first generation / GG/GY",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "S320",
+      "startYear": 1992,
+      "endYear": 1999,
+      "label": "W140",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Nv200",
+      "startYear": 2013,
+      "endYear": 2021,
+      "label": "M20 U.S. generation / M20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "Impreza",
+      "startYear": 2008,
+      "endYear": 2011,
+      "label": "third generation / GE/GH",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Matrix",
+      "startYear": 2003,
+      "endYear": 2008,
+      "label": "first generation / E130",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Passat",
+      "startYear": 2006,
+      "endYear": 2010,
+      "label": "B6",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volvo",
+      "model": "S70",
+      "startYear": 1998,
+      "endYear": 2000,
+      "label": "first generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Avalanche",
+      "startYear": 2007,
+      "endYear": 2013,
+      "label": "second generation / GMT940",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "F-250 Super Duty",
+      "startYear": 1999,
+      "endYear": 2007,
+      "label": "first generation / P221",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Sierra 3500",
+      "startYear": 2001,
+      "endYear": 2006,
+      "label": "GMT800 HD",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "Spectra",
+      "startYear": 2004,
+      "endYear": 2009,
+      "label": "second generation / LD",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "Protege",
+      "startYear": 1999,
+      "endYear": 2003,
+      "label": "BJ generation / BJ",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "CLS550",
+      "startYear": 2006,
+      "endYear": 2011,
+      "label": "C219",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "Legacy",
+      "startYear": 2005,
+      "endYear": 2009,
+      "label": "fourth generation / BL/BP",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Avalon",
+      "startYear": 2000,
+      "endYear": 2004,
+      "label": "second generation / XX20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Cc",
+      "startYear": 2009,
+      "endYear": 2017,
+      "label": "single generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Captiva Sport",
+      "startYear": 2012,
+      "endYear": 2015,
+      "label": "first and only U.S. fleet generation / Theta",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "F-250 Super Duty",
+      "startYear": 2008,
+      "endYear": 2010,
+      "label": "second generation / P356",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "C1500",
+      "startYear": 1988,
+      "endYear": 1998,
+      "label": "fourth generation / GMT400",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Equinox",
+      "startYear": 2018,
+      "endYear": 2024,
+      "label": "third generation / D2XX",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Freestyle",
+      "startYear": 2005,
+      "endYear": 2007,
+      "label": "first and only generation / D3",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Sierra 1500",
+      "startYear": 2007,
+      "endYear": 2013,
+      "label": "second generation / GMT900",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Kia",
+      "model": "K900",
+      "startYear": 2015,
+      "endYear": 2017,
+      "label": "first U.S. generation / KH",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Silverado 1500 Classic",
+      "startYear": 2007,
+      "endYear": 2007,
+      "label": "GMT800 carryover / GMT800",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Thunderbird",
+      "startYear": 1989,
+      "endYear": 1997,
+      "label": "tenth generation / MN12",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mazda",
+      "model": "MX-5 Miata",
+      "startYear": 1999,
+      "endYear": 2005,
+      "label": "second generation / NB",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Ecosport",
+      "startYear": 2018,
+      "endYear": 2022,
+      "label": "first and only U.S. generation / B515",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "C350",
+      "startYear": 2008,
+      "endYear": 2015,
+      "label": "W204",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "Outlander",
+      "startYear": 2003,
+      "endYear": 2006,
+      "label": "1",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Maxima",
+      "startYear": 1995,
+      "endYear": 1999,
+      "label": "A32 generation / A32",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "Impreza",
+      "startYear": 2002,
+      "endYear": 2007,
+      "label": "second generation / GD/GG",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Tacoma",
+      "startYear": 1995,
+      "endYear": 2004,
+      "label": "first generation / N140/N150/N160/N170/N190",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Touareg",
+      "startYear": 2011,
+      "endYear": 2017,
+      "label": "2nd generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Explorer",
+      "startYear": 1995,
+      "endYear": 2001,
+      "label": "second generation / UN105/UN150",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "CLA250",
+      "startYear": 2014,
+      "endYear": 2019,
+      "label": "1st generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mitsubishi",
+      "model": "Galant",
+      "startYear": 1999,
+      "endYear": 2003,
+      "label": "8 (global)",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Explorer Sport",
+      "startYear": 1995,
+      "endYear": 2001,
+      "label": "second generation / UN105/UN150",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "E350",
+      "startYear": 2010,
+      "endYear": 2016,
+      "label": "W212",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Maxima",
+      "startYear": 2004,
+      "endYear": 2008,
+      "label": "A34 generation / A34",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Subaru",
+      "model": "Outback",
+      "startYear": 2000,
+      "endYear": 2004,
+      "label": "second generation / BH",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Cobalt",
+      "startYear": 2005,
+      "endYear": 2010,
+      "label": "first and only generation / Delta I",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Transit Connect",
+      "startYear": 2014,
+      "endYear": 2023,
+      "label": "second U.S. generation / V408",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "R350",
+      "startYear": 2006,
+      "endYear": 2012,
+      "label": "W251",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Altima",
+      "startYear": 1998,
+      "endYear": 2001,
+      "label": "L30 generation / L30",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Venza",
+      "startYear": 2009,
+      "endYear": 2015,
+      "label": "first generation / AV10",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Beetle",
+      "startYear": 2012,
+      "endYear": 2019,
+      "label": "A5 Beetle",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Mustang",
+      "startYear": 2005,
+      "endYear": 2014,
+      "label": "fifth generation / S197",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Acadia",
+      "startYear": 2017,
+      "endYear": 2023,
+      "label": "second generation / C1XX",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "C350",
+      "startYear": 2001,
+      "endYear": 2007,
+      "label": "W203",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Frontier",
+      "startYear": 2005,
+      "endYear": 2021,
+      "label": "D40 generation / D40",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Corolla",
+      "startYear": 2009,
+      "endYear": 2013,
+      "label": "tenth generation / E140/E150",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Gti",
+      "startYear": 2006,
+      "endYear": 2009,
+      "label": "Mk5",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Gmc",
+      "model": "Envoy Xuv",
+      "startYear": 2004,
+      "endYear": 2005,
+      "label": "reconfigurable-roof body run / GMT305",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "GL550",
+      "startYear": 2007,
+      "endYear": 2012,
+      "label": "X164",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Rogue Select",
+      "startYear": 2014,
+      "endYear": 2015,
+      "label": "S35 carryover / S35",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Solara",
+      "startYear": 1999,
+      "endYear": 2003,
+      "label": "first generation / XV20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Routan",
+      "startYear": 2009,
+      "endYear": 2014,
+      "label": "single generation",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Edge",
+      "startYear": 2015,
+      "endYear": 2024,
+      "label": "second generation / CD539",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "GMC",
+      "model": "Yukon XL",
+      "startYear": 2007,
+      "endYear": 2014,
+      "label": "second generation / GMT900",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "R320",
+      "startYear": 2006,
+      "endYear": 2012,
+      "label": "W251",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Versa Note",
+      "startYear": 2014,
+      "endYear": 2019,
+      "label": "E12 generation / E12",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Corolla",
+      "startYear": 1993,
+      "endYear": 1997,
+      "label": "seventh generation / E100",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Impala",
+      "startYear": 2014,
+      "endYear": 2020,
+      "label": "tenth generation / Epsilon II",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Escort",
+      "startYear": 1997,
+      "endYear": 2003,
+      "label": "third U.S. generation / ZX2/CT20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "GMC",
+      "model": "Yukon Denali",
+      "startYear": 2000,
+      "endYear": 2006,
+      "label": "second generation / GMT800",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "ML550",
+      "startYear": 2006,
+      "endYear": 2011,
+      "label": "W164",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Kicks",
+      "startYear": 2018,
+      "endYear": 2024,
+      "label": "P15 generation / P15",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Rav4",
+      "startYear": 2006,
+      "endYear": 2012,
+      "label": "third generation / XA30",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "S10",
+      "startYear": 1994,
+      "endYear": 2004,
+      "label": "second generation / S/T-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Crown Victoria",
+      "startYear": 1992,
+      "endYear": 1997,
+      "label": "first standalone generation / Panther EN53",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Mercedes-Benz",
+      "model": "C-Class",
+      "startYear": 2008,
+      "endYear": 2015,
+      "label": "W204",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "GMC",
+      "model": "Sonoma",
+      "startYear": 1994,
+      "endYear": 2004,
+      "label": "second generation / S/T-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Leaf",
+      "startYear": 2011,
+      "endYear": 2017,
+      "label": "first generation / ZE0/AZE0",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Rav4",
+      "startYear": 1996,
+      "endYear": 2000,
+      "label": "first generation / XA10",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Passat",
+      "startYear": 1998,
+      "endYear": 2005,
+      "label": "B5/B5.5",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "City Express",
+      "startYear": 2015,
+      "endYear": 2018,
+      "label": "first and only generation / Nissan M20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "E-250 Econoline",
+      "startYear": 1992,
+      "endYear": 2014,
+      "label": "fourth generation / VN58",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "GMC",
+      "model": "Savana",
+      "startYear": 1996,
+      "endYear": 2002,
+      "label": "first-generation early phase / GMT600",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Impala Limited",
+      "startYear": 2014,
+      "endYear": 2016,
+      "label": "fleet continuation of ninth generation / W-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Versa",
+      "startYear": 2020,
+      "endYear": 2025,
+      "label": "N18 generation / N18",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Land Cruiser",
+      "startYear": 1998,
+      "endYear": 2007,
+      "label": "100 Series / J100",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Golf",
+      "startYear": 1993,
+      "endYear": 1999,
+      "label": "Mk3",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Rav4",
+      "startYear": 2001,
+      "endYear": 2005,
+      "label": "second generation / XA20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Quest",
+      "startYear": 2004,
+      "endYear": 2009,
+      "label": "V42 generation / V42",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Avalon",
+      "startYear": 1995,
+      "endYear": 1999,
+      "label": "first generation / XX10",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "E-350 Econoline",
+      "startYear": 1992,
+      "endYear": 2014,
+      "label": "fourth generation / VN58",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Maxima",
+      "startYear": 2016,
+      "endYear": 2023,
+      "label": "A36 generation / A36",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Sienna",
+      "startYear": 2011,
+      "endYear": 2020,
+      "label": "third generation / XL30",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Spark",
+      "startYear": 2016,
+      "endYear": 2022,
+      "label": "second U.S. generation / M400",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Windstar",
+      "startYear": 1999,
+      "endYear": 2003,
+      "label": "second generation / VAN",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Pathfinder",
+      "startYear": 1996,
+      "endYear": 2004,
+      "label": "R50 generation / R50",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Prius",
+      "startYear": 2001,
+      "endYear": 2003,
+      "label": "first U.S.-market generation / XW10/NHW11",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Sentra",
+      "startYear": 1995,
+      "endYear": 1999,
+      "label": "B14 generation / B14",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Camry",
+      "startYear": 1992,
+      "endYear": 1996,
+      "label": "third U.S. wide-body generation / XV10",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Malibu",
+      "startYear": 1997,
+      "endYear": 2003,
+      "label": "fifth generation / N-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Sentra",
+      "startYear": 2020,
+      "endYear": 2025,
+      "label": "B18 generation / B18",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Tundra",
+      "startYear": 2000,
+      "endYear": 2006,
+      "label": "first generation / XK30/XK40",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "F-350 Super Duty",
+      "startYear": 1999,
+      "endYear": 2007,
+      "label": "first generation / P221",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Juke",
+      "startYear": 2011,
+      "endYear": 2017,
+      "label": "F15 U.S. generation / F15",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Yaris",
+      "startYear": 2007,
+      "endYear": 2011,
+      "label": "first U.S.-market generation / XP90",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Camaro",
+      "startYear": 1993,
+      "endYear": 2002,
+      "label": "fourth generation / F-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Taurus",
+      "startYear": 2008,
+      "endYear": 2009,
+      "label": "fifth generation / D3",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "200SX",
+      "startYear": 1995,
+      "endYear": 1998,
+      "label": "B14 generation / B14",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Solara",
+      "startYear": 2004,
+      "endYear": 2008,
+      "label": "second generation / XV30",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "F-250",
+      "startYear": 1992,
+      "endYear": 1996,
+      "label": "ninth generation / OBS/Aeronose 1992-1996",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Nissan",
+      "model": "Pathfinder",
+      "startYear": 1987,
+      "endYear": 1995,
+      "label": "WD21 generation / WD21",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Monte Carlo",
+      "startYear": 1995,
+      "endYear": 1999,
+      "label": "fifth generation / W-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Explorer Sport",
+      "startYear": 2002,
+      "endYear": 2005,
+      "label": "third generation / U152",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Sienna",
+      "startYear": 1998,
+      "endYear": 2003,
+      "label": "first generation / XL10",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Ranger",
+      "startYear": 1993,
+      "endYear": 1997,
+      "label": "second generation / PN125",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Avalon",
+      "startYear": 2005,
+      "endYear": 2012,
+      "label": "third generation / XX30",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Crown Victoria",
+      "startYear": 1998,
+      "endYear": 2011,
+      "label": "second standalone generation / Panther EN114",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Yaris",
+      "startYear": 2012,
+      "endYear": 2018,
+      "label": "second U.S.-market hatchback generation / XP130",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Ltd Crown Victoria",
+      "startYear": 1983,
+      "endYear": 1991,
+      "label": "LTD Crown Victoria generation / Panther",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Camry",
+      "startYear": 1987,
+      "endYear": 1991,
+      "label": "second generation / V20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Tundra",
+      "startYear": 2007,
+      "endYear": 2021,
+      "label": "second generation / XK50",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "F-350 Super Duty",
+      "startYear": 2008,
+      "endYear": 2010,
+      "label": "second generation / P356",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Echo",
+      "startYear": 2000,
+      "endYear": 2005,
+      "label": "first and only U.S.-market generation / XP10",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Prius V",
+      "startYear": 2012,
+      "endYear": 2017,
+      "label": "first and only U.S. generation / ZVW40",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Cruze Limited",
+      "startYear": 2016,
+      "endYear": 2016,
+      "label": "first-generation fleet continuation / Delta II/J300",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "F-150 Heritage",
+      "startYear": 2004,
+      "endYear": 2004,
+      "label": "tenth-generation carryover / PN96",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Tacoma",
+      "startYear": 2005,
+      "endYear": 2015,
+      "label": "second generation / N220/N240/N250/N260/N270",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Taurus",
+      "startYear": 1996,
+      "endYear": 1999,
+      "label": "third generation / DN101",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Camry Hybrid",
+      "startYear": 2012,
+      "endYear": 2017,
+      "label": "seventh U.S. wide-body generation / XV50",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Ford",
+      "model": "Taurus X",
+      "startYear": 2008,
+      "endYear": 2009,
+      "label": "first and only generation / D3",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Matrix",
+      "startYear": 2009,
+      "endYear": 2013,
+      "label": "second generation / E140",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Spark",
+      "startYear": 2013,
+      "endYear": 2015,
+      "label": "first U.S. generation / M300",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "4Runner",
+      "startYear": 1996,
+      "endYear": 2002,
+      "label": "third generation / N180",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Toyota",
+      "model": "Camry Solara",
+      "startYear": 1999,
+      "endYear": 2003,
+      "label": "first generation / XV20",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "C1500",
+      "startYear": 1988,
+      "endYear": 1998,
+      "label": "fourth generation / GMT400",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "K2500",
+      "startYear": 1988,
+      "endYear": 1998,
+      "label": "fourth generation / GMT400",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "C2500",
+      "startYear": 1988,
+      "endYear": 1998,
+      "label": "fourth generation / GMT400",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Silverado 2500 Hd",
+      "startYear": 2008,
+      "endYear": 2010,
+      "label": "GMT900 HD",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Malibu Limited",
+      "startYear": 2016,
+      "endYear": 2016,
+      "label": "fleet continuation of eighth generation / Epsilon II",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Camaro",
+      "startYear": 2016,
+      "endYear": 2024,
+      "label": "sixth generation / Alpha",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Camaro",
+      "startYear": 2010,
+      "endYear": 2015,
+      "label": "fifth generation / Zeta",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Malibu",
+      "startYear": 1978,
+      "endYear": 1983,
+      "label": "fourth generation / A/G-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Silverado Classic 1500",
+      "startYear": 2007,
+      "endYear": 2007,
+      "label": "GMT800 carryover / GMT800",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Avalanche",
+      "startYear": 2002,
+      "endYear": 2006,
+      "label": "first generation / GMT805",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Venture",
+      "startYear": 1997,
+      "endYear": 2005,
+      "label": "first and only generation / U-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Malibu Maxx",
+      "startYear": 2004,
+      "endYear": 2008,
+      "label": "sixth generation / Epsilon I",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Suburban",
+      "startYear": 2000,
+      "endYear": 2006,
+      "label": "tenth generation / GMT800",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "S10 Pickup",
+      "startYear": 1994,
+      "endYear": 2004,
+      "label": "second generation / S/T-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Express",
+      "startYear": 1996,
+      "endYear": 2002,
+      "label": "first-generation early phase / GMT600",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
+    },
+    {
+      "make": "Chevrolet",
+      "model": "Astro",
+      "startYear": 1985,
+      "endYear": 1994,
+      "label": "first generation / M-body",
+      "verified": false,
+      "source": "Scrap Solutions; unverified"
     }
   ]
 }
