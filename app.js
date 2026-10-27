@@ -1588,7 +1588,15 @@ loadLiveInventory();
 
     if (matching.length === 1) {
       const g = matching[0];
-      return `${g.label} (${g.startYear}–${g.endYear})`;
+      
+const label = String(g.label || '')
+  .replace(
+    /^([A-Za-z0-9]+)\s+generation\s*\/\s*\1$/i,
+    '$1'
+  );
+
+return `${label} (${g.startYear}–${g.endYear})`;
+
     }
 
     return valid(car.generation) || '';
@@ -1970,4 +1978,154 @@ loadLiveInventory();
   );
 })();
 
+
+
+/* =============================================
+   PULL LIST — CLEAN VIN & YARD LOCATION
+   Remove redundant labels and highlight
+   Row / Space beside the vehicle title
+   ============================================= */
+
+(() => {
+  'use strict';
+
+  const style = document.createElement('style');
+
+  style.textContent = `
+    /* Remove VIN and Generation text prefixes */
+    #detail .pl-clean-spec-row[data-field="VIN"] span,
+    #detail .pl-clean-spec-row[data-field="Generation"] span {
+      display: none !important;
+    }
+
+    /* Remove Row and Space from the info tags */
+    #detail .pl-clean-spec-row[data-field="Row"],
+    #detail .pl-clean-spec-row[data-field="Space"] {
+      display: none !important;
+    }
+
+    /* Big location badges underneath the title */
+    #detail .pl-location-badges {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0 15px;
+    }
+
+    #detail .pl-location-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      min-width: 76px;
+      padding: 9px 15px;
+      border: 1px solid #34654f;
+      border-radius: 12px;
+      background: #244c39;
+      box-sizing: border-box;
+    }
+
+    #detail .pl-location-label {
+      color: #b7e7cc;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1.3;
+    }
+
+    #detail .pl-location-value {
+      color: #ffffff;
+      font-size: 23px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    @media (max-width: 590px) {
+      #detail .pl-location-badges {
+        gap: 8px;
+        margin: 8px 0 12px;
+      }
+
+      #detail .pl-location-badge {
+        min-width: 68px;
+        padding: 7px 12px;
+      }
+
+      #detail .pl-location-value {
+        font-size: 21px;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+
+  // Preserve the existing VIN decoding, generation
+  // matching, parts and profit rendering.
+  const previousRenderDetail = renderDetail;
+
+  function locationBadge(label, value) {
+    const badge = document.createElement('div');
+    badge.className = 'pl-location-badge';
+
+    const labelEl = document.createElement('span');
+    labelEl.className = 'pl-location-label';
+    labelEl.textContent = label;
+
+    const valueEl = document.createElement('strong');
+    valueEl.className = 'pl-location-value';
+    valueEl.textContent = String(value);
+
+    badge.append(labelEl, valueEl);
+    return badge;
+  }
+
+  renderDetail = function (...args) {
+    previousRenderDetail(...args);
+
+    if (!current) return;
+
+    const title = document.getElementById('carTitle');
+    if (!title) return;
+
+    // Avoid creating duplicate location badges.
+    document.querySelectorAll(
+      '#detail .pl-location-badges'
+    ).forEach(el => el.remove());
+
+    const row = String(current.row ?? '').trim();
+    const space = String(current.space ?? '').trim();
+
+    const invalid = value =>
+      !value ||
+      /^(space|row|vin|null|undefined|n\/a|—)$/i
+        .test(value);
+
+    // Only display usable location information.
+    if (invalid(row) && invalid(space)) return;
+
+    const container = document.createElement('div');
+    container.className = 'pl-location-badges';
+
+    if (!invalid(row)) {
+      container.appendChild(
+        locationBadge('ROW', row)
+      );
+    }
+
+    if (!invalid(space)) {
+      container.appendChild(
+        locationBadge('SPACE', space)
+      );
+    }
+
+    // Place badges right underneath the vehicle name.
+    title.insertAdjacentElement('afterend', container);
+  };
+
+  console.log(
+    '[Pull List] Clean VIN and yard location enabled.'
+  );
+})();
 
