@@ -14,7 +14,7 @@ if(!db.seedUpdatesApplied.includes('batch-v5')) { for(const part of SEED_PARTS.f
 if(!db.seedUpdatesApplied.includes('batch-v6')) { for(const part of SEED_PARTS.filter(p=>p.id.startsWith('seed-batch-v6-'))) { if(!db.parts.some(x=>x.id===part.id))db.parts.push(structuredClone(part)); } db.seedUpdatesApplied.push('batch-v6'); try{localStorage.setItem(KEY,JSON.stringify(db))}catch{} }
 if(!db.seedUpdatesApplied.includes('batch-v7')){for(const p of SEED_PARTS.filter(p=>p.id.startsWith('seed-batch-v7-'))){if(!db.parts.some(x=>x.id===p.id))db.parts.push(structuredClone(p))}db.seedUpdatesApplied.push('batch-v7');try{localStorage.setItem(KEY,JSON.stringify(db))}catch{}}
 let liveFeed=null,liveError='',current=null, modalSave=null, fileCallback=null, confirmKey='',confirmUntil=0;const money=n=>Number.isFinite(+n)?'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';const num=v=>Math.max(0,Number(v)||0);const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const store=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch{flash('Local save failed. Export a backup.')}};
+const store=()=>{partIndex=null;try{localStorage.setItem(KEY,JSON.stringify(db))}catch{flash('Local save failed. Export a backup.')}};
 const flash=s=>{let x=$('#message');x.textContent=s;x.hidden=false;clearTimeout(flash.timer);flash.timer=setTimeout(()=>x.hidden=true,6000)};
 const feedCars=()=>liveFeed?Object.values(liveFeed.yards||{}).flatMap(y=>y.vehicles||[]):[];
 const allCars=()=>[...MORE_DEMOS,...feedCars(),...db.cars].filter(c=>!db.hidden.includes(c.id));
