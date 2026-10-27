@@ -99,6 +99,18 @@ const profit=p=>num(p.salePrice)*(1-db.fee/100)-num(p.yardCost)-num(p.shipping)-
 const photoUrl=c=>{try{let u=new URL(c.imageUrl);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}};
 const availableLabel=c=>{if(!c.availableDate)return '';let d=new Date(c.availableDate+'T12:00:00');return Number.isFinite(d.getTime())?d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):c.availableDate};
 const maxProfit=c=>{let parts=carParts(c).filter(p=>p.group==='general'&&num(p.soldCount)>=5);return parts.length?Math.max(...parts.map(profit)):null};
+
+const potentialProfit = car => {
+  const parts = carParts(car).filter(
+    p => p.group === 'fitment'
+  );
+
+  return parts.length
+    ? Math.max(...parts.map(profit))
+    : null;
+};
+
+
 const save=()=>{store();render()};
 function nav(screen){$$('.screen').forEach(e=>e.hidden=e.id!==screen);$$('nav button[data-nav]').forEach(e=>e.classList.toggle('selected',e.dataset.nav===screen));if(screen==='browse')renderBrowse();if(screen==='database')renderDB();window.scrollTo({top:0,behavior:'instant'})}
 function render(){   document.body.classList.toggle('dark',!!db.dark);   renderBrowse();   if(current) renderDetail();   if(!$('#database').hidden) renderDB(); }
@@ -348,7 +360,8 @@ else if (sort === 'name') {
 
   function vehicleCard(car) {
     const parts = carParts(car);
-    const best = maxProfit(car);
+   const best = maxProfit(car);
+   const potential = potentialProfit(car);
 
     const yardName = car.demo
       ? 'Research'
@@ -399,9 +412,19 @@ else if (sort === 'name') {
             ${best === null ? '—' : money(best)}
           </div>
 
-          <small>
-            Top est. net profit
-          </small>
+          
+<small>
+  Top est. net profit
+</small>
+
+<div class="value" style="margin-top:10px;font-size:1.1rem">
+  ${potential === null ? '—' : money(potential)}
+</div>
+
+<small>
+  Potential profit · Verify fitment
+</small>
+
 
           <button
             type="button"
