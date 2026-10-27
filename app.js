@@ -1226,3 +1226,102 @@ loadLiveInventory();
   console.log("Generation labels enabled.");
 })();
 
+
+
+/* ============================================
+   PULL LIST — BROWSER BACK / SCROLL RESTORE
+   Keeps yard, filters, page and scroll position
+   ============================================ */
+
+(() => {
+  'use strict';
+
+  let browseScrollY = 0;
+  let restorePosition = false;
+
+  const vehicleList = document.getElementById('vehicles');
+  const backButton = document.getElementById('back');
+
+  if (!vehicleList) return;
+
+  // Save the browsing position before opening a car.
+  // Capture phase runs before the existing View Parts handler.
+  vehicleList.addEventListener('click', event => {
+    const button = event.target.closest('[data-open]');
+
+    if (!button || !vehicleList.contains(button)) return;
+
+    const carId = button.dataset.open;
+    if (!carId) return;
+
+    browseScrollY = window.scrollY;
+
+    history.pushState(
+      {
+        pullListView: 'detail',
+        carId,
+        browseScrollY
+      },
+      '',
+      window.location.href
+    );
+  }, true);
+
+  // Restore browsing screen and its exact position.
+  function restoreBrowse() {
+    current = null;
+    nav('browse');
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: browseScrollY,
+          left: 0,
+          behavior: 'instant'
+        });
+      });
+    });
+  }
+
+  // Browser Back and Forward navigation.
+  window.addEventListener('popstate', event => {
+    const state = event.state;
+
+    if (
+      state?.pullListView === 'detail' &&
+      state.carId
+    ) {
+      const car = allCars().find(
+        c => String(c.id) === String(state.carId)
+      );
+
+      if (car) {
+        current = car;
+        browseScrollY = state.browseScrollY ?? browseScrollY;
+        nav('detail');
+        renderDetail();
+        return;
+      }
+    }
+
+    restoreBrowse();
+  });
+
+  // Make the in-app Back button behave the same way.
+  if (backButton) {
+    backButton.onclick = () => {
+      if (
+        history.state?.pullListView === 'detail'
+      ) {
+        history.back();
+      } else {
+        restoreBrowse();
+      }
+    };
+  }
+
+  console.log(
+    '[Pull List] Vehicle history and scroll restore enabled.'
+  );
+})();
+
