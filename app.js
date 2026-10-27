@@ -1231,54 +1231,154 @@ loadLiveInventory();
 
 
 
-/* ============================================
-   PULL LIST — BROWSER BACK / SCROLL RESTORE
-   Keeps yard, filters, page and scroll position
-   ============================================ */
+
+/* =============================================
+   PULL LIST — COMPLETE BACK NAVIGATION
+   Yards, Vehicles, Scan VIN, Parts, Settings
+   Preserves browse page and scroll position
+   ============================================= */
 
 (() => {
   'use strict';
 
-  let browseScrollY = 0;
-  let restorePosition = false;
+  const SCREENS = [
+    'browse',
+    'detail',
+    'database',
+    'scanVinScreen'
+  ];
 
-  const vehicleList = document.getElementById('vehicles');
-  const backButton = document.getElementById('back');
+  const settingsDialog =
+    document.getElementById('modal');
 
-  if (!vehicleList) return;
+  let restoringHistory = false;
 
-  // Save the browsing position before opening a car.
-  // Capture phase runs before the existing View Parts handler.
-  vehicleList.addEventListener('click', event => {
-    const button = event.target.closest('[data-open]');
+  // Find whichever main screen is currently visible.
+  function activeScreen() {
+    return SCREENS.find(id => {
+      const element = document.getElementById(id);
+      return element && !element.hidden;
+    }) || 'browse';
+  }
 
-    if (!button || !vehicleList.contains(button)) return;
+  // Remember the scroll position of the current screen.
+  function savePosition() {
+    const state = history.state;
 
-    const carId = button.dataset.open;
-    if (!carId) return;
+    if (!state?.pullListView) return;
 
-    browseScrollY = window.scrollY;
-
-    history.pushState(
+    history.replaceState(
       {
-        pullListView: 'detail',
-        carId,
-        browseScrollY
+        ...state,
+        scrollY: window.scrollY
       },
       '',
       window.location.href
     );
+  }
+
+  // Establish a starting history entry.
+  if (!history.state?.pullListView) {
+    history.replaceState(
+      {
+        pullListView: 'browse',
+        scrollY: window.scrollY
+      },
+      '',
+      window.location.href
+    );
+  }
+
+  // Create a history entry for a new screen.
+  function openHistory(view, extra = {}) {
+    if (restoringHistory) return;
+
+    const state = history.state;
+
+    if (
+      state?.pullListView === view &&
+      (view !== 'detail' ||
+        state.carId === extra.carId)
+    ) {
+      return;
+    }
+
+    savePosition();
+
+    history.pushState(
+      {
+        pullListView: view,
+        scrollY: 0,
+        ...extra
+      },
+      '',
+      window.location.href
+    );
+  }
+
+  // Capture navigation clicks before existing handlers.
+  // This works with the dynamically created Scan VIN tab.
+  document.addEventListener('click', event => {
+    const button = event.target.closest('button');
+
+    if (!button) return;
+
+    // Opening an individual vehicle.
+    if (
+      button.matches('#vehicles [data-open]')
+    ) {
+      openHistory('detail', {
+        carId: button.dataset.open
+      });
+      return;
+    }
+
+    // Main navigation buttons:
+    // Yards, Parts, Scan VIN.
+    const navButton = button.closest(
+      'nav button[data-nav]'
+    );
+
+    if (navButton) {
+      const view = navButton.dataset.nav;
+
+      if (SCREENS.includes(view)) {
+        openHistory(view);
+      }
+
+      return;
+    }
+
+    // Scan VIN shortcut on the inventory page.
+    if (
+      button.matches(
+        '#browse .controls .buttonrow button'
+      ) &&
+      button.textContent.includes('Scan VIN')
+    ) {
+      openHistory('scanVinScreen');
+      return;
+    }
+
+    // Header Settings or mobile Settings button.
+    if (
+      button.id === 'settings' ||
+      button.id === 'navSettings'
+    ) {
+      openHistory('settings', {
+        previousView: activeScreen()
+      });
+    }
   }, true);
 
-  // Restore browsing screen and its exact position.
-  function restoreBrowse() {
-    current = null;
-    nav('browse');
+  // Restore a saved scroll position after rendering.
+  function restoreScroll(position) {
+    const y = Math.max(0, Number(position) || 0);
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         window.scrollTo({
-          top: browseScrollY,
+          top: y,
           left: 0,
           behavior: 'instant'
         });
@@ -1286,47 +1386,125 @@ loadLiveInventory();
     });
   }
 
-  // Browser Back and Forward navigation.
-  window.addEventListener('popstate', event => {
-    const state = event.state;
+  // Restore a screen from browser history.
+  function restoreState(state) {
+    restoringHistory = true;
 
-    if (
-      state?.pullListView === 'detail' &&
-      state.carId
-    ) {
-      const car = allCars().find(
-        c => String(c.id) === String(state.carId)
-      );
+    try {
+      // If Settings is open, close it first.
+      if (settingsDialog?.open) {
+        settingsDialog.close();
+      }
 
-      if (car) {
-        current = car;
-        browseScrollY = state.browseScrollY ?? browseScrollY;
-        nav('detail');
-        renderDetail();
+      const view = state?.pullListView || 'browse';
+
+      if (view === 'detail' && state.carId) {
+        const car = allCars().find(
+          item =>
+            String(item.id) === String(state.carId)
+        );
+
+        if (car) {
+          current = car;
+          nav('detail');
+          renderDetail();
+
+          restoreScroll(state.scrollY);
+          return;
+        }
+      }
+
+      if (view === 'settings') {
+        const previous = SCREENS.includes(
+          state.previousView
+        )
+          ? state.previousView
+          : 'browse';
+
+        if (previous === 'detail' && current) {
+          nav('detail');
+          renderDetail();
+        } else {
+          nav(previous);
+        }
+
+        openSettings();
+        restoreScroll(state.scrollY);
         return;
       }
-    }
 
-    restoreBrowse();
+      if (
+        view === 'browse' ||
+        view === 'database' ||
+        view === 'scanVinScreen'
+      ) {
+        nav(view);
+        restoreScroll(state.scrollY);
+        return;
+      }
+
+      nav('browse');
+      restoreScroll(state?.scrollY);
+
+    } finally {
+      restoringHistory = false;
+    }
+  }
+
+  // Phone Back gesture, browser Back, and Forward.
+  window.addEventListener('popstate', event => {
+    restoreState(event.state);
   });
 
-  // Make the in-app Back button behave the same way.
-  if (backButton) {
-    backButton.onclick = () => {
-      if (
-        history.state?.pullListView === 'detail'
-      ) {
+  // Pull List's own Back button in vehicle details.
+  const vehicleBack =
+    document.getElementById('back');
+
+  if (vehicleBack) {
+    vehicleBack.onclick = () => {
+      if (history.state?.pullListView === 'detail') {
         history.back();
       } else {
-        restoreBrowse();
+        nav('browse');
       }
     };
   }
 
+  // Parts database's own Back button.
+  const databaseBack =
+    document.getElementById('dbback');
+
+  if (databaseBack) {
+    databaseBack.onclick = () => {
+      if (
+        history.state?.pullListView === 'database'
+      ) {
+        history.back();
+      } else {
+        nav('browse');
+      }
+    };
+  }
+
+  // Closing Settings through Save, Cancel, X,
+  // or Escape should also clear its history entry.
+  if (settingsDialog) {
+    settingsDialog.addEventListener('close', () => {
+      if (
+        !restoringHistory &&
+        history.state?.pullListView === 'settings'
+      ) {
+        history.back();
+      }
+    });
+  }
+
   console.log(
-    '[Pull List] Vehicle history and scroll restore enabled.'
+    '[Pull List] Complete browser navigation enabled.'
   );
+
 })();
+
 
 
 /* =============================================
@@ -1447,8 +1625,7 @@ loadLiveInventory();
     if (!valid(value)) return '';
 
     return `
-      <div class="pl-clean-spec-row">
-        <span>${safe(label)}</span>
+        <div class="pl-clean-spec-row" data-field="${safe(label)}">        <span>${safe(label)}</span>
         <strong>${safe(value)}</strong>
       </div>
     `;
@@ -1687,5 +1864,110 @@ loadLiveInventory();
   );
 })();
 
+
+/* =============================================
+   PULL LIST — COMPACT VEHICLE INFO TAGS
+   ============================================= */
+
+(() => {
+  'use strict';
+
+  const style = document.createElement('style');
+
+  style.textContent = `
+    /* Remove the large specifications container */
+    #detail .pl-clean-specs {
+      display: flex !important;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+
+      margin: 12px 0 16px;
+      padding: 0;
+
+      border: none;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    /* Compact rounded tags */
+    #detail .pl-clean-spec-row {
+      display: inline-flex !important;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 5px;
+
+      width: auto;
+      max-width: 100%;
+      min-height: 30px;
+      box-sizing: border-box;
+
+      padding: 4px 11px;
+      margin: 0;
+
+      border: 1px solid #34476b;
+      border-radius: 999px;
+      background: #202a43;
+
+      font-size: 12px;
+      line-height: 1.35;
+      white-space: normal;
+    }
+
+    /* Match the light-blue lettering in screenshot */
+    #detail .pl-clean-spec-row span,
+    #detail .pl-clean-spec-row strong {
+      display: inline;
+      padding: 0;
+      margin: 0;
+      border: none;
+
+      color: #a5bff1;
+      font-size: inherit;
+      font-weight: 650;
+      text-align: left;
+      overflow-wrap: anywhere;
+    }
+
+    /* Hide unnecessary prefixes */
+    #detail .pl-clean-spec-row[data-field="Trim"] span,
+    #detail .pl-clean-spec-row[data-field="Body"] span,
+    #detail .pl-clean-spec-row[data-field="Engine"] span,
+    #detail .pl-clean-spec-row[data-field="Drivetrain"] span,
+    #detail .pl-clean-spec-row[data-field="Fuel"] span {
+      display: none;
+    }
+
+    /* Keep the VIN and generation readable */
+    #detail .pl-clean-spec-row[data-field="VIN"],
+    #detail .pl-clean-spec-row[data-field="Generation"] {
+      font-weight: 700;
+    }
+
+    /* Status text should stay on a separate line */
+    #detail .pl-decode-status {
+      flex-basis: 100%;
+      font-size: 11px;
+    }
+
+    @media (max-width: 590px) {
+      #detail .pl-clean-specs {
+        gap: 6px;
+      }
+
+      #detail .pl-clean-spec-row {
+        min-height: 28px;
+        padding: 4px 9px;
+        font-size: 11px;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+
+  console.log(
+    '[Pull List] Compact vehicle tags enabled.'
+  );
+})();
 
 
