@@ -253,24 +253,34 @@ async function vinDecode(){if(!current?.vin){flash('Edit this car to enter its V
       });
     }
 
-    else if (sort === 'profit') {
-      cars.sort((a, b) =>
-        (maxProfit(b) ?? -Infinity) -
-        (maxProfit(a) ?? -Infinity)
-      );
+
+else if (sort === 'profit') {
+  const profitCache = new Map();
+
+  const value = car => {
+    const key =
+      String(car.make).toLowerCase() + '|' +
+      cleanModel(car.model) + '|' +
+      car.year;
+
+    if (!profitCache.has(key)) {
+      profitCache.set(key, maxProfit(car));
     }
 
-    else if (sort === 'year') {
-      cars.sort((a, b) => b.year - a.year);
-    }
+    return profitCache.get(key);
+  };
 
-    else if (sort === 'name') {
-      cars.sort((a, b) =>
-        (a.make + ' ' + a.model).localeCompare(
-          b.make + ' ' + b.model
-        )
-      );
-    }
+  cars.sort((a, b) => {
+    const pa = value(a);
+    const pb = value(b);
+
+    if (pa === null && pb === null) return 0;
+    if (pa === null) return 1;
+    if (pb === null) return -1;
+
+    return pb - pa;
+  });
+}
 
     else if (sort === 'row') {
       cars.sort((a, b) =>
