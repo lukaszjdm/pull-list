@@ -1248,6 +1248,7 @@ loadLiveInventory();
     'browse',
     'detail',
     'database',
+    'pullRouteScreen',
     'scanVinScreen'
   ];
 
@@ -1439,6 +1440,7 @@ loadLiveInventory();
       if (
         view === 'browse' ||
         view === 'database' ||
+        view === 'pullRouteScreen' ||
         view === 'scanVinScreen'
       ) {
         nav(view);
