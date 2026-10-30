@@ -14,7 +14,7 @@ if(!db.seedUpdatesApplied.includes('batch-v5')) { for(const part of SEED_PARTS.f
 if(!db.seedUpdatesApplied.includes('batch-v6')) { for(const part of SEED_PARTS.filter(p=>p.id.startsWith('seed-batch-v6-'))) { if(!db.parts.some(x=>x.id===part.id))db.parts.push(structuredClone(part)); } db.seedUpdatesApplied.push('batch-v6'); try{localStorage.setItem(KEY,JSON.stringify(db))}catch{} }
 if(!db.seedUpdatesApplied.includes('batch-v7')){for(const p of SEED_PARTS.filter(p=>p.id.startsWith('seed-batch-v7-'))){if(!db.parts.some(x=>x.id===p.id))db.parts.push(structuredClone(p))}db.seedUpdatesApplied.push('batch-v7');try{localStorage.setItem(KEY,JSON.stringify(db))}catch{}}
 let liveFeed=null,liveError='',current=null, modalSave=null, fileCallback=null, confirmKey='',confirmUntil=0;const money=n=>Number.isFinite(+n)?'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';const num=v=>Math.max(0,Number(v)||0);const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const store=()=>{partIndex=null;try{localStorage.setItem(KEY,JSON.stringify(db))}catch{flash('Local save failed. Export a backup.')}};
+const store=()=>{partIndex=null;if(window.PLStoreIndexedDB){window.PLStoreIndexedDB();return;}try{localStorage.setItem(KEY,JSON.stringify(db))}catch{flash('Local save failed. Export a backup.')}};
 const flash=s=>{let x=$('#message');x.textContent=s;x.hidden=false;clearTimeout(flash.timer);flash.timer=setTimeout(()=>x.hidden=true,6000)};
 const feedCars=()=>liveFeed?Object.values(liveFeed.yards||{}).flatMap(y=>y.vehicles||[]):[];
 const allCars=()=>[...MORE_DEMOS,...feedCars(),...db.cars].filter(c=>!db.hidden.includes(c.id));
@@ -2129,3 +2129,387 @@ return `${label} (${g.startYear}–${g.endYear})`;
   );
 })();
 
+
+/* PULL LIST — COMPLETE RESEARCH SYNC + RELATED-MODEL LEADS */
+(() => {
+  'use strict';
+
+  const DATABASE = 'pull-list-complete-v1';
+
+  const clean = value =>
+    String(value ?? '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '');
+
+  const root = value =>
+    clean(value).replace(/(?:quattro|xdrive)$/, '');
+
+  const aliases = {
+    bmw: {
+      '535ixdrive': ['535i', '5series'],
+      '750li': ['750i', '7series'],
+      '328igtxdrive': ['328igt', '3series'],
+      'alpinab7lxdrive': ['alpinab7', '7series']
+    },
+    ford: {
+      'policeinterceptorutility': ['explorer'],
+      'policeinterceptorsedan': ['taurus']
+    },
+    audi: {
+      'a3quattro': ['a3'],
+      'a5quattro': ['a5']
+    },
+    chevrolet: {
+      'silverado': ['silverado1500', 'ck1500'],
+      'c3500hd': ['c3500']
+    },
+    gmc: {
+      'c3500hd': ['c3500']
+    },
+    jaguar: {
+      'vandenplas': ['xj8', 'xj']
+    },
+    lexus: {
+      'sc300400': ['sc300', 'sc400']
+    }
+  };
+
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DATABASE, 1);
+
+      request.onupgradeneeded = () => {
+        request.result.createObjectStore('catalog');
+      };
+
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function readSaved() {
+    const database = await openDB();
+
+    try {
+      return await new Promise((resolve, reject) => {
+        const transaction = database.transaction(
+          'catalog', 'readonly'
+        );
+
+        const request =
+          transaction.objectStore('catalog').get('db');
+
+        request.onsuccess = () =>
+          resolve(request.result || null);
+
+        request.onerror = () =>
+          reject(request.error);
+      });
+    } finally {
+      database.close();
+    }
+  }
+
+  async function writeSaved() {
+    const snapshot = structuredClone(db);
+    const database = await openDB();
+
+    try {
+      await new Promise((resolve, reject) => {
+        const transaction = database.transaction(
+          'catalog', 'readwrite'
+        );
+
+        transaction.objectStore('catalog')
+          .put(snapshot, 'db');
+
+        transaction.oncomplete = resolve;
+        transaction.onerror = () =>
+          reject(transaction.error);
+        transaction.onabort = () =>
+          reject(transaction.error);
+      });
+    } finally {
+      database.close();
+    }
+  }
+
+  let saveTimer;
+
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+
+    saveTimer = setTimeout(() => {
+      writeSaved().catch(error =>
+        console.error(
+          '[Pull List] IndexedDB save failed',
+          error
+        )
+      );
+    }, 250);
+  }
+
+  window.PLStoreIndexedDB = scheduleSave;
+
+  const previousRender = render;
+
+  render = function (...args) {
+    const result = previousRender(...args);
+    scheduleSave();
+    return result;
+  };
+
+  function relatedParts(car, limit = 15) {
+    const mk = clean(car.make);
+    const base = root(car.model);
+
+    const allowed = new Set([
+      base,
+      ...(aliases[mk]?.[clean(car.model)] || [])
+    ]);
+
+    const year = Number(car.year);
+
+    const exactIDs = new Set(
+      carParts(car).map(p => String(p.id))
+    );
+
+    const found = new Set();
+
+    return db.parts
+      .filter(p => {
+        if (
+          clean(p.make) !== mk ||
+          !allowed.has(root(p.model)) ||
+          exactIDs.has(String(p.id))
+        ) return false;
+
+        const direct =
+          year >= Number(p.startYear) &&
+          year <= Number(p.endYear);
+
+        const gen =
+          Number(p.generationStartYear) >= 1950 &&
+          year >= Number(p.generationStartYear) &&
+          year <= Number(p.generationEndYear);
+
+        const listing =
+          Number(p.listingFitmentStartYear) >= 1950 &&
+          year >= Number(p.listingFitmentStartYear) &&
+          year <= Number(p.listingFitmentEndYear);
+
+        return direct || gen || listing;
+      })
+      .sort((a, b) =>
+        Number(b.soldCount || 0) -
+        Number(a.soldCount || 0)
+      )
+      .filter(p => {
+        const id =
+          clean(p.name) + '|' +
+          clean(p.variant);
+
+        if (found.has(id)) return false;
+
+        found.add(id);
+        return true;
+      })
+      .slice(0, limit);
+  }
+
+  const previousDetail = renderDetail;
+
+  renderDetail = function (...args) {
+    previousDetail(...args);
+
+    if (!current) return;
+
+    const container =
+      document.getElementById('parts');
+
+    if (!container) return;
+
+    const related = relatedParts(current);
+
+    if (!related.length) return;
+
+    const section = document.createElement('section');
+    section.className = 'partgroup';
+
+    const heading = document.createElement('h2');
+
+    heading.textContent =
+      'Related-model / generation research — VERIFY (' +
+      related.length + ')';
+
+    const intro = document.createElement('p');
+
+    intro.textContent =
+      'Possible leads from similar models or ' +
+      'generation years. These are not confirmed ' +
+      'fits or year-specific market prices and do ' +
+      'not affect the car ranking.';
+
+    section.append(heading, intro);
+
+    for (const p of related) {
+      const item = document.createElement('article');
+      item.className = 'part';
+
+      const title = document.createElement('h3');
+      title.textContent = p.name;
+
+      const detail = document.createElement('p');
+
+      detail.textContent =
+        `${p.make} ${p.model} | ` +
+        `Research years ${p.startYear}–${p.endYear} | ` +
+        `Sold ${p.soldCount ?? 'unknown'} | ` +
+        `Price ${money(p.salePrice)} | ` +
+        'Verify OEM number, drivetrain, equipment, ' +
+        'and actual fitment.';
+
+      item.append(title, detail);
+      section.append(item);
+    }
+
+    container.append(section);
+  };
+
+  window.PLFullAudit = () => {
+    const unique = new Map();
+
+    for (const c of allCars()) {
+      if (
+        !c?.make ||
+        !c?.model ||
+        !Number.isInteger(+c.year)
+      ) continue;
+
+      const id = [
+        +c.year,
+        clean(c.make),
+        clean(c.model)
+      ].join('|');
+
+      if (!unique.has(id)) unique.set(id, c);
+    }
+
+    const gaps = [];
+
+    for (const c of unique.values()) {
+      if (!carParts(c).length) {
+        gaps.push({
+          year: +c.year,
+          make: c.make,
+          model: c.model,
+          vin: c.vin || '',
+          relatedLeads: relatedParts(c, 30).length
+        });
+      }
+    }
+
+    console.log('[Pull List] Audit:', {
+      vehicleGroups: unique.size,
+      loadedParts: db.parts.length,
+      zeroExactMatches: gaps.length
+    });
+
+    console.table(gaps);
+    return gaps;
+  };
+
+  (async () => {
+    try {
+      const saved = await readSaved();
+
+      if (
+        saved &&
+        Array.isArray(saved.parts) &&
+        Array.isArray(saved.cars)
+      ) {
+        db = saved;
+        db.hidden ??= [];
+        db.fee ??= 13.25;
+        db.other ??= 0;
+        partIndex = null;
+      }
+
+      const response = await fetch(
+        './seed.json?complete=' + Date.now(),
+        { cache: 'no-store' }
+      );
+
+      if (!response.ok) {
+        throw Error(
+          'seed.json HTTP ' + response.status
+        );
+      }
+
+      const latest = await response.json();
+
+      if (!Array.isArray(latest)) {
+        throw Error('seed.json is not an array');
+      }
+
+      const existing = new Map(
+        db.parts.map((p, i) => [String(p.id), i])
+      );
+
+      let added = 0;
+      let refreshed = 0;
+
+      for (const p of latest) {
+        if (!p || !p.id) continue;
+
+        const id = String(p.id);
+
+        if (existing.has(id)) {
+          const i = existing.get(id);
+
+          // Keep manually edited records.
+          // Update unedited research from GitHub.
+          if (!db.parts[i].edited) {
+            db.parts[i] = p;
+            refreshed++;
+          }
+        } else {
+          existing.set(id, db.parts.length);
+          db.parts.push(p);
+          added++;
+        }
+      }
+
+      partIndex = null;
+
+      await writeSaved();
+      render();
+
+      const databaseView =
+        document.getElementById('database');
+
+      if (databaseView && !databaseView.hidden) {
+        renderDB();
+      }
+
+      console.log(
+        '[Pull List] FULL DATABASE LOADED',
+        {
+          github: latest.length,
+          active: db.parts.length,
+          newParts: added,
+          refreshedParts: refreshed,
+          storage: 'IndexedDB'
+        }
+      );
+
+      window.PLFullAudit();
+
+    } catch (error) {
+      console.error(
+        '[Pull List] Full catalog load failed:',
+        error
+      );
+    }
+  })();
+})();
