@@ -220,11 +220,10 @@ def fetch_all_pages(yard, base_url, session=None, delay=PAGE_DELAY_SECONDS, max_
             unique[car['stock'] or car['vin']] = car
         count += 1
         print(f'{yard}: page {count}, {len(cars)} cards, {len(unique)} unique total', flush=True)
-        # A final batch containing fewer than the usual 25 cards is the end.
-        # LKQ may still show a Next Page link pointing to an empty page.
-        if len(cars) < 25:
-            print(f'{yard}: final partial page reached ({len(cars)} cards)', flush=True)
-            break
+        # Do not assume a page with fewer than 25 cards is the final page.
+        # LKQ can show partial pages while more arrivals exist on later pages.
+        # Follow the actual Next Page link until it disappears or an empty
+        # terminal page is verified.
         page_url = next_page(response.text, page_url, base_url)
         if page_url and delay:
             time.sleep(delay)
