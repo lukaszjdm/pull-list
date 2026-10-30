@@ -18,8 +18,8 @@ const store=()=>{partIndex=null;if(window.PLStoreIndexedDB){window.PLStoreIndexe
 const flash=s=>{let x=$('#message');x.textContent=s;x.hidden=false;clearTimeout(flash.timer);flash.timer=setTimeout(()=>x.hidden=true,6000)};
 const feedCars=()=>liveFeed?Object.values(liveFeed.yards||{}).flatMap(y=>y.vehicles||[]):[];
 const allCars=()=>[...MORE_DEMOS,...feedCars(),...db.cars].filter(c=>!db.hidden.includes(c.id));
-const cleanModel=m=>String(m||'').toLowerCase().replace(/\b(super duty|sd|sedan|coupe|classic)\b/g,'').replace(/[^a-z0-9]/g,'');
-const similarModel=(a,b)=>{let x=cleanModel(a),y=cleanModel(b);return x===y||(['f250','f350','mazda6','ram1500','silverado1500'].includes(x)&&y.startsWith(x))};
+const cleanModel=m=>String(m||'').toLowerCase().replace(/\b(super duty|sd)\b/g,'').replace(/[^a-z0-9]/g,'');
+const similarModel=(a,b)=>cleanModel(a)===cleanModel(b);
 async function loadLiveInventory(){
   // Local file:// pages cannot reliably fetch adjacent JSON; show the bundled snapshot.
   const bundled=window.PULL_LIST_BUNDLED_YARDS;
@@ -77,24 +77,21 @@ const carParts = c => {
   const make = String(c.make).trim().toLowerCase();
   const model = cleanModel(c.model);
 
-  const candidates = [
-    ...(index.get(make + '|' + model) || [])
-  ];
-
-  for (const prefix of [
-    'f250', 'f350', 'mazda6',
-    'ram1500', 'silverado1500'
-  ]) {
-    if (model !== prefix && model.startsWith(prefix)) {
-      candidates.push(
-        ...(index.get(make + '|' + prefix) || [])
-      );
-    }
-  }
-
-  return candidates.filter(p => match(p, c));
+  // Keep profit rankings grounded in the exact researched model/year.
+  // Different versions are separately listed as VERIFY-only leads.
+  return (index.get(make + '|' + model) || [])
+    .filter(p => match(p, c));
 };
 
+const browsePartSummary = car => {
+  const count = carParts(car).length;
+  if (count) return count + ' recommended parts';
+  const leads = typeof window.PLRelatedCount === 'function'
+    ? window.PLRelatedCount(car) : 0;
+  return leads
+    ? '0 exact parts · ' + leads + ' related leads (VERIFY)'
+    : '0 matching research parts';
+};
 const profit=p=>num(p.salePrice)*(1-db.fee/100)-num(p.yardCost)-num(p.shipping)-num(db.other);
 const photoUrl=c=>{try{let u=new URL(c.imageUrl);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}};
 const availableLabel=c=>{if(!c.availableDate)return '';let d=new Date(c.availableDate+'T12:00:00');return Number.isFinite(d.getTime())?d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):c.availableDate};
@@ -116,7 +113,7 @@ function nav(screen){$$('.screen').forEach(e=>e.hidden=e.id!==screen);$$('nav bu
 function render(){   document.body.classList.toggle('dark',!!db.dark);   renderBrowse();   if(current) renderDetail();   if(!$('#database').hidden) renderDB(); }
 function renderBrowse(){const yard=$('#yard').value,search=$('#search').value.toLowerCase().trim(),min=Number($('#yearMin').value)||0,max=Number($('#yearMax').value)||9999;let cars=allCars().filter(c=>(yard==='all'?c.yard!=='demo':c.yard===yard)&&c.year>=min&&c.year<=max&&[c.year,c.make,c.model,c.row,c.trim].join(' ').toLowerCase().includes(search));const sort=$('#sort').value;cars.sort((a,b)=>sort==='row'?(String(a.row??'').localeCompare(String(b.row??''),undefined,{numeric:true})||a.make.localeCompare(b.make)):sort==='year'?b.year-a.year:sort==='date-new'||sort==='date-old'?((a.availableDate&&b.availableDate)?(sort==='date-new'?b.availableDate.localeCompare(a.availableDate):a.availableDate.localeCompare(b.availableDate)):(a.availableDate?-1:b.availableDate?1:0)):sort==='name'?(a.make+' '+a.model).localeCompare(b.make+' '+b.model):((maxProfit(b)??-Infinity)-(maxProfit(a)??-Infinity)));
 $('#vehicleCount').textContent='('+cars.length+')';$('#shownYard').textContent=yard==='all'?'All Illinois yards':YARDS[yard].name;
-$('#vehicles').innerHTML=cars.length?cars.map(c=>`<div class="car ${c.demo?'demo-car':''}">${photoUrl(c)?`<img class="car-thumb" src="${safe(photoUrl(c))}" alt="${safe(c.year+' '+c.make+' '+c.model)} yard photo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">`:''}<div class="car-main"><div class="name">${safe(c.year)} ${safe(c.make)} ${safe(c.model)}</div><small>${safe(c.demo?'Research':YARDS[c.yard]?.name)} · Row ${safe(c.row||'—')} ${c.space?'· Space '+safe(c.space):''} ${c.demo?'· RESEARCH':''}</small>${c.availableDate?`<small class="available-date">Available ${safe(availableLabel(c))}</small>`:''}<small>${carParts(c).length} recommended parts</small></div><div class="right"><div class="value">${maxProfit(c)===null?'—':money(maxProfit(c))}</div><small>Top est. net profit</small><button class="btn" data-open="${safe(c.id)}">View parts →</button></div></div>`).join(''):`<div class="empty">No verified vehicles are available for this yard yet. Check the inventory status above, or choose Research to explore your parts database.</div>`;
+$('#vehicles').innerHTML=cars.length?cars.map(c=>`<div class="car ${c.demo?'demo-car':''}">${photoUrl(c)?`<img class="car-thumb" src="${safe(photoUrl(c))}" alt="${safe(c.year+' '+c.make+' '+c.model)} yard photo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">`:''}<div class="car-main"><div class="name">${safe(c.year)} ${safe(c.make)} ${safe(c.model)}</div>${window.PLGenerationFor?.(c)?`<small class="car-generation">${safe(window.PLGenerationFor(c))}</small>`:''}<small>${safe(c.demo?'Research':YARDS[c.yard]?.name)} · Row ${safe(c.row||'—')} ${c.space?'· Space '+safe(c.space):''} ${c.demo?'· RESEARCH':''}</small>${c.availableDate?`<small class="available-date">Available ${safe(availableLabel(c))}</small>`:''}<small>${safe(browsePartSummary(c))}</small></div><div class="right"><div class="value">${maxProfit(c)===null?'—':money(maxProfit(c))}</div><small>Top est. net profit</small><button class="btn" data-open="${safe(c.id)}">View parts →</button></div></div>`).join(''):`<div class="empty">No verified vehicles are available for this yard yet. Check the inventory status above, or choose Research to explore your parts database.</div>`;
 const keys=yard==='all'?['north','south','island','summit']:[yard];
 if(yard==='demo')$('#inventoryStatus').textContent=MORE_DEMOS.length+' research vehicles loaded. These are NOT confirmed in any yard.';
 else if(liveError)$('#inventoryStatus').textContent=liveError+' · '+keys.map(k=>{let y=liveFeed?.yards?.[k];return (YARDS[k]?.name||k)+': '+(y?.vehicles?.length||0)+' saved vehicles, '+(y?.status||'unavailable')}).join(' | ');
@@ -1576,31 +1573,97 @@ loadLiveInventory();
     return generationPromise;
   }
 
+  // Match exact models first, then drivetrain-name variants, then known
+  // model families. Never guess a label when catalog entries conflict.
+  function generationKeys(make, model) {
+    const mk = normalize(make);
+    const exact = normalize(model);
+    const family = exact.replace(
+      /(?:quattro|xdrive|4matic|awd|fwd|rwd|4wd|2wd)$/, ''
+    );
+    const keys = [exact, family];
+
+    if (mk === 'chevrolet' &&
+        /^(express|suburban|avalanche)(?:1500|2500|3500)$/.test(family)) {
+      keys.push(family.replace(/(?:1500|2500|3500)$/, ''));
+    }
+    if (mk === 'gmc' &&
+        /^(savana|yukonxl)(?:1500|2500|3500)$/.test(family)) {
+      keys.push(family.replace(/(?:1500|2500|3500)$/, ''));
+    }
+    if (mk === 'ford' && /^e[123]50(?:econoline)?clubwagon$/.test(family)) {
+      keys.push(family.replace(/(?:econoline)?clubwagon$/, 'econoline'));
+    }
+    if (mk === 'chevrolet' && family === 'aveo5') keys.push('aveo');
+    if (mk === 'chevrolet' && family === 'capriceclassic') keys.push('caprice');
+    if (mk === 'chevrolet' && family === 'silverado1500hd') keys.push('silverado1500');
+    if (mk === 'cadillac' && family === 'ctssportwagon') keys.push('cts');
+    if (mk === 'subaru' && family === 'xvcrosstrek') keys.push('crosstrek');
+
+    return [...new Set(keys.filter(Boolean))];
+  }
+
   function generationFor(car) {
     const year = Number(car.year);
+    const make = normalize(car.make);
 
-    const matching = generationData.filter(g =>
-      normalize(g.make) === normalize(car.make) &&
-      normalize(g.model) === normalize(car.model) &&
-      year >= Number(g.startYear) &&
-      year <= Number(g.endYear)
-    );
+    for (const model of generationKeys(car.make, car.model)) {
+      const matches = generationData.filter(g =>
+        normalize(g.make) === make &&
+        normalize(g.model) === model &&
+        year >= Number(g.startYear) &&
+        year <= Number(g.endYear)
+      );
 
-    if (matching.length === 1) {
-      const g = matching[0];
-      
-const label = String(g.label || '')
-  .replace(
-    /^([A-Za-z0-9]+)\s+generation\s*\/\s*\1$/i,
-    '$1'
-  );
+      if (!matches.length) continue;
 
-return `${label} (${g.startYear}–${g.endYear})`;
+      const unique = new Map(matches.map(g => [
+        [g.label, g.startYear, g.endYear].join('|'), g
+      ]));
 
+      if (unique.size === 1) {
+        const g = [...unique.values()][0];
+        const label = String(g.label || '').replace(
+          /^([A-Za-z0-9]+)\s+generation\s*\/\s*\1$/i, '$1'
+        );
+        return `${label} (${g.startYear}–${g.endYear})`;
+      }
+      break;
     }
 
     return valid(car.generation) || '';
   }
+
+  window.PLGenerationFor = generationFor;
+
+  // Run PLGenerationAudit() in your browser Console to see remaining gaps.
+  window.PLGenerationAudit = async () => {
+    await loadGenerations();
+    const seen = new Set();
+    const missing = [];
+
+    for (const car of allCars()) {
+      if (!car || !car.make || !car.model || !Number(car.year)) continue;
+      const key = [car.year, normalize(car.make),
+        normalize(car.model)].join('|');
+      if (seen.has(key)) continue;
+      seen.add(key);
+      if (!generationFor(car)) {
+        missing.push({
+          year: car.year, make: car.make, model: car.model,
+          source: car.demo ? 'Research' : 'Yard inventory'
+        });
+      }
+    }
+
+    console.log('[Pull List] Generation audit:', {
+      vehicleGroups: seen.size,
+      generationCatalog: generationData.length,
+      missingGeneration: missing.length
+    });
+    console.table(missing);
+    return missing;
+  };
 
   function decodedEngine(d, car) {
     if (!d) return valid(car.engine);
@@ -1865,7 +1928,7 @@ return `${label} (${g.startYear}–${g.endYear})`;
 
   document.head.appendChild(style);
 
-  loadGenerations();
+  loadGenerations().then(() => renderBrowse());
 
   console.log(
     '[Pull List] Clean automatic vehicle details enabled.'
@@ -2141,8 +2204,12 @@ return `${label} (${g.startYear}–${g.endYear})`;
       .toLowerCase()
       .replace(/[^a-z0-9]/g, '');
 
+  // Only use expanded vehicle families for VERIFY-only research leads.
+  // These do NOT affect exact matches, part rankings or profit calculations.
   const root = value =>
-    clean(value).replace(/(?:quattro|xdrive)$/, '');
+    clean(value).replace(
+      /(?:quattro|xdrive|4matic|awd|fwd|rwd|4wd|2wd|hybrid)$/, ''
+    );
 
   const aliases = {
     bmw: {
@@ -2173,6 +2240,35 @@ return `${label} (${g.startYear}–${g.endYear})`;
       'sc300400': ['sc300', 'sc400']
     }
   };
+
+  function familyAliases(make, model) {
+    const key = clean(model);
+    const result = [];
+
+    if (make === 'chevrolet' &&
+        /^(express|suburban|avalanche)(?:1500|2500|3500)$/.test(key)) {
+      result.push(key.replace(/(?:1500|2500|3500)$/, ''));
+    }
+    if (make === 'gmc' &&
+        /^(savana|yukonxl)(?:1500|2500|3500)$/.test(key)) {
+      result.push(key.replace(/(?:1500|2500|3500)$/, ''));
+    }
+    if (make === 'chevrolet' && key === 'silverado1500hd') {
+      result.push('silverado1500');
+    }
+    if (make === 'ford' && /^e[123]50(?:econoline)?clubwagon$/.test(key)) {
+      result.push(key.replace(/(?:econoline)?clubwagon$/, 'econoline'));
+    }
+    if (make === 'chevrolet' && key === 'aveo5') result.push('aveo');
+    if (make === 'chevrolet' && key === 'capriceclassic') result.push('caprice');
+    if (make === 'cadillac' && key === 'ctssportwagon') result.push('cts');
+    if (make === 'subaru' && key === 'xvcrosstrek') result.push('crosstrek');
+    if (make === 'bmw' && /^3[0-9]{2}xi$/.test(key)) {
+      result.push(key.replace(/xi$/, 'i'));
+    }
+
+    return result;
+  }
 
   function openDB() {
     return new Promise((resolve, reject) => {
@@ -2265,7 +2361,8 @@ return `${label} (${g.startYear}–${g.endYear})`;
 
     const allowed = new Set([
       base,
-      ...(aliases[mk]?.[clean(car.model)] || [])
+      ...(aliases[mk]?.[clean(car.model)] || []),
+      ...familyAliases(mk, car.model)
     ]);
 
     const year = Number(car.year);
@@ -2316,6 +2413,9 @@ return `${label} (${g.startYear}–${g.endYear})`;
       })
       .slice(0, limit);
   }
+
+  // Zero-exact-match cards may show these separately labeled leads.
+  window.PLRelatedCount = car => relatedParts(car).length;
 
   const previousDetail = renderDetail;
 
