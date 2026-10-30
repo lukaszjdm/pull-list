@@ -46,7 +46,7 @@
       vin:text(current.vin),year:text(current.year),make:text(current.make),
       model:text(current.model),trim:text(current.trim),
       name:text(part.name),variant:text(part.variant),group:text(part.group),
-      profit:Number(profit(part))||0,minutes:pullMinutes(part),pullTime:text(part.pullTime),pulled:false,note:'',savedAt:new Date().toISOString()
+      profit:Number(profit(part))||0,pulled:false,note:'',savedAt:new Date().toISOString()
     });
     save();updatePartButtons();if(!screen.hidden)renderRoute();
   }
@@ -56,17 +56,6 @@
   });
   const oldDetail=renderDetail;
   renderDetail=function(...args){const result=oldDetail.apply(this,args);updatePartButtons();return result;};
-  // Existing saved parts without a minute snapshot fall back to their database
-  // part time when available, then to the category planning assumptions.
-  const minutesForEntry=e=>{
-    const saved=Number(e.minutes);
-    if(e.minutes!==null&&e.minutes!==undefined&&String(e.minutes).trim()!==''&&
-       Number.isFinite(saved)&&saved>=1&&saved<=480)return saved;
-    const live=db.parts.find(p=>text(p.id)===text(e.partId));
-    if(live)return pullMinutes(live);
-    return ({quick:10,moderate:30,heavy:60})[text(e.pullTime).toLowerCase()]||30;
-  };
-  const rateForEntry=e=>(Number(e.profit)||0)/minutesForEntry(e);
   const yardOrder=['north','south','island','summit','demo'];
   const cleanRow=value=>{
     const r=text(value);
@@ -96,8 +85,7 @@
     const open=entries.filter(e=>!e.pulled);
     const vehicles=new Set(open.map(e=>e.key.split('|part:')[0]));
     const profitSum=open.reduce((sum,e)=>sum+(Number(e.profit)||0),0);
-    const minutesSum=open.reduce((sum,e)=>sum+minutesForEntry(e),0);
-    summary.innerHTML=`<div class="route-stats"><span><b>${open.length}</b><small>Parts remaining</small></span><span><b>${vehicles.size}</b><small>Vehicles</small></span><span><b>${usd(profitSum)}</b><small>Est. net profit remaining</small></span></div><p class="muted small">${entries.length-open.length} of ${entries.length} parts marked pulled · ~${Math.round(minutesSum)} min estimated part removal (walking and delays excluded) · Profit estimates are saved snapshots</p>`;
+    summary.innerHTML=`<div class="route-stats"><span><b>${open.length}</b><small>Parts remaining</small></span><span><b>${vehicles.size}</b><small>Vehicles</small></span><span><b>${usd(profitSum)}</b><small>Est. net profit remaining</small></span></div><p class="muted small">${entries.length-open.length} of ${entries.length} parts marked pulled · Profit estimates are saved snapshots</p>`;
     const visible=entries.filter(e=>filter==='all'||(filter==='pulled'?e.pulled:!e.pulled)).slice().sort(compare);
     if(!visible.length){list.innerHTML=`<div class="empty">${entries.length?'No parts match this filter.':'No saved parts yet. Open a vehicle and tap “+ Save to pull list” beside an exact recommendation.'}</div>`;return;}
     const yards=new Map();
@@ -112,13 +100,13 @@
     for(const [yardId,yard] of yards){
       content+=`<section class="route-yard"><h2>${html(yard.name||YARDS[yardId]?.name||yardId)}</h2>`;
       for(const vehicle of yard.cars.values()){
-        // Continue walking by row; within a vehicle, pull the best rate first.
-        vehicle.parts.sort((a,b)=>rateForEntry(b)-rateForEntry(a));
+        // Continue walking by row; show higher estimated net-profit parts first.
+        vehicle.parts.sort((a,b)=>(Number(b.profit)||0)-(Number(a.profit)||0));
         const c=vehicle.car,live=findCar(c);
         const vehicleId=c.key.split('|part:')[0];
         content+=`<article class="route-vehicle"><div class="route-vehicle-heading"><div><span class="route-row">Row ${html(cleanRow(c.row)||'unknown')}</span><h3>${html([c.year,c.make,c.model].join(' '))}</h3><small>${html([c.space?'Space '+c.space:'',c.stock?'Stock '+c.stock:'',c.vin?'VIN '+c.vin:''].filter(Boolean).join(' · '))}</small></div>${live?`<button type="button" class="btn" data-route-open="${html(vehicleId)}">View vehicle</button>`:'<small class="route-unavailable">Not currently in inventory</small>'}</div>`;
         for(const e of vehicle.parts){
-          content+=`<div class="route-item ${e.pulled?'route-done':''}"><label class="route-toggle"><input type="checkbox" data-route-check="${html(e.key)}" ${e.pulled?'checked':''} aria-label="Mark ${html(e.name)} pulled"></label><div class="route-item-main"><strong>${html(e.name)}</strong>${e.variant?`<small>${html(e.variant)}</small>`:''}${e.group!=='general'?`<small class="route-verify">${e.group==='fitment'?'Verify fitment / equipment':'Thin sales evidence — verify'}</small>`:''}<small class="route-efficiency">${usd(rateForEntry(e))}/min est. · ~${minutesForEntry(e)} min</small><input class="route-note" data-route-note="${html(e.key)}" type="text" value="${html(e.note||'')}" placeholder="Notes / condition / location" aria-label="Notes for ${html(e.name)}"></div><div class="route-item-actions"><strong>${usd(e.profit)}</strong><button type="button" class="btn route-remove" data-route-remove="${html(e.key)}">Remove</button></div></div>`;
+          content+=`<div class="route-item ${e.pulled?'route-done':''}"><label class="route-toggle"><input type="checkbox" data-route-check="${html(e.key)}" ${e.pulled?'checked':''} aria-label="Mark ${html(e.name)} pulled"></label><div class="route-item-main"><strong>${html(e.name)}</strong>${e.variant?`<small>${html(e.variant)}</small>`:''}${e.group!=='general'?`<small class="route-verify">${e.group==='fitment'?'Verify fitment / equipment':'Thin sales evidence — verify'}</small>`:''}<input class="route-note" data-route-note="${html(e.key)}" type="text" value="${html(e.note||'')}" placeholder="Notes / condition / location" aria-label="Notes for ${html(e.name)}"></div><div class="route-item-actions"><strong>${usd(e.profit)}</strong><button type="button" class="btn route-remove" data-route-remove="${html(e.key)}">Remove</button></div></div>`;
         }
         content+='</article>';
       }
@@ -169,7 +157,7 @@
   ));
   const csv=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
   document.getElementById('routeExportCsv')?.addEventListener('click',()=>{
-    const columns=['yardName','row','space','year','make','model','stock','vin','name','variant','group','profit','minutes','pullTime','pulled','note'];
+    const columns=['yardName','row','space','year','make','model','stock','vin','name','variant','group','profit','pulled','note'];
     const lines=[columns.join(','),...entries.slice().sort(compare).map(e=>columns.map(k=>csv(e[k])).join(','))];
     download(lines.join('\r\n'),`pull-route-${stamp()}.csv`,'text/csv;charset=utf-8');
   });
