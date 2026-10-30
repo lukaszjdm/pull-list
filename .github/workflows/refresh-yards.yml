@@ -4,8 +4,13 @@ name: Refresh partial LKQ inventory snapshot
 
 on:
   schedule:
-    - cron: "17 8,14 * * *"
-      timezone: "America/Chicago"
+    - cron: "17 */2 * * *"
+  push:
+    branches: [main]
+    paths:
+      - "sync_yards.py"
+      - "summit_official.py"
+      - ".github/workflows/refresh-yards.yml"
   workflow_dispatch:
 
 permissions:
@@ -35,7 +40,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Refresh official LKQ public pages
-        run: python sync_yards-summit-first.py
+        run: python sync_yards.py
 
       - name: Commit changed feed
         run: |
