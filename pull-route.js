@@ -57,13 +57,17 @@
   const oldDetail=renderDetail;
   renderDetail=function(...args){const result=oldDetail.apply(this,args);updatePartButtons();return result;};
   const yardOrder=['north','south','island','summit','demo'];
+  const cleanRow=value=>{
+    const r=text(value);
+    return /^(?:[—–-]+|n\/?a|unknown|none|\?)$/i.test(r)?'':r;
+  };
   function compare(a,b){
     const ya=yardOrder.indexOf(a.yard),yb=yardOrder.indexOf(b.yard);
     const aIndex=ya<0?99:ya,bIndex=yb<0?99:yb;
     if(aIndex!==bIndex)return aIndex-bIndex;
-    if(!text(a.row)&&text(b.row))return 1;
-    if(text(a.row)&&!text(b.row))return -1;
-    const row=collator.compare(text(a.row),text(b.row));
+    if(!cleanRow(a.row)&&cleanRow(b.row))return 1;
+    if(cleanRow(a.row)&&!cleanRow(b.row))return -1;
+    const row=collator.compare(cleanRow(a.row),cleanRow(b.row));
     if(row)return row;
     return collator.compare([a.year,a.make,a.model].join(' '),[b.year,b.make,b.model].join(' '));
   }
@@ -98,7 +102,7 @@
       for(const vehicle of yard.cars.values()){
         const c=vehicle.car,live=findCar(c);
         const vehicleId=c.key.split('|part:')[0];
-        content+=`<article class="route-vehicle"><div class="route-vehicle-heading"><div><span class="route-row">Row ${html(c.row||'unknown')}</span><h3>${html([c.year,c.make,c.model].join(' '))}</h3><small>${html([c.space?'Space '+c.space:'',c.stock?'Stock '+c.stock:'',c.vin?'VIN '+c.vin:''].filter(Boolean).join(' · '))}</small></div>${live?`<button type="button" class="btn" data-route-open="${html(vehicleId)}">View vehicle</button>`:'<small class="route-unavailable">Not currently in inventory</small>'}</div>`;
+        content+=`<article class="route-vehicle"><div class="route-vehicle-heading"><div><span class="route-row">Row ${html(cleanRow(c.row)||'unknown')}</span><h3>${html([c.year,c.make,c.model].join(' '))}</h3><small>${html([c.space?'Space '+c.space:'',c.stock?'Stock '+c.stock:'',c.vin?'VIN '+c.vin:''].filter(Boolean).join(' · '))}</small></div>${live?`<button type="button" class="btn" data-route-open="${html(vehicleId)}">View vehicle</button>`:'<small class="route-unavailable">Not currently in inventory</small>'}</div>`;
         for(const e of vehicle.parts){
           content+=`<div class="route-item ${e.pulled?'route-done':''}"><label class="route-toggle"><input type="checkbox" data-route-check="${html(e.key)}" ${e.pulled?'checked':''} aria-label="Mark ${html(e.name)} pulled"></label><div class="route-item-main"><strong>${html(e.name)}</strong>${e.variant?`<small>${html(e.variant)}</small>`:''}${e.group!=='general'?`<small class="route-verify">${e.group==='fitment'?'Verify fitment / equipment':'Thin sales evidence — verify'}</small>`:''}<input class="route-note" data-route-note="${html(e.key)}" type="text" value="${html(e.note||'')}" placeholder="Notes / condition / location" aria-label="Notes for ${html(e.name)}"></div><div class="route-item-actions"><strong>${usd(e.profit)}</strong><button type="button" class="btn route-remove" data-route-remove="${html(e.key)}">Remove</button></div></div>`;
         }
