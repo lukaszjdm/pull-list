@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link href="styles.css?v=20261030-blue-night-2" rel="stylesheet"/>
+  <link href="styles.css?v=20261030-blue-night-3" rel="stylesheet"/>
   <link href="pull-route.css?v=20261030-1" rel="stylesheet"/>
 </head>
 
@@ -106,13 +106,11 @@
             <select id="sort">
               <option value="date-new" selected>Date added — newest first</option>
               <option value="profit">Highest estimated profit</option>
-              <option value="profit-minute">Best estimated profit / minute</option>
               <option value="date-old">Date added — oldest first</option>
               <option value="row">Row (walk order)</option>
               <option value="year">Newest year</option>
               <option value="name">Make / model</option>
             </select>
-            <small class="hint" id="profitMinuteHint" hidden>Planning times: quick 10 min · moderate 30 min · heavy 60 min. Edit a part to set its own minutes.</small>
           </label>
         </div>
 
@@ -275,7 +273,10 @@
 
       <p class="muted small">
         Sale prices are editable leads, not verified live eBay prices.
-        The current estimate subtracts yard cost, shipping, and your chosen fees.
+        "eBay title" years are seller-advertised search years, not confirmed fitment.
+        "Researched" shows the vehicle years recorded in the database.
+        Check the OEM part number, model, trim and equipment before pulling.
+        Estimated profit subtracts yard cost, shipping and your chosen fees.
       </p>
 
       <div id="parts"></div>
@@ -354,9 +355,9 @@
 <!-- WEBSITE DATA & LOGIC -->
 <script src="yard-inventory.js"></script>
 <script src="seed.js"></script>
-<script src="app.js?v=20261030-profit-minute-2"></script>
+<script src="app.js?v=20261030-listing-years"></script>
 <script src="scan-vin.js?v=20261027-2"></script>
-<script src="pull-route.js?v=20261030-profit-minute"></script>
+<script src="pull-route.js?v=20261030-row-profit"></script>
 
 
 
