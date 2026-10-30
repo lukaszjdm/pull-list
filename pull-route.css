@@ -1,0 +1,34 @@
+/* Saved Pull List / yard walking route */
+#pullRouteScreen .route-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:13px 0 17px}
+#pullRouteScreen .route-toolbar label{display:flex;align-items:center;gap:7px}
+#pullRouteScreen .route-toolbar select{width:auto;min-width:135px}
+#pullRouteScreen .route-toolbar .btn{min-height:42px}
+.route-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-top:10px}
+.route-stats span{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
+.route-stats b{display:block;font-size:clamp(17px,3vw,25px);color:var(--accent);overflow-wrap:anywhere}
+.route-stats small{display:block;font-size:11px;color:var(--muted);padding-top:5px}
+.route-yard{margin:24px 0}
+.route-yard>h2{margin:0 0 10px}
+.route-vehicle{background:var(--panel);border:1px solid var(--line);border-radius:15px;margin:10px 0;overflow:hidden}
+.route-vehicle-heading{padding:15px;display:flex;gap:10px;justify-content:space-between;align-items:flex-start;background:var(--chip)}
+.route-vehicle-heading h3{margin:5px 0 3px;font-size:17px}
+.route-vehicle-heading small{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.route-row{display:inline-block;font-size:11px;font-weight:800;color:var(--accent)}
+.route-unavailable{max-width:120px;text-align:right}
+.route-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border-top:1px solid var(--line)}
+.route-toggle{display:block;flex:none;margin-top:6px}
+.route-toggle input{width:22px;height:22px;min-height:22px;accent-color:var(--accent)}
+.route-item-main{flex:1;min-width:0}
+.route-item-main strong{display:block;font-size:14px}
+.route-item-main small{display:block;font-size:11px;color:var(--muted);margin-top:5px}
+.route-item-main .route-verify{color:var(--warn)}
+.route-note{font-size:12px;min-height:35px;padding:7px 9px;margin-top:8px}
+.route-item-actions{display:flex;flex-direction:column;gap:9px;align-items:flex-end;white-space:nowrap}
+.route-item-actions strong{font-size:15px;color:var(--accent)}
+.route-item-actions .btn{font-size:11px;min-height:34px;padding:7px 9px}
+.route-done .route-item-main>strong{text-decoration:line-through;opacity:.55}
+.route-saved{border-color:var(--accent);color:var(--accent)}
+#pullRouteCount{border-radius:8px;background:var(--chip);color:var(--accent);padding:1px 5px;font-size:10px}
+#routeStorageNotice{color:var(--red)}
+nav button{padding-left:clamp(8px,3vw,20px);padding-right:clamp(8px,3vw,20px)}
+@media(max-width:530px){.route-stats{gap:6px}.route-stats span{padding:10px 8px}.route-stats b{font-size:17px}.route-item{gap:8px;padding:11px}.route-vehicle-heading{padding:12px}.route-vehicle-heading .btn{padding:7px 9px}}
