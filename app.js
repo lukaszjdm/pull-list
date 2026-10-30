@@ -536,6 +536,8 @@ else if (sort === 'name') {
       Number($('#yearMax').value) || 9999;
 
     const sort = $('#sort').value;
+    const rateHint = document.getElementById('profitMinuteHint');
+    if (rateHint) rateHint.hidden = sort !== 'profit-minute';
 
     const filterKey = JSON.stringify({
       yard,
