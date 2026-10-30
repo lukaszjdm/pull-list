@@ -190,8 +190,6 @@ nav button.selected{color:var(--accent)}
 .car small,.part small,.stat small,.muted,.pager-summary{color:var(--muted)}
 body.dark .demo-car{border-color:#395673;background:linear-gradient(125deg,var(--panel),#1b2d43)}
 body.dark .tag{background:var(--chip)}
-.efficiency-tag{background:#dcecff;color:#21599c}
-body.dark .efficiency-tag{background:#1b3857;color:#9dcfff}
 body.dark .available-date{color:#88c8ff!important}
 body.dark #detail .pl-location-badge{background:#203550!important;border-color:#37618c!important}
 body.dark #detail .pl-location-label{color:#9bcfff!important}
@@ -215,7 +213,24 @@ body.dark #detail .pl-clean-spec-row span{color:#b5d7ff!important}
 }
 
 /* Rate-of-return planning cues */
-#profitMinuteHint{display:block;font-size:11px;line-height:1.45;font-weight:500}
-#profitMinuteHint[hidden]{display:none}
-.route-efficiency{color:var(--accent)!important;font-weight:800}
 .car .right .value{overflow-wrap:normal}
+
+/* Clearly separate researched years from marketplace listing titles. */
+.tag.pl-title-years{
+  color:var(--accent);
+  background:var(--chip);
+  border:1px solid var(--line);
+  font-weight:800;
+}
+.tag.pl-research-years{
+  color:var(--muted);
+  background:transparent;
+  border:1px dashed var(--line);
+  font-weight:650;
+}
+.tag.pl-year-conflict{
+  color:var(--warn);
+  border:1px solid currentColor;
+  background:transparent;
+  white-space:normal;
+}
