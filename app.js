@@ -2506,9 +2506,11 @@ loadLiveInventory();
 
       const detail = document.createElement('p');
 
+      const yearInfo = yearBadgeData(p,current?.year);
       detail.textContent =
         `${p.make} ${p.model} | ` +
-        `Research years ${p.startYear}–${p.endYear} | ` +
+        `Researched ${yearInfo.research} | ` +
+        (yearInfo.advertised ? `eBay title ${yearInfo.advertised} (unverified) | ` : '') +
         `Sold ${p.soldCount ?? 'unknown'} | ` +
         `Price ${money(p.salePrice)} | ` +
         'Verify OEM number, drivetrain, equipment, ' +
