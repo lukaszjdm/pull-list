@@ -59,6 +59,10 @@ body.dark .feature-art{background:linear-gradient(140deg,#3c5945,#1c2c21)}body.d
   box-shadow:var(--shadow);
 }
 
+.pagerbar-bottom{
+  margin-top:14px;
+}
+
 .pagerbar label{
   display:flex;
   align-items:center;

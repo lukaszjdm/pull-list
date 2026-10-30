@@ -203,13 +203,21 @@ async function vinDecode(){if(!current?.vin){flash('Edit this car to enter its V
   const nextButton = document.getElementById('nextPage');
   const pageIndicator = document.getElementById('pageIndicator');
   const pageSummary = document.getElementById('pageSummary');
+  const prevButtonBottom = document.getElementById('prevPageBottom');
+  const nextButtonBottom = document.getElementById('nextPageBottom');
+  const pageIndicatorBottom = document.getElementById('pageIndicatorBottom');
+  const pageSummaryBottom = document.getElementById('pageSummaryBottom');
 
   if (
     !sizeSelect ||
     !prevButton ||
     !nextButton ||
     !pageIndicator ||
-    !pageSummary
+    !pageSummary ||
+    !prevButtonBottom ||
+    !nextButtonBottom ||
+    !pageIndicatorBottom ||
+    !pageSummaryBottom
   ) {
     console.error(
       '[Pull List] Pagination controls were not found. ' +
@@ -361,7 +369,6 @@ else if (sort === 'name') {
   function vehicleCard(car) {
     const parts = carParts(car);
    const best = maxProfit(car);
-   const potential = potentialProfit(car);
 
     const yardName = car.demo
       ? 'Research'
@@ -416,15 +423,6 @@ else if (sort === 'name') {
 <small>
   Top est. net profit
 </small>
-
-<div class="value" style="margin-top:10px;font-size:1.1rem">
-  ${potential === null ? '—' : money(potential)}
-</div>
-
-<small>
-  Potential profit · Verify fitment
-</small>
-
 
           <button
             type="button"
@@ -587,9 +585,13 @@ else if (sort === 'name') {
 
     pageIndicator.textContent =
       `Page ${currentPage} of ${totalPages}`;
+    pageIndicatorBottom.textContent = pageIndicator.textContent;
+    pageSummaryBottom.textContent = pageSummary.textContent;
 
     prevButton.disabled = currentPage === 1;
     nextButton.disabled = currentPage >= totalPages;
+    prevButtonBottom.disabled = prevButton.disabled;
+    nextButtonBottom.disabled = nextButton.disabled;
 
     $('#vehicles').innerHTML =
       visibleCars.length
@@ -671,6 +673,10 @@ else if (sort === 'name') {
         block: 'start'
       });
   };
+
+  // Both sets of pagination buttons use the same state and behavior.
+  prevButtonBottom.onclick = prevButton.onclick;
+  nextButtonBottom.onclick = nextButton.onclick;
 
   console.log(
     '[Pull List] Mobile pagination loaded.',
