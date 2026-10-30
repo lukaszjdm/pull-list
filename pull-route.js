@@ -127,7 +127,16 @@
     if(!open)return;
     const found=entries.find(e=>e.key.startsWith(open.dataset.routeOpen+'|part:'));
     const car=found&&findCar(found);
-    if(car){current=car;nav('detail');renderDetail();}
+    if(car){
+      // Preserve the route as the browser's Back destination.
+      if(history.state?.pullListView==='pullRouteScreen'){
+        history.replaceState({...history.state,scrollY:window.scrollY},'',window.location.href);
+        history.pushState({pullListView:'detail',carId:car.id,scrollY:0},'',window.location.href);
+      }
+      current=car;
+      nav('detail');
+      renderDetail();
+    }
   });
   document.getElementById('pullRouteFilter')?.addEventListener('change',renderRoute);
   function download(content,name,type){
