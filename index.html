@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#f4f0e5"/>
   <title>Pull List — Illinois yard picker</title>
   <link href="styles.css?v=20261030-ui-fixes" rel="stylesheet"/>
+  <link href="pull-route.css?v=20261030-1" rel="stylesheet"/>
 </head>
 
 <body>
@@ -188,6 +189,33 @@
 
     </section>
 
+    <!-- SAVED PARTS WALKING ROUTE -->
+    <section class="screen" hidden id="pullRouteScreen">
+      <button class="back" id="pullRouteBack" type="button">← Yard vehicles</button>
+      <div class="sectionheading">
+        <h1>My Pull List</h1>
+        <span class="muted">Grouped by yard · Sorted by row</span>
+      </div>
+      <p class="muted">Save individual parts while browsing vehicles, then follow this list at the yard. Verify vehicle and part fitment before pulling.</p>
+      <div id="pullRouteSummary"></div>
+      <div class="route-toolbar">
+        <label>Show
+          <select id="pullRouteFilter" aria-label="Saved part status">
+            <option value="remaining">Still to pull</option>
+            <option value="all">All parts</option>
+            <option value="pulled">Already pulled</option>
+          </select>
+        </label>
+        <button class="btn" id="routeExportCsv" type="button">Export CSV</button>
+        <button class="btn" id="routeExportJson" type="button">Backup JSON</button>
+        <button class="btn" id="routeImportJson" type="button">Import JSON</button>
+        <input type="file" id="routeImportFile" hidden accept=".json,application/json"/>
+      </div>
+      <p class="muted small">Saved on this device only. Download a JSON backup to move your list to another device. Unknown rows appear last.</p>
+      <p class="small" id="routeStorageNotice" role="status"></p>
+      <div id="pullRouteItems"></div>
+    </section>
+
     <!-- VEHICLE DETAILS -->
     <section class="screen" hidden id="detail">
 
@@ -278,6 +306,9 @@
       ⌕ <span>Yards</span>
     </button>
 
+    <button data-nav="pullRouteScreen">
+      ✓ <span>Pull List <b id="pullRouteCount">0</b></span>
+    </button>
     <button data-nav="database">
       ▤ <span>Parts</span>
     </button>
@@ -313,6 +344,7 @@
 <script src="seed.js"></script>
 <script src="app.js?v=20261030-ui-fixes"></script>
 <script src="scan-vin.js?v=20261027-2"></script>
+<script src="pull-route.js?v=20261030-1"></script>
 
 
 
