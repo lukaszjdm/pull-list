@@ -93,31 +93,6 @@ const browsePartSummary = car => {
     : '0 matching research parts';
 };
 const profit=p=>num(p.salePrice)*(1-db.fee/100)-num(p.yardCost)-num(p.shipping)-num(db.other);
-// Planning assumptions only: quick = 10, moderate = 30, heavy = 60 minutes.
-// Each part can override these estimates with pullMinutes in the editor.
-const PULL_TIME_DEFAULTS = {quick:10,moderate:30,heavy:60};
-const pullMinutes = part => {
-  const raw = part?.pullMinutes;
-  const explicit = Number(raw);
-  if (raw !== undefined && raw !== null && String(raw).trim() !== '' &&
-      Number.isFinite(explicit) && explicit >= 1 && explicit <= 480) {
-    return Math.round(explicit);
-  }
-  return PULL_TIME_DEFAULTS[String(part?.pullTime || 'moderate').toLowerCase()] || 30;
-};
-const profitPerMinute = part => profit(part) / pullMinutes(part);
-const bestProfitPerMinute = car => {
-  let best = null;
-  for (const part of carParts(car)) {
-    if (part.group !== 'general' || num(part.soldCount) < 5) continue;
-    const net = profit(part);
-    if (!Number.isFinite(net) || net <= 0) continue;
-    const minutes = pullMinutes(part);
-    const rate = net / minutes;
-    if (!best || rate > best.rate) best = { rate, minutes, net, partId: part.id };
-  }
-  return best;
-};
 const photoUrl=c=>{try{let u=new URL(c.imageUrl);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}};
 const availableLabel=c=>{if(!c.availableDate)return '';let d=new Date(c.availableDate+'T12:00:00');return Number.isFinite(d.getTime())?d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):c.availableDate};
 const maxProfit=c=>{let parts=carParts(c).filter(p=>p.group==='general'&&num(p.soldCount)>=5);return parts.length?Math.max(...parts.map(profit)):null};
@@ -147,8 +122,45 @@ else $('#inventoryStatus').textContent=keys.map(k=>{const item=liveFeed.yards[k]
 $$('[data-open]').forEach(b=>b.onclick=()=>{current=allCars().find(c=>c.id===b.dataset.open);nav('detail');renderDetail()});}
 function renderDetail(){if(!current)return;current=allCars().find(c=>c.id===current.id);if(!current){current=null;nav('browse');return}$('#carYard').textContent=(YARDS[current.yard]?.name||'Yard')+(current.demo?' · RESEARCH ONLY':' · YARD INVENTORY');$('#carTitle').textContent=`${current.year} ${current.make} ${current.model}`;$('#carMeta').textContent=[current.trim,current.body,current.engine,'Row '+(current.row||'—')].filter(Boolean).join(' · ');$('#carVin').textContent=current.vin?'VIN: '+current.vin:'VIN not entered';const p=photoUrl(current);$('#carPhoto').innerHTML=p?`<img src="${safe(p)}" alt="${safe(current.year+' '+current.make+' '+current.model)} yard photo" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.hidden=true">`:'';$('#carPhoto').hidden=!p;
 const details=[['VIN',current.vin],['Generation',current.generation],['Trim',current.trim&&current.trim!=='Not confirmed'?current.trim:'Not confirmed'],['Body style',current.body],['Engine',current.engine],['Fuel',current.fuel],['Drivetrain',current.drivetrain],['Transmission',current.transmission],['Yard section',current.section],['Yard row',current.row],['Space',current.space],['Stock ID',current.stock],['Available in yard since',availableLabel(current)],['Inventory source',current.source]];$('#vehicleSpecs').innerHTML=details.map(([label,val])=>`<div class="spec-item"><small>${safe(label)}</small><strong>${safe(val || 'Not available')}</strong></div>`).join('');$('#topProfit').textContent=maxProfit(current)===null?'—':money(maxProfit(current));let parts=carParts(current);$('#partCount').textContent=parts.length;$('#removeCar').disabled=!!current.demo;
-const labels={general:['Best general opportunities','At least five reported sold comparisons; verify current market prices.'],thin:['Thin evidence — verify before pulling','Fewer than five reported sold comparisons; these do not set vehicle ranking.'],fitment:['Must verify trim / equipment','Confirm required trim, transmission or equipment on the actual vehicle.']};$('#parts').innerHTML=Object.entries(labels).map(([g,[name,desc]])=>{let ps=parts.filter(p=>p.group===g).sort((a,b)=>profit(b)-profit(a));return `<section class="partgroup"><h2>${name} (${ps.length})</h2><p>${desc}</p>${ps.length?ps.map(p=>`<article class="part"><div class="parthead"><div><h3>${safe(p.name)}</h3><small>${safe(p.variant||p.condition||'')} ${p.variant&&p.condition?'· '+safe(p.condition):''}</small><span class="tag">${safe(p.pullTime||'moderate')} pull · ~${pullMinutes(p)} min</span><span class="tag efficiency-tag">${money(profitPerMinute(p))}/min est.</span><span class="tag">${safe(p.startYear)}–${safe(p.endYear)}</span>${g!=='general'?`<span class="tag warn">${g==='thin'?'Thin evidence':'Verify fitment'}</span>`:''}${g==='fitment'&&num(p.soldCount)<5?'<span class="tag warn">Thin evidence</span>':''}</div><div class="profit">${money(profit(p))}<small>Est. net profit</small></div></div><div class="metrics"><div class="metric"><small>Est. sale price</small><b>${money(p.salePrice)}</b></div><div class="metric"><small>Yard cost</small><b>${money(p.yardCost)}</b></div><div class="metric"><small>Shipping</small><b>${money(p.shipping)}</b></div><div class="metric"><small>Sold comps*</small><b>${safe(p.soldCount??'—')}</b></div></div><small>*Reported by imported source, not live verified · Fee ${db.fee}%${p.notes?' · '+safe(p.notes):''}</small><div class="buttonrow"><button class="btn primary" data-ebay="${safe(p.id)}">eBay sold ↗</button><button class="btn" data-editpart="${safe(p.id)}">Edit price / part</button><button class="btn danger" data-deletepart="${safe(p.id)}">Remove ×2</button></div></article>`).join(''):'<div class="empty">No matching parts</div>'}</section>`}).join('');wireParts();}
+const labels={general:['Best general opportunities','At least five reported sold comparisons; verify current market prices.'],thin:['Thin evidence — verify before pulling','Fewer than five reported sold comparisons; these do not set vehicle ranking.'],fitment:['Must verify trim / equipment','Confirm required trim, transmission or equipment on the actual vehicle.']};$('#parts').innerHTML=Object.entries(labels).map(([g,[name,desc]])=>{let ps=parts.filter(p=>p.group===g).sort((a,b)=>profit(b)-profit(a));return `<section class="partgroup"><h2>${name} (${ps.length})</h2><p>${desc}</p>${ps.length?ps.map(p=>`<article class="part"><div class="parthead"><div><h3>${safe(p.name)}</h3><small>${safe(p.variant||p.condition||'')} ${p.variant&&p.condition?'· '+safe(p.condition):''}</small>${partYearBadges(p,current?.year)}${g!=='general'?`<span class="tag warn">${g==='thin'?'Thin evidence':'Verify fitment'}</span>`:''}${g==='fitment'&&num(p.soldCount)<5?'<span class="tag warn">Thin evidence</span>':''}</div><div class="profit">${money(profit(p))}<small>Est. net profit</small></div></div><div class="metrics"><div class="metric"><small>Est. sale price</small><b>${money(p.salePrice)}</b></div><div class="metric"><small>Yard cost</small><b>${money(p.yardCost)}</b></div><div class="metric"><small>Shipping</small><b>${money(p.shipping)}</b></div><div class="metric"><small>Sold comps*</small><b>${safe(p.soldCount??'—')}</b></div></div><small>*Reported by imported source, not live verified · Fee ${db.fee}%${p.notes?' · '+safe(p.notes):''}</small><div class="buttonrow"><button class="btn primary" data-ebay="${safe(p.id)}">eBay sold ↗</button><button class="btn" data-editpart="${safe(p.id)}">Edit price / part</button><button class="btn danger" data-deletepart="${safe(p.id)}">Remove ×2</button></div></article>`).join(''):'<div class="empty">No matching parts</div>'}</section>`}).join('');wireParts();}
     
+
+// A search listing's advertised years are not the same as confirmed fitment.
+// Keep startYear/endYear for exact vehicle matching and show title years separately.
+function listingTitleYears(p, vehicleYear) {
+  const title=String(p.searchTitle||'').replace(/\s*\(\s*For\s*:\s*[^)]*\)/gi,'');
+  const matches=[];
+  for(const m of title.matchAll(/(?:^|[^\d])((?:19[5-9]\d|20[0-3]\d))\s*[-–—/]\s*((?:19[5-9]\d|20[0-3]\d))(?!\d)/g)){
+    const from=Number(m[1]),to=Number(m[2]);
+    if(to<from||to-from>35)continue;
+    if(!matches.some(r=>r.from===from&&r.to===to))matches.push({from,to});
+  }
+  if(matches.length===1)return matches[0];
+  // Multiple separate ranges may describe other models in the title.
+  const exact=matches.filter(r=>Number(vehicleYear)>=r.from&&Number(vehicleYear)<=r.to);
+  return exact.length===1?exact[0]:null;
+}
+function researchYearLabel(p){
+  const from=Number(p.startYear),to=Number(p.endYear);
+  if(!Number.isInteger(from)||!Number.isInteger(to)||from<1950||to<from||to>2040)return 'Year not confirmed';
+  return from===to?String(from):from+'–'+to;
+}
+function yearBadgeData(p,vehicleYear){
+  const title=listingTitleYears(p,vehicleYear);
+  const research=researchYearLabel(p);
+  const advertised=title?title.from+'–'+title.to:null;
+  const mismatch=!!title&&Number.isInteger(Number(vehicleYear))&&
+    (Number(vehicleYear)<title.from||Number(vehicleYear)>title.to);
+  return {research,advertised,mismatch};
+}
+function partYearBadges(p,vehicleYear){
+  const years=yearBadgeData(p,vehicleYear);
+  const research='<span class="tag pl-research-years" title="Year researched in the catalog; not a confirmed fitment range">Researched '+safe(years.research)+'</span>';
+  const title=years.advertised?'<span class="tag pl-title-years" title="Years written in the seller listing title, not verified fitment">eBay title '+safe(years.advertised)+'</span>':'';
+  const mismatch=years.mismatch?'<span class="tag warn pl-year-conflict">Seller years exclude this vehicle — VERIFY</span>':'';
+  return title+research+mismatch;
+}
+
 function soldUrl(p,c){
   const raw = p.searchTitle ||
     [c.year,c.make,c.model,p.name].join(' ');
@@ -165,12 +177,12 @@ function soldUrl(p,c){
 
 function wireParts(){$$('[data-ebay]').forEach(b=>b.onclick=()=>{const p=db.parts.find(p=>p.id===b.dataset.ebay);window.open(soldUrl(p,current),'_blank','noopener,noreferrer')});$$('[data-editpart]').forEach(b=>b.onclick=()=>openPart(db.parts.find(p=>p.id===b.dataset.editpart)));$$('[data-deletepart]').forEach(b=>b.onclick=()=>twice('part-'+b.dataset.deletepart,()=>{db.parts=db.parts.filter(p=>p.id!==b.dataset.deletepart);save();flash('Part removed from all matching vehicles.')}));}
 function twice(key,action){if(confirmKey===key&&Date.now()<confirmUntil){confirmKey='';action()}else{confirmKey=key;confirmUntil=Date.now()+5000;flash('Tap the same Remove button again within 5 seconds to confirm.')}}
-function renderDB(){let q=$('#dbsearch').value.toLowerCase();let ps=db.parts.filter(p=>(p.make+' '+p.model+' '+p.name+' '+p.variant).toLowerCase().includes(q));$('#dblist').innerHTML=ps.map(p=>`<div class="dbrow"><div><b>${safe(p.name)}</b><small style="display:block;color:var(--muted)">${safe(p.make)} ${safe(p.model)} · ${safe(p.startYear)}–${safe(p.endYear)} · ${money(p.salePrice)}</small></div><div class="buttonrow"><button class="btn" data-dbedit="${safe(p.id)}">Edit</button><button class="btn danger" data-dbremove="${safe(p.id)}">×2</button></div></div>`).join('')||'<p class="muted">No parts found.</p>';$$('[data-dbedit]').forEach(b=>b.onclick=()=>openPart(db.parts.find(p=>p.id===b.dataset.dbedit)));$$('[data-dbremove]').forEach(b=>b.onclick=()=>twice('part-'+b.dataset.dbremove,()=>{db.parts=db.parts.filter(p=>p.id!==b.dataset.dbremove);save();flash('Part removed.')}));}
+function renderDB(){let q=$('#dbsearch').value.toLowerCase();let ps=db.parts.filter(p=>(p.make+' '+p.model+' '+p.name+' '+p.variant).toLowerCase().includes(q));$('#dblist').innerHTML=ps.map(p=>`<div class="dbrow"><div><b>${safe(p.name)}</b><small style="display:block;color:var(--muted)">${safe(p.make)} ${safe(p.model)} · Research ${safe(researchYearLabel(p))}${listingTitleYears(p,p.startYear)?' · eBay title '+safe(yearBadgeData(p,p.startYear).advertised):''} · ${money(p.salePrice)}</small></div><div class="buttonrow"><button class="btn" data-dbedit="${safe(p.id)}">Edit</button><button class="btn danger" data-dbremove="${safe(p.id)}">×2</button></div></div>`).join('')||'<p class="muted">No parts found.</p>';$$('[data-dbedit]').forEach(b=>b.onclick=()=>openPart(db.parts.find(p=>p.id===b.dataset.dbedit)));$$('[data-dbremove]').forEach(b=>b.onclick=()=>twice('part-'+b.dataset.dbremove,()=>{db.parts=db.parts.filter(p=>p.id!==b.dataset.dbremove);save();flash('Part removed.')}));}
 function modal(title,fields,handler){$('#modalTitle').textContent=title;$('#fields').innerHTML=fields;modalSave=handler;$('#modal').showModal();$('#fields input:not([type=checkbox]),#fields select').at(0)?.focus()}
 const field=(label,key,value='',type='text',extra='')=>`<label>${label}<input name="${key}" type="${type}" value="${safe(value)}" ${extra}></label>`;
 const selected=(items,val)=>items.map(x=>`<option value="${safe(x[0])}" ${x[0]===val?'selected':''}>${safe(x[1])}</option>`).join('');
 function openCar(c){let yard=c?.yard||($('#yard').value==='all'||$('#yard').value==='demo'?'north':$('#yard').value);modal(c?'Edit vehicle':'Add vehicle',`${field('Year','year',c?.year||'', 'number','required min="1900" max="2100"')}${field('Make','make',c?.make||'', 'text','required')}${field('Model','model',c?.model||'', 'text','required')}<label>Yard<select name="yard">${selected(Object.entries(YARDS).filter(([k])=>k!=='demo').map(([k,v])=>[k,v.name]),yard)}</select></label>${field('Row','row',c?.row||'')}${field('Trim','trim',c?.trim||'')}${field('VIN (optional)','vin',c?.vin||'')}${field('Engine (optional)','engine',c?.engine||'')}${field('Body style','body',c?.body||'')}`,v=>{const obj={id:c?.id||crypto.randomUUID(),year:+v.year,make:v.make.trim(),model:v.model.trim(),yard:v.yard,row:v.row,trim:v.trim,vin:v.vin.toUpperCase(),engine:v.engine,body:v.body};if(c){Object.assign(c,obj);current=obj}else{db.cars.push(obj)}save();flash('Vehicle saved on this device.')});}
-function openPart(p){const base=p||{make:current?.make||'Mazda',model:current?.model||'Mazda6',startYear:current?.year||2016,endYear:current?.year||2016,name:'',variant:'',condition:'',group:'general',salePrice:'',yardCost:'',shipping:0,soldCount:0,pullTime:'moderate',notes:'',searchTitle:''};modal(p?'Edit price / part':'Add recommended part',`${field('Make','make',base.make,'text','required')}${field('Model','model',base.model,'text','required')}<div class="side">${field('Start year','startYear',base.startYear,'number','required')}${field('End year','endYear',base.endYear,'number','required')}</div>${field('Part name','name',base.name,'text','required')}${field('Trim / variant','variant',base.variant)}${field('Fitment notes','condition',base.condition)}<label>Section<select name="group">${selected([['general','General opportunities'],['thin','Thin evidence'],['fitment','Verify trim / equipment']],base.group)}</select></label><div class="side">${field('Estimated eBay item selling price ($)','salePrice',base.salePrice,'number','step="0.01" min="0" required')}${field('Yard cost ($)','yardCost',base.yardCost,'number','step="0.01" min="0" required')}</div><div class="side">${field('Shipping cost ($)','shipping',base.shipping,'number','step="0.01" min="0"')}${field('Sold comparisons','soldCount',base.soldCount,'number','min="0"')}</div><label>Pull time<select name="pullTime">${selected([['quick','Quick'],['moderate','Moderate'],['heavy','Heavy']],base.pullTime)}</select></label>${field('Est. pull minutes (optional; quick 10 / moderate 30 / heavy 60)','pullMinutes',base.pullMinutes??'','number','min="1" max="480" step="1" placeholder="Use category default"')}${field('eBay sold search title','searchTitle',base.searchTitle)}<label>Notes<textarea name="notes">${safe(base.notes)}</textarea></label><p class="hint">Estimated profit = item sale price − yard cost − shipping − fees (${db.fee}%) − other costs. Changes affect every vehicle matching the entered year range.</p>`,v=>{if(+v.endYear<+v.startYear){flash('End year must be at least start year.');return false}const result={...base,id:p?.id||crypto.randomUUID(),make:v.make.trim(),model:v.model.trim(),startYear:+v.startYear,endYear:+v.endYear,name:v.name.trim(),variant:v.variant,condition:v.condition,group:v.group,salePrice:num(v.salePrice),yardCost:num(v.yardCost),shipping:num(v.shipping),soldCount:num(v.soldCount),pullTime:v.pullTime,pullMinutes:v.pullMinutes.trim()?Number(v.pullMinutes):null,notes:v.notes,searchTitle:v.searchTitle,edited:true};if(p)Object.assign(p,result);else db.parts.push(result);save();flash('Part saved on this device.')})}
+function openPart(p){const base=p||{make:current?.make||'Mazda',model:current?.model||'Mazda6',startYear:current?.year||2016,endYear:current?.year||2016,name:'',variant:'',condition:'',group:'general',salePrice:'',yardCost:'',shipping:0,soldCount:0,pullTime:'moderate',notes:'',searchTitle:''};modal(p?'Edit price / part':'Add recommended part',`${field('Make','make',base.make,'text','required')}${field('Model','model',base.model,'text','required')}<div class="side">${field('Research start year','startYear',base.startYear,'number','required')}${field('Research end year','endYear',base.endYear,'number','required')}</div>${field('Part name','name',base.name,'text','required')}${field('Trim / variant','variant',base.variant)}${field('Fitment notes','condition',base.condition)}<label>Section<select name="group">${selected([['general','General opportunities'],['thin','Thin evidence'],['fitment','Verify trim / equipment']],base.group)}</select></label><div class="side">${field('Estimated eBay item selling price ($)','salePrice',base.salePrice,'number','step="0.01" min="0" required')}${field('Yard cost ($)','yardCost',base.yardCost,'number','step="0.01" min="0" required')}</div><div class="side">${field('Shipping cost ($)','shipping',base.shipping,'number','step="0.01" min="0"')}${field('Sold comparisons','soldCount',base.soldCount,'number','min="0"')}</div>${field('eBay sold search title','searchTitle',base.searchTitle)}<label>Notes<textarea name="notes">${safe(base.notes)}</textarea></label><p class="hint">Research years determine which vehicle years show this recommendation. A broader eBay title year range is not verified fitment. Confirm OEM numbers, model, trim and options before widening research years. Profit subtracts yard cost, shipping, fees (${db.fee}%) and other costs.</p>`,v=>{if(+v.endYear<+v.startYear){flash('End year must be at least start year.');return false}const result={...base,id:p?.id||crypto.randomUUID(),make:v.make.trim(),model:v.model.trim(),startYear:+v.startYear,endYear:+v.endYear,name:v.name.trim(),variant:v.variant,condition:v.condition,group:v.group,salePrice:num(v.salePrice),yardCost:num(v.yardCost),shipping:num(v.shipping),soldCount:num(v.soldCount),notes:v.notes,searchTitle:v.searchTitle,edited:true};if(p)Object.assign(p,result);else db.parts.push(result);save();flash('Part saved on this device.')})}
 function openSettings(){modal('Settings & data',`<p class="hint">All edits and manually imported vehicle lists are stored in this browser using local storage. They are not synchronized across phones or backed up online. Export backups regularly.</p>${field('Estimated eBay fee (%)','fee',db.fee,'number','step="0.01" min="0" max="99"')}${field('Other per-part costs ($)','other',db.other,'number','step="0.01" min="0"')}<p class="hint">Current yard inventory is not automatically fetched. Import a CSV or visit the official yard website. No user account or backend is connected.</p>`,v=>{db.fee=num(v.fee);db.other=num(v.other);save()})}
 function csvParse(src){const rows=[];let row=[],v='',quoted=false;for(let i=0;i<src.length;i++){let c=src[i];if(c==='"'){if(quoted&&src[i+1]==='"'){v+='"';i++}else quoted=!quoted}else if(c===','&&!quoted){row.push(v);v=''}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&src[i+1]==='\n')i++;row.push(v);if(row.some(x=>x.trim()))rows.push(row);row=[];v=''}else v+=c}row.push(v);if(row.some(x=>x.trim()))rows.push(row);let hdr=rows.shift().map(x=>x.trim().toLowerCase().replace(/[^a-z0-9]/g,''));return rows.map(r=>Object.fromEntries(hdr.map((h,i)=>[h,r[i]||''])))}
 function chooseFile(accept,callback){let f=$('#file');f.accept=accept;fileCallback=callback;f.value='';f.click()}
@@ -296,18 +308,6 @@ async function vinDecode(){if(!current?.vin){flash('Edit this car to enter its V
     }
 
 
-else if (sort === 'profit-minute') {
-  // One pass per vehicle: avoid recalculating part matching in sort callbacks.
-  const rates = new Map(cars.map(car => [car, bestProfitPerMinute(car)?.rate ?? null]));
-  cars.sort((a, b) => {
-    const av = rates.get(a), bv = rates.get(b);
-    if (av === null && bv === null) return 0;
-    if (av === null) return 1;
-    if (bv === null) return -1;
-    return bv - av;
-  });
-}
-
 else if (sort === 'profit') {
   const profitCache = new Map();
 
@@ -405,8 +405,6 @@ else if (sort === 'name') {
 
   function vehicleCard(car) {
     const parts = carParts(car);
-    const efficiencyMode = sortSelect.value === 'profit-minute';
-    const efficiency = efficiencyMode ? bestProfitPerMinute(car) : null;
     const best = maxProfit(car);
 
     const yardName = car.demo
@@ -455,13 +453,12 @@ else if (sort === 'name') {
         <div class="right">
 
           <div class="value">
-            ${efficiencyMode ? (efficiency ? money(efficiency.rate) + '/min' : '—') : (best === null ? '—' : money(best))}
+            ${best === null ? '—' : money(best)}
           </div>
 
           <small>
-            ${efficiencyMode ? 'Best est. net profit / min' : 'Top est. net profit'}
+            Top est. net profit
           </small>
-          ${efficiencyMode && efficiency ? `<small>Est. ${efficiency.minutes} min pull</small>` : ''}
 
 
           <button
@@ -536,8 +533,6 @@ else if (sort === 'name') {
       Number($('#yearMax').value) || 9999;
 
     const sort = $('#sort').value;
-    const rateHint = document.getElementById('profitMinuteHint');
-    if (rateHint) rateHint.hidden = sort !== 'profit-minute';
 
     const filterKey = JSON.stringify({
       yard,
