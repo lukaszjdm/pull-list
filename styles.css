@@ -213,3 +213,9 @@ body.dark #detail .pl-clean-spec-row span{color:#b5d7ff!important}
 @media(prefers-reduced-motion:reduce){
   .car,.part,.btn{transition:none}
 }
+
+/* Rate-of-return planning cues */
+#profitMinuteHint{display:block;font-size:11px;line-height:1.45;font-weight:500}
+#profitMinuteHint[hidden]{display:none}
+.route-efficiency{color:var(--accent)!important;font-weight:800}
+.car .right .value{overflow-wrap:normal}
