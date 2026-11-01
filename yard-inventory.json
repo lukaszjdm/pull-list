@@ -1,10 +1,10 @@
 {
   "format": "pull-list-yard-feed-v1",
-  "generatedAt": "2026-10-31T23:25:36.808394Z",
+  "generatedAt": "2026-11-01T06:13:41.836032Z",
   "yards": {
     "north": {
       "status": "partial",
-      "checkedAt": "2026-10-31T23:25:36.808394Z",
+      "checkedAt": "2026-11-01T06:13:41.836032Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/",
       "message": "Scanned 60 populated publicly linked inventory pages (1499 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 60,
@@ -25497,7 +25497,7 @@
     },
     "south": {
       "status": "partial",
-      "checkedAt": "2026-10-31T23:25:36.808394Z",
+      "checkedAt": "2026-11-01T06:13:41.836032Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/",
       "message": "Scanned 48 populated publicly linked inventory pages (1193 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 48,
@@ -45788,7 +45788,7 @@
     },
     "island": {
       "status": "partial",
-      "checkedAt": "2026-10-31T23:25:36.808394Z",
+      "checkedAt": "2026-11-01T06:13:41.836032Z",
       "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/",
       "message": "Scanned 72 populated publicly linked inventory pages (1794 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 72,
@@ -76296,7 +76296,7 @@
     },
     "summit": {
       "status": "partial",
-      "checkedAt": "2026-10-31T23:25:36.808394Z",
+      "checkedAt": "2026-11-01T06:13:41.836032Z",
       "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501",
       "message": "Official Pick-n-Pull ZIP 60501 / 10-mile search: 1143 recognized Summit vehicles across 0 make searches. Coverage not independently verified (previous reference ~1144).",
       "makeCount": 0,
@@ -93779,7 +93779,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-7615c26e7d1aa2c17c819825",
+          "id": "summit-record-27c726680fbca271e6318561",
           "yard": "summit",
           "year": 2001,
           "make": "Honda",
