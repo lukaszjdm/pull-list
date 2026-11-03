@@ -1,10 +1,10 @@
 {
   "format": "pull-list-yard-feed-v1",
-  "generatedAt": "2026-11-02T23:37:22.414125Z",
+  "generatedAt": "2026-11-03T06:54:20.451985Z",
   "yards": {
     "north": {
       "status": "partial",
-      "checkedAt": "2026-11-02T23:37:22.414125Z",
+      "checkedAt": "2026-11-03T06:54:20.451985Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/",
       "message": "Scanned 60 populated publicly linked inventory pages (1480 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 60,
@@ -25174,7 +25174,7 @@
     },
     "south": {
       "status": "partial",
-      "checkedAt": "2026-11-02T23:37:22.414125Z",
+      "checkedAt": "2026-11-03T06:54:20.451985Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/",
       "message": "Scanned 49 populated publicly linked inventory pages (1214 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 49,
@@ -45822,7 +45822,7 @@
     },
     "island": {
       "status": "partial",
-      "checkedAt": "2026-11-02T23:37:22.414125Z",
+      "checkedAt": "2026-11-03T06:54:20.451985Z",
       "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/",
       "message": "Scanned 72 populated publicly linked inventory pages (1778 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 72,
@@ -76058,7 +76058,7 @@
     },
     "summit": {
       "status": "partial",
-      "checkedAt": "2026-11-02T23:37:22.414125Z",
+      "checkedAt": "2026-11-03T06:54:20.451985Z",
       "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501",
       "message": "Official Pick-n-Pull ZIP 60501 / 10-mile search: 1143 recognized Summit vehicles across 0 make searches. Coverage not independently verified (previous reference ~1144).",
       "makeCount": 0,
@@ -78649,7 +78649,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-1d80a062b2c91161cedae27d",
+          "id": "summit-record-17477278ca7920f57b577c64",
           "yard": "summit",
           "year": 2014,
           "make": "Audi",
@@ -79006,7 +79006,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-e609cf3a2aa3e75ec456d2e4",
+          "id": "summit-record-4ef1fba99de212d90a2141fb",
           "yard": "summit",
           "year": 2014,
           "make": "Audi",
@@ -80162,7 +80162,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-2516d4edc62818ec54564110",
+          "id": "summit-record-bdc68e70c2611bfdbfeba9fe",
           "yard": "summit",
           "year": 2013,
           "make": "Audi",
@@ -80723,7 +80723,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-ca24f1eec269bda3b78df621",
+          "id": "summit-record-6da73e9e86a69ef3d601b399",
           "yard": "summit",
           "year": 2012,
           "make": "Audi",
@@ -82916,7 +82916,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-06dee488fee812e0ba711ad1",
+          "id": "summit-record-11fc75a64be5ba6c10d51784",
           "yard": "summit",
           "year": 2011,
           "make": "Audi",
@@ -84276,7 +84276,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-0883d4d9271414ec8b50dc6e",
+          "id": "summit-record-c2ea7eebeef6be8caa8a91d2",
           "yard": "summit",
           "year": 2010,
           "make": "Toyota",
@@ -86231,7 +86231,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-85defe15b27fed66782fb591",
+          "id": "summit-record-0105793406be6e4938b274e1",
           "yard": "summit",
           "year": 2008,
           "make": "Audi",
@@ -89206,7 +89206,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-ef2550946930c93d168c8c69",
+          "id": "summit-record-9963cf93b5e0eee357ea9475",
           "yard": "summit",
           "year": 2006,
           "make": "Audi",
