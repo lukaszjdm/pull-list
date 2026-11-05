@@ -1,14 +1,14 @@
 {
   "format": "pull-list-yard-feed-v1",
-  "generatedAt": "2026-11-05T16:30:06.476448Z",
+  "generatedAt": "2026-11-05T23:40:20.034248Z",
   "yards": {
     "north": {
       "status": "partial",
-      "checkedAt": "2026-11-05T16:30:06.476448Z",
+      "checkedAt": "2026-11-05T23:40:20.034248Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/",
-      "message": "Scanned 59 populated publicly linked inventory pages (1456 unique vehicles). Availability may change; verify at the yard.",
+      "message": "Scanned 59 populated publicly linked inventory pages (1457 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 59,
-      "vehicleCount": 1456,
+      "vehicleCount": 1457,
       "vehicles": [
         {
           "id": "north-1581-94973",
@@ -24491,6 +24491,23 @@
           "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/"
         },
         {
+          "id": "north-1581-92857",
+          "yard": "north",
+          "year": 2013,
+          "make": "Chevrolet",
+          "model": "Malibu",
+          "row": "35",
+          "space": "1",
+          "section": "Domestic",
+          "stock": "1581-92857",
+          "vin": "1G11C5SA2DF192628",
+          "availableDate": "2026-08-10",
+          "imageUrl": "https://cdn.pypapps.com/carbuy/CAR-FRONT-LEFT_25989890_front_left_corner.jpg?vehicle=2013",
+          "vehicleUrl": "https://www.pyp.com/inventory/chicago-north-1581/2013-chevrolet-malibu/1G11C5SA2DF192628/",
+          "source": "Official LKQ public inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/"
+        },
+        {
           "id": "north-1581-92846",
           "yard": "north",
           "year": 2010,
@@ -24766,7 +24783,7 @@
     },
     "south": {
       "status": "partial",
-      "checkedAt": "2026-11-05T16:30:06.476448Z",
+      "checkedAt": "2026-11-05T23:40:20.034248Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/",
       "message": "Scanned 47 populated publicly linked inventory pages (1151 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 47,
@@ -44343,12 +44360,46 @@
     },
     "island": {
       "status": "partial",
-      "checkedAt": "2026-11-05T16:30:06.476448Z",
+      "checkedAt": "2026-11-05T23:40:20.034248Z",
       "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/",
-      "message": "Scanned 70 populated publicly linked inventory pages (1737 unique vehicles). Availability may change; verify at the yard.",
+      "message": "Scanned 70 populated publicly linked inventory pages (1739 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 70,
-      "vehicleCount": 1737,
+      "vehicleCount": 1739,
       "vehicles": [
+        {
+          "id": "island-1582-91618",
+          "yard": "island",
+          "year": 2010,
+          "make": "Chevrolet",
+          "model": "Equinox",
+          "row": "36",
+          "space": "23",
+          "section": "Domestic",
+          "stock": "1582-91618",
+          "vin": "2CNALDEW0A6247863",
+          "availableDate": "2026-11-05",
+          "imageUrl": "https://cdn.pypapps.com/carbuy/CAR-FRONT-LEFT_26713111_front_left_corner.jpg?vehicle=2010",
+          "vehicleUrl": "https://www.pyp.com/inventory/blue-island-1582/2010-chevrolet-equinox/2CNALDEW0A6247863/",
+          "source": "Official LKQ public inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/"
+        },
+        {
+          "id": "island-1582-91598",
+          "yard": "island",
+          "year": 2012,
+          "make": "Ford",
+          "model": "Escape",
+          "row": "36",
+          "space": "11",
+          "section": "Domestic",
+          "stock": "1582-91598",
+          "vin": "1FMCU0EGXCKC61339",
+          "availableDate": "2026-11-05",
+          "imageUrl": "https://cdn.pypapps.com/carbuy/CAR-FRONT-LEFT_26712799_front_left_corner.jpg?vehicle=2012",
+          "vehicleUrl": "https://www.pyp.com/inventory/blue-island-1582/2012-ford-escape/1FMCU0EGXCKC61339/",
+          "source": "Official LKQ public inventory page",
+          "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/"
+        },
         {
           "id": "island-1582-91733",
           "yard": "island",
@@ -73882,7 +73933,7 @@
     },
     "summit": {
       "status": "partial",
-      "checkedAt": "2026-11-05T16:30:06.476448Z",
+      "checkedAt": "2026-11-05T23:40:20.034248Z",
       "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501",
       "message": "Official Pick-n-Pull ZIP 60501 / 10-mile search: 1148 recognized Summit vehicles across 0 make searches. Coverage not independently verified (previous reference ~1144).",
       "makeCount": 0,
@@ -78496,7 +78547,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-6a6506f5c15593a6b04d746d",
+          "id": "summit-record-4ab448cc16105207a2f47af2",
           "yard": "summit",
           "year": 2012,
           "make": "Ford",
@@ -81998,7 +82049,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-1102c9cf13b6452d6309be36",
+          "id": "summit-record-500a23667d9c754b82751387",
           "yard": "summit",
           "year": 2010,
           "make": "Ford",
