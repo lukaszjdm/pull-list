@@ -1,10 +1,10 @@
 {
   "format": "pull-list-yard-feed-v1",
-  "generatedAt": "2026-11-07T21:55:17.364723Z",
+  "generatedAt": "2026-11-08T01:28:23.601497Z",
   "yards": {
     "north": {
       "status": "partial",
-      "checkedAt": "2026-11-07T21:55:17.364723Z",
+      "checkedAt": "2026-11-08T01:28:23.601497Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/",
       "message": "Scanned 60 populated publicly linked inventory pages (1477 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 60,
@@ -25123,7 +25123,7 @@
     },
     "south": {
       "status": "partial",
-      "checkedAt": "2026-11-07T21:55:17.364723Z",
+      "checkedAt": "2026-11-08T01:28:23.601497Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/",
       "message": "Scanned 47 populated publicly linked inventory pages (1175 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 47,
@@ -45108,7 +45108,7 @@
     },
     "island": {
       "status": "partial",
-      "checkedAt": "2026-11-07T21:55:17.364723Z",
+      "checkedAt": "2026-11-08T01:28:23.601497Z",
       "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/",
       "message": "Scanned 72 populated publicly linked inventory pages (1799 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 72,
@@ -75701,7 +75701,7 @@
     },
     "summit": {
       "status": "partial",
-      "checkedAt": "2026-11-07T21:55:17.364723Z",
+      "checkedAt": "2026-11-08T01:28:23.601497Z",
       "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501",
       "message": "Official Pick-n-Pull ZIP 60501 / 10-mile search: 1143 recognized Summit vehicles across 0 make searches. Coverage not independently verified (previous reference ~1144).",
       "makeCount": 0,
