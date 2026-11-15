@@ -1,10 +1,10 @@
 {
   "format": "pull-list-yard-feed-v1",
-  "generatedAt": "2026-11-15T17:13:56.071494Z",
+  "generatedAt": "2026-11-15T22:52:51.220685Z",
   "yards": {
     "north": {
       "status": "partial",
-      "checkedAt": "2026-11-15T17:13:56.071494Z",
+      "checkedAt": "2026-11-15T22:52:51.220685Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/",
       "message": "Scanned 60 populated publicly linked inventory pages (1488 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 60,
@@ -25310,7 +25310,7 @@
     },
     "south": {
       "status": "partial",
-      "checkedAt": "2026-11-15T17:13:56.071494Z",
+      "checkedAt": "2026-11-15T22:52:51.220685Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/",
       "message": "Scanned 46 populated publicly linked inventory pages (1148 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 46,
@@ -44836,7 +44836,7 @@
     },
     "island": {
       "status": "partial",
-      "checkedAt": "2026-11-15T17:13:56.071494Z",
+      "checkedAt": "2026-11-15T22:52:51.220685Z",
       "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/",
       "message": "Scanned 73 populated publicly linked inventory pages (1803 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 73,
@@ -75497,7 +75497,7 @@
     },
     "summit": {
       "status": "partial",
-      "checkedAt": "2026-11-15T17:13:56.071494Z",
+      "checkedAt": "2026-11-15T22:52:51.220685Z",
       "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501",
       "message": "Official Pick-n-Pull ZIP 60501 / 10-mile search: 1127 recognized Summit vehicles across 0 make searches. Coverage not independently verified (previous reference ~1144).",
       "makeCount": 0,
@@ -92606,7 +92606,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-3fa6c4e03a078f63d193ed3f",
+          "id": "summit-record-04e649374546af02ea012aff",
           "yard": "summit",
           "year": 2002,
           "make": "Toyota",
@@ -93320,7 +93320,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-905d3e08583216e16567c935",
+          "id": "summit-record-5ca0f91d4c12fd37b0e01dca",
           "yard": "summit",
           "year": 2000,
           "make": "Toyota",
@@ -93541,7 +93541,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-07967d6cfa366bb2a050851c",
+          "id": "summit-record-24096322ec0bccf41355fa97",
           "yard": "summit",
           "year": 2000,
           "make": "Toyota",
