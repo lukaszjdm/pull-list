@@ -1,10 +1,10 @@
 {
   "format": "pull-list-yard-feed-v1",
-  "generatedAt": "2026-11-28T01:28:28.465482Z",
+  "generatedAt": "2026-11-28T10:31:35.203626Z",
   "yards": {
     "north": {
       "status": "partial",
-      "checkedAt": "2026-11-28T01:28:28.465482Z",
+      "checkedAt": "2026-11-28T10:31:35.203626Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-north-1581/",
       "message": "Scanned 58 populated publicly linked inventory pages (1429 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 58,
@@ -24307,7 +24307,7 @@
     },
     "south": {
       "status": "partial",
-      "checkedAt": "2026-11-28T01:28:28.465482Z",
+      "checkedAt": "2026-11-28T10:31:35.203626Z",
       "sourceUrl": "https://www.pyp.com/inventory/chicago-south-1585/",
       "message": "Scanned 47 populated publicly linked inventory pages (1168 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 47,
@@ -44173,7 +44173,7 @@
     },
     "island": {
       "status": "partial",
-      "checkedAt": "2026-11-28T01:28:28.465482Z",
+      "checkedAt": "2026-11-28T10:31:35.203626Z",
       "sourceUrl": "https://www.pyp.com/inventory/blue-island-1582/",
       "message": "Scanned 74 populated publicly linked inventory pages (1826 unique vehicles). Availability may change; verify at the yard.",
       "pageCount": 74,
@@ -75225,7 +75225,7 @@
     },
     "summit": {
       "status": "partial",
-      "checkedAt": "2026-11-28T01:28:28.465482Z",
+      "checkedAt": "2026-11-28T10:31:35.203626Z",
       "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501",
       "message": "Official Pick-n-Pull ZIP 60501 / 10-mile search: 1121 recognized Summit vehicles across 0 make searches. Coverage not independently verified (previous reference ~1144).",
       "makeCount": 0,
@@ -87268,7 +87268,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-5fd1071fa2fe3e74e24e33ba",
+          "id": "summit-record-cbcd72c56aa73cb7c32961a8",
           "yard": "summit",
           "year": 2006,
           "make": "Nissan",
@@ -87591,7 +87591,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-79921a825f68bcd5cfc99b13",
+          "id": "summit-record-796b1bd4a11005fbcd0e232b",
           "yard": "summit",
           "year": 2006,
           "make": "Nissan",
@@ -87795,7 +87795,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-f119cb337b0fa1318ba1c68a",
+          "id": "summit-record-cb791931fca860dd64d542d9",
           "yard": "summit",
           "year": 2006,
           "make": "Nissan",
@@ -87965,7 +87965,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-6611f288891d2a54c72da04f",
+          "id": "summit-record-e42b3b8f6bffc8f955e36318",
           "yard": "summit",
           "year": 2006,
           "make": "Nissan",
@@ -88764,7 +88764,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-1748bc5d3ac8895542da7d5e",
+          "id": "summit-record-9224592c8f72102f8f94f9c4",
           "yard": "summit",
           "year": 2005,
           "make": "Nissan",
@@ -88849,7 +88849,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-37085863fd0041907e544bc9",
+          "id": "summit-record-770b3408b89bda32b3ad02d5",
           "yard": "summit",
           "year": 2005,
           "make": "Nissan",
@@ -88900,7 +88900,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-7fb3f97930082f4a316e083e",
+          "id": "summit-record-121afa1068bdcd64ca498cc0",
           "yard": "summit",
           "year": 2005,
           "make": "Nissan",
@@ -88985,7 +88985,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-25176e1394ab33bde32d32d1",
+          "id": "summit-record-5ac2e18c4b4686689ae8ce63",
           "yard": "summit",
           "year": 2005,
           "make": "Nissan",
@@ -89308,7 +89308,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-c093cc6a26907b6dfc216c89",
+          "id": "summit-record-3a228d6274d8bf5ffc5af6a0",
           "yard": "summit",
           "year": 2005,
           "make": "Nissan",
@@ -89580,7 +89580,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-9f73b250685bb34ab00e4bb6",
+          "id": "summit-record-b451a1f1a274a555e3e4af13",
           "yard": "summit",
           "year": 2005,
           "make": "Nissan",
@@ -90464,7 +90464,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-b4b6f349daa5786a84db9354",
+          "id": "summit-record-459fc5f77dbdb82d5f44e3ef",
           "yard": "summit",
           "year": 2004,
           "make": "Nissan",
@@ -90804,7 +90804,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-9574af080c4e5ab84dafdf8b",
+          "id": "summit-record-e65b648323ef6727cdba33ba",
           "yard": "summit",
           "year": 2003,
           "make": "Nissan",
@@ -91824,7 +91824,7 @@
           "sourceUrl": "https://www.picknpull.com/check-inventory/vehicle-search?distance=10&zip=60501"
         },
         {
-          "id": "summit-record-931b9d8be9521e7550a25a0b",
+          "id": "summit-record-963469cbdc823d95b5628160",
           "yard": "summit",
           "year": 2002,
           "make": "Nissan",
